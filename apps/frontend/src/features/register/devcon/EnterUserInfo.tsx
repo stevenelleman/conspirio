@@ -168,7 +168,7 @@ const EnterUserInfo: React.FC<EnterUserInfoProps> = ({
           Link your contact info
         </span>
         <span className="font-sans text-sm font-normal text-label-primary">
-          This contact info will be shared when others tap your Cursive chip.
+          This contact info will be shared when others tap your Conspirio chip.
           You can modify this data in the app, or choose other socials like
           Signal and Farcaster.
         </span>
