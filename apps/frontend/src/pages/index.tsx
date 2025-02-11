@@ -34,7 +34,7 @@ export default function Home() {
       <div className="flex-grow flex px-6 center sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex flex-col grow">
           <RegisterHeader
-            title="Hold your Cursive chip to your phone until you get a notification."
+            title="Hold your Conspirio chip to your phone until you get a notification."
             description={
               <>
                 <p className="mb-4">

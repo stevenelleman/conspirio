@@ -12,11 +12,11 @@ export const AppCopy = ({ className }: any) => {
     >
       Built by{" "}
       <Link
-        href="https://www.cursive.team/"
+        href="https://github.com/stevenelleman/conspirio/"
         target="_blank"
         className="underline font-bold"
       >
-        Cursive
+        Conspirio
       </Link>
       .
     </span>
