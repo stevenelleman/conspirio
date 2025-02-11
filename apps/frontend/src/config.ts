@@ -68,8 +68,8 @@ export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
 };
 
 export const APP_CONFIG = {
-  APP_NAME: "Cursive Connections",
-  APP_DESCRIPTION: "Cursive Connections",
+  APP_NAME: "Conspirio",
+  APP_DESCRIPTION: "Conspirio",
   SUPPORT_EMAIL: "hello@cursive.team",
   ALLOW_INCOGNITO: false, // Set to false to disable incognito mode
   IS_MOBILE_ONLY: true, // Set to true to disable the web version

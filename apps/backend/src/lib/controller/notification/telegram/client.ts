@@ -40,10 +40,10 @@ export class TelegramNotificationClient implements iNotificationClient {
       });
 
       await ctx.reply(
-        `I'm Curtis, the Cursive Connections bot. I'm here to help you discover and deepen your connections.`
+        `I'm Curtis, the Conspirio bot. I'm here to help you discover and deepen your connections.`
       );
       await ctx.reply(
-        `If you want to stop Cursive Telegram notifications, enter /stop.`
+        `If you want to stop Conspirio Telegram notifications, enter /stop.`
       );
       await ctx.reply(`If you want to resume at any time enter /start.`);
       await ctx.reply(
@@ -162,15 +162,16 @@ export class TelegramNotificationClient implements iNotificationClient {
 
     this.bot.command("feedback", async (ctx) => {
       await ctx.reply(
-        `Join the Cursive Support channel and talk with the team!`
+        `Join the Conspirio Support channel and talk with the team!`
       );
+      // TODO: change telegram chat
       await ctx.reply(`https://t.me/cursiveappsupport`);
     });
 
     this.bot.command("help", async (ctx) => {
       await ctx.reply(`/start : register or resume notifications.`);
       await ctx.reply(`/stop : stop notifications.`);
-      await ctx.reply(`/feedback : chat with the Cursive team.`);
+      await ctx.reply(`/feedback : chat with the Conspirio team.`);
     });
 
     this.bot.on("message", async (ctx) => {

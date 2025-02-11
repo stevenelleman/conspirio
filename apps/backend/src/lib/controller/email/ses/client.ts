@@ -23,7 +23,7 @@ export class SESEmailClient implements iEmailClient {
       },
       Message: {
         Subject: {
-          Data: "Cursive Connections Sign-in Code",
+          Data: "Conspirio Sign-in Code",
           Charset: "UTF-8",
         },
         Body: {
@@ -34,7 +34,7 @@ export class SESEmailClient implements iEmailClient {
                 <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Cursive Connections Sign-in Code</title>
+                  <title>Conspirio Sign-in Code</title>
                   <style>
                     body {
                       font-family: 'Helvetica Neue', Arial, sans-serif;

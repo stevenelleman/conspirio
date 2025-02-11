@@ -543,7 +543,7 @@ const UserProfilePage: React.FC = () => {
                     logClientEvent("user-profile-begin-edit-comment", {});
                     if (isUnregistered) {
                       toast.error(
-                        "Unregistered user cannot add contact notes. Come to the Cursive booth and" +
+                        "Unregistered user cannot add contact notes. Come to the Conspirio booth and" +
                           " register!"
                       );
                     }
@@ -825,7 +825,7 @@ const UserProfilePage: React.FC = () => {
                 logClientEvent("user-started-psi", {});
                 if (isUnregistered) {
                   toast.error(
-                    "Unregistered user cannot add run contact PSI. Come to the Cursive booth and register!"
+                    "Unregistered user cannot add run contact PSI. Come to the Conspirio booth and register!"
                   );
                 }
                 updatePSIOverlap();
