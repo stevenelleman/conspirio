@@ -124,9 +124,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   // Refresh imports when the page is refreshed
   useEffect(() => {
     const refreshImports = async () => {
+
       const user = await storage.getUser();
       const session = await storage.getSession();
-      if (!user || !session) {
+      if (!user || !session || session.authTokenExpiresAt < new Date()) {
+        // TODO: Ideally would like a single location to deal with session expiration.
+        storage.deleteSession();
         return;
       }
 

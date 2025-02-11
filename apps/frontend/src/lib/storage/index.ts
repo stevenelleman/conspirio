@@ -32,6 +32,7 @@ export interface ClientStorage {
   getUserAndSession(): Promise<{ user: User; session: Session }>;
   getUser(): Promise<User | undefined>;
   getSession(): Promise<Session | undefined>;
+  deleteSession(): Promise<void>;
   saveOAuthAccessToken(app: DataImportSource, token: AccessToken): Promise<void>;
   getOAuthAccessToken(app: DataImportSource): Promise<AccessToken | undefined>;
   deleteOAuthAccessToken(app: DataImportSource): Promise<void>;

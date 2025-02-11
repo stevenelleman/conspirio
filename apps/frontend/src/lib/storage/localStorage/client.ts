@@ -93,6 +93,10 @@ export class LocalStorage implements ClientStorage {
     return getSession();
   }
 
+  async deleteSession(): Promise<void> {
+    return deleteSession();
+  }
+
   syncGetSession(): Session | undefined {
     return getSession();
   }
