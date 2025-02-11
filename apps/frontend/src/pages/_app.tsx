@@ -189,7 +189,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         darkTheme && "dark-theme"
       )}
     >
-      <DefaultSeo titleTemplate="%s | Cursive Connections" />
+      <DefaultSeo titleTemplate="%s | Conspirio" />
       <SocketProvider>
         <PlausibleProvider
           domain={process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN!}

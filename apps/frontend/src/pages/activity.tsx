@@ -29,7 +29,7 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
   switch (activity.type) {
     case "REGISTER":
       return {
-        text: "You registered for Cursive Connections",
+        text: "You registered for Conspirio",
         timestamp: activity.timestamp,
       };
     case "REGISTER_CHIP":

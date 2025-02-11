@@ -15,7 +15,7 @@ export default function AboutPage() {
             About the app
           </span>
           <span className="text-label-tertiary font-sans text-base font-medium">
-            <i>Cursive Connections</i> is an experimental social app using{" "}
+            <i>Conspirio</i> is an experimental social app using{" "}
             <b>multi-party computation (MPC)</b> to enable safer and more
             efficient human connection.It features first-of-its-kind consumer
             experiments with coSNARKs, private set intersections, and digital

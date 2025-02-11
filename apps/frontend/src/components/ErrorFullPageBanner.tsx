@@ -116,7 +116,7 @@ const ErrorFullPageBanner = ({
             isIncognito && (
               <>
                 <Header
-                  title="Cursive Connections doesn't work in incognito."
+                  title="Conspirio doesn't work in incognito."
                   description={
                     <>
                       <div className="flex flex-col gap-6">

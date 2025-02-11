@@ -18,22 +18,22 @@ export default function MaintenancePage() {
       <div className="flex-grow flex px-6 center sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex flex-col grow">
           <RegisterHeader
-            title="Cursive is under maintenance."
+            title="Conspirio is under maintenance."
             subtitle="We will be back soon!"
             description={
               <span>
                 In the meantime, learn about upcoming features{" "}
                 <a
-                  href="https://cursive.team/lanna"
+                  href="https://github.com/stevenelleman/conspirio"
                   className="text-[#FF9DF8] font-bold underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   here
                 </a>{" "}
-                and follow Cursive on{" "}
+                and follow Conspirio on{" "}
                 <a
-                  href="https://x.com/cursive_team"
+                  href="https://github.com/stevenelleman/conspirio"
                   className="text-[#FF9DF8] font-bold underline"
                   target="_blank"
                   rel="noopener noreferrer"
