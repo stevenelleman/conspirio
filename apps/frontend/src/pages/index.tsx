@@ -55,6 +55,13 @@ export default function Home() {
           >
             I already have an account
           </AppButton>
+          <AppButton
+            variant="outline"
+            className="mt-4"
+            onClick={() => router.push("/register")}
+          >
+            Create an account
+          </AppButton>
         </div>
       </div>
       <AppCopy className="text-center py-4" />
