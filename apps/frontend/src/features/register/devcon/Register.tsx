@@ -11,7 +11,7 @@ import RegisterWithPassword from "@/features/register/devcon/RegisterWithPasswor
 import { verifyUsernameIsUnique } from "@/lib/auth/util";
 import { TapInfo } from "@/lib/storage/types";
 import { registerChip } from "@/lib/chip/register";
-import { applyBackupsToNewUser, registerUser } from "@/lib/auth/register";
+import { applyBackupsToChippedNewUser, registerUser } from "@/lib/auth/register";
 import useSettings from "@/hooks/useSettings";
 import { HeaderCover } from "@/components/ui/HeaderCover";
 import { logClientEvent } from "@/lib/frontend/metrics";
@@ -150,7 +150,7 @@ const RegisterDevcon: React.FC<RegisterDevconProps> = ({ savedTap }) => {
       // This is the only place this method should be applied
       // Backups will only be applied if an unregistered user exists (which will only happen if an accountless client
       // goes through the tap flow)
-      await applyBackupsToNewUser(backupPassword, savedTap.tapResponse.chipIssuer);
+      await applyBackupsToChippedNewUser(backupPassword, savedTap.tapResponse.chipIssuer);
 
       const { user, session } = await storage.getUserAndSession();
 
