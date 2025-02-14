@@ -12,7 +12,10 @@ export const communitiesHumanReadable: { [key: string]: string } = {
   testing: "Testing",
 };
 
-export const ERROR_SUPPORT_CONTACT = "https://t.me/vivboop";
+export const ERROR_SUPPORT_CONTACT = "https://t.me/stevenelleman";
+
+// TODO: Update to conspirio email
+export const SUPPORT_EMAIL = "steven.elleman@gmail.com";
 
 export const devconLocationMapping: {
   [key: string]: { name: string; exhibitor: string; description: string };

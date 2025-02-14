@@ -28,37 +28,20 @@ export default function AboutPage() {
         </div>
         <div className="flex flex-col gap-2">
           <span className="text-label-primary font-medium text-lg tracking-[-0.1px]">
-            About Cursive
+            About Conspirio
           </span>
           <span className="text-label-tertiary font-sans text-base font-medium">
-            <i>Cursive</i> is a research lab and design studio focused on
-            cryptography for human connection. We are supported by grants from
-            the{" "}
-            <Link
-              className="text-[#F429D5]"
-              href="https://pse.dev"
-              target="_blank"
-            >
-              Privacy & Scaling Explorations
-            </Link>{" "}
-            team at the Ethereum Foundation.
+            <i>Conspirio</i> is a cottage industry and design studio focused on
+            cryptography for human connection.
           </span>
         </div>
-        <Link href={"https://twitter.com/cursive_team"} target="_blank">
-          <div className="flex w-full items-center justify-between bg-gray-100 rounded-lg p-2">
-            <span className="text-iron-600 font-semibold text-sm">
-              Cursive Twitter
-            </span>
-            <Icons.ExternalLink className="text-gray-10" />
-          </div>
-        </Link>
         <Link
-          href={"https://github.com/cursive-team/connections"}
+          href={"https://github.com/stevenelleman/conspirio"}
           target="_blank"
         >
           <div className="flex w-full items-center justify-between bg-gray-100 rounded-lg p-2">
             <span className="text-iron-600 font-semibold text-sm">
-              Cursive GitHub
+              Conspirio GitHub
             </span>
             <Icons.ExternalLink className="text-gray-10" />
           </div>

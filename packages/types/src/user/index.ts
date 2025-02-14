@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+// Email schema
+export const EmailSchema = z.string().email();
+
 // Username schema
 export const UsernameSchema = z.string().regex(/^[a-zA-Z0-9]{3,20}$/);
 
@@ -115,7 +118,7 @@ export type VerifyUsernameUniqueResponse = z.infer<
 
 // Request schema for verifying email uniqueness
 export const VerifyEmailUniqueRequestSchema = z.object({
-  email: z.string(),
+  email: EmailSchema,
 });
 
 export type VerifyEmailUniqueRequest = z.infer<
@@ -133,7 +136,7 @@ export type VerifyEmailUniqueResponse = z.infer<
 // Request schema for registering a user
 export const UserRegisterRequestSchema = z.object({
   username: UsernameSchema,
-  email: z.string(),
+  email: EmailSchema,
   signaturePublicKey: z.string(),
   encryptionPublicKey: z.string(),
   psiPublicKeyLink: z.string().optional(),
@@ -165,7 +168,7 @@ export type UserLoginRequest = z.infer<typeof UserLoginRequestSchema>;
 // Response schema for logging in a user
 export const UserLoginResponseSchema = z.object({
   authToken: AuthTokenSchema,
-  email: z.string(),
+  email:EmailSchema,
   backupData: z.array(BackupDataSchema),
   passwordSalt: z.string(),
   passwordHash: z.string(),
@@ -177,7 +180,7 @@ export type UserLoginResponse = z.infer<typeof UserLoginResponseSchema>;
 
 // Request schema for creating a signin token
 export const CreateSigninTokenRequestSchema = z.object({
-  email: z.string(),
+  email: EmailSchema,
 });
 
 export type CreateSigninTokenRequest = z.infer<
@@ -186,7 +189,7 @@ export type CreateSigninTokenRequest = z.infer<
 
 // Request schema for verifying a signin token
 export const VerifySigninTokenRequestSchema = z.object({
-  email: z.string(),
+  email: EmailSchema,
   signinToken: SigninTokenSchema,
 });
 

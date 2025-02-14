@@ -2,14 +2,11 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/router";
-import { storage } from "@/lib/storage";
-import { errorToString, Json, UsernameSchema } from "@types";
-import EnterUserInfo from "@/features/register/ethindia/EnterUserInfo";
-import RegisterWithPassword from "@/features/register/ethindia/RegisterWithPassword";
-import { verifyUsernameIsUnique } from "@/lib/auth/util";
-import { TapInfo } from "@/lib/storage/types";
-import { registerChip } from "@/lib/chip/register";
-import { applyBackupsToChippedNewUser, registerUser } from "@/lib/auth/register";
+import { errorToString, UsernameSchema } from "@types";
+import EnterUserInfo from "@/features/register/chipless/EnterUserInfo";
+import RegisterWithPassword from "@/features/register/chipless/RegisterWithPassword";
+import { requestSigninToken, verifyEmailIsUnique, verifySigninToken, verifyUsernameIsUnique } from "@/lib/auth/util";
+import { applyBackupsToChiplessNewUser, registerUser } from "@/lib/auth/register";
 import useSettings from "@/hooks/useSettings";
 import { HeaderCover } from "@/components/ui/HeaderCover";
 import { logClientEvent } from "@/lib/frontend/metrics";
@@ -17,28 +14,80 @@ import { SupportToast } from "@/components/ui/SupportToast";
 import { ERROR_SUPPORT_CONTACT } from "@/constants";
 import { zxcvbn } from "@zxcvbn-ts/core";
 import CreatingAccount from "./CreatingAccount";
+import EnterEmail from "@/features/register/chipless/EnterEmail";
+import EnterCode from "@/features/register/chipless/EnterCode";
 
 enum DisplayState {
+  ENTER_EMAIL,
+  ENTER_CODE,
   ENTER_USER_INFO,
   REGISTER_WITH_PASSWORD,
   CREATING_ACCOUNT,
 }
 
-interface RegisterETHIndiaProps {
-  savedTap: TapInfo;
-}
-
-const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
+const RegisterChipless: React.FC = () => {
   const router = useRouter();
   const { pageHeight } = useSettings();
   const [displayState, setDisplayState] = useState<DisplayState>(
-    DisplayState.ENTER_USER_INFO
+    DisplayState.ENTER_EMAIL
   );
+  const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [telegramHandle, setTelegramHandle] = useState("");
   const [twitterHandle, setTwitterHandle] = useState("");
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+
+  const handleEmailSubmit = async (submittedEmail: string) => {
+    logClientEvent("register-email-submit", {});
+    const isUnique = await verifyEmailIsUnique(submittedEmail);
+    if (!isUnique) {
+      toast.error("Email is already in use");
+      return;
+    }
+
+    try {
+      await requestSigninToken(submittedEmail);
+    } catch (error) {
+      console.error(error);
+      toast(
+        SupportToast(
+          "",
+          true,
+          "Error requesting signin token",
+          ERROR_SUPPORT_CONTACT,
+          errorToString(error)
+        )
+      );
+    }
+
+    setEmail(submittedEmail);
+    setDisplayState(DisplayState.ENTER_CODE);
+  };
+
+  const handleCodeSubmit = async (submittedCode: string) => {
+    logClientEvent("register-code-submit", {});
+    try {
+      const isValid = await verifySigninToken(email, submittedCode);
+      if (!isValid) {
+        toast.error("Invalid code");
+        return;
+      }
+
+      setDisplayState(DisplayState.ENTER_USER_INFO);
+    } catch (error) {
+      toast(
+        SupportToast(
+          "",
+          true,
+          "Cannot verify signin code",
+          ERROR_SUPPORT_CONTACT,
+          errorToString(error)
+        )
+      );
+      return;
+    }
+  };
 
   const handleUserInfoSubmit = async (userInfo: {
     displayName: string;
@@ -46,9 +95,7 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
     telegramHandle: string;
     twitterHandle: string;
   }) => {
-    logClientEvent("register-user-info-submit", {
-      chipIssuer: savedTap.tapResponse.chipIssuer,
-    });
+    logClientEvent("register-user-info-submit", {});
 
     setDisplayName(userInfo.displayName);
     setBio(userInfo.bio);
@@ -88,9 +135,7 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
       return;
     }
 
-    logClientEvent("register-register-with-password", {
-      chipIssuer: savedTap.tapResponse.chipIssuer,
-    });
+    logClientEvent("register-register-with-password", {});
     await handleCreateAccount(username, password, false, undefined);
   };
 
@@ -100,15 +145,13 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
     registeredWithPasskey: boolean,
     authPublicKey: string | undefined
   ) => {
-    logClientEvent("register-create-account", {
-      chipIssuer: savedTap.tapResponse.chipIssuer,
-    });
+    logClientEvent("register-create-account", {});
 
     setDisplayState(DisplayState.CREATING_ACCOUNT);
     setIsCreatingAccount(true);
     try {
       await registerUser({
-        email: username,
+        email,
         password: backupPassword,
         username,
         displayName,
@@ -119,56 +162,12 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
         passkeyAuthPublicKey: authPublicKey,
       });
 
-      // This is the only place this method should be applied
+      // This is the only place where accountless backups should be applied
       // Backups will only be applied if an unregistered user exists (which will only happen if an accountless client
       // goes through the tap flow)
-      await applyBackupsToChippedNewUser(
+      await applyBackupsToChiplessNewUser(
         backupPassword,
-        savedTap.tapResponse.chipIssuer
       );
-
-      const { user, session } = await storage.getUserAndSession();
-
-      // Register chip if saved tap is present
-      if (savedTap) {
-        logClientEvent("register-register-chip", {
-          chipIssuer: savedTap.tapResponse.chipIssuer,
-        });
-        const {
-          username,
-          displayName,
-          bio,
-          signaturePublicKey,
-          encryptionPublicKey,
-          psiPublicKeyLink,
-        } = user.userData;
-
-        // Set owner user data for chip registration
-        // TODO: Generalize this to be extensible for arbitrary user data
-        const ownerUserData: Json = {};
-        if (user.userData.twitter && user.userData.twitter.username) {
-          ownerUserData.twitter = {
-            username: user.userData.twitter.username,
-          };
-        }
-        if (user.userData.telegram && user.userData.telegram.username) {
-          ownerUserData.telegram = {
-            username: user.userData.telegram.username,
-          };
-        }
-
-        await registerChip({
-          authToken: session.authTokenValue,
-          tapParams: savedTap.tapParams,
-          ownerUsername: username,
-          ownerDisplayName: displayName,
-          ownerBio: bio,
-          ownerSignaturePublicKey: signaturePublicKey,
-          ownerEncryptionPublicKey: encryptionPublicKey,
-          ownerPsiPublicKeyLink: psiPublicKeyLink,
-          ownerUserData,
-        });
-      }
 
       setIsCreatingAccount(false);
     } catch (error) {
@@ -212,17 +211,24 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
       }}
     >
       {[
+        DisplayState.ENTER_EMAIL,
+        DisplayState.ENTER_CODE,
         DisplayState.ENTER_USER_INFO,
         DisplayState.REGISTER_WITH_PASSWORD,
         DisplayState.CREATING_ACCOUNT,
       ].includes(displayState) && (
         <HeaderCover
-          image="ethindia"
           // isLoading={[DisplayState.CREATING_ACCOUNT].includes(displayState)}
           isLoading={isCreatingAccount}
         />
       )}
       <div className="flex-grow flex px-6 center sm:mx-auto sm:w-full sm:max-w-md">
+        {displayState === DisplayState.ENTER_EMAIL && (
+          <EnterEmail defaultEmail={email} submitEmail={handleEmailSubmit} />
+        )}
+        {displayState === DisplayState.ENTER_CODE && (
+          <EnterCode email={email} submitCode={handleCodeSubmit} />
+        )}
         {displayState === DisplayState.ENTER_USER_INFO && (
           <EnterUserInfo
             displayName={displayName}
@@ -249,4 +255,4 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
   );
 };
 
-export default RegisterETHIndia;
+export default RegisterChipless;

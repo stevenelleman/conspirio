@@ -198,7 +198,7 @@ export async function createUnregisteredUser(): Promise<UnregisteredUser> {
   return user;
 }
 
-export async function applyBackupsToNewUser(password: string, chipIssuer: ChipIssuer | undefined): Promise<void> {
+export async function applyBackupsToChippedNewUser(password: string, chipIssuer: ChipIssuer | undefined): Promise<void> {
   // Both these values should have been created in registerUser, if they don't, exit
   const user = await storage.getUser();
   const session = await storage.getSession();
@@ -266,3 +266,59 @@ export async function applyBackupsToNewUser(password: string, chipIssuer: ChipIs
     await storage.deleteUnregisteredUser();
   }
 }
+
+export async function applyBackupsToChiplessNewUser(password: string): Promise<void> {
+  // Both these values should have been created in registerUser, if they don't, exit
+  const user = await storage.getUser();
+  const session = await storage.getSession();
+  if (!user || !session) {
+    return;
+  }
+
+  const unregisteredUser = await storage.getUnregisteredUser();
+  if (unregisteredUser) {
+    const createBackups: CreateBackupData[] = [];
+    for (const backup of unregisteredUser.backups) {
+      try {
+        switch (backup.type) {
+          case BackupEntryType.CONNECTION:
+            const connection = ConnectionSchema.parse(JSON.parse(backup.backup));
+
+            // TODO: for each existing connection, notify to tap them back? Make UI easier to tap back?
+
+            const connectionBackupData = upsertConnectionBackup({
+              email: user.email,
+              password: password,
+              connection
+            });
+
+            createBackups.push(connectionBackupData);
+            break;
+
+          case BackupEntryType.ACTIVITY:
+            const activity = ActivitySchema.parse(JSON.parse(backup.backup));
+
+            const activityBackupData = createActivityBackup({
+              email: user.email,
+              password: password,
+              activity,
+            });
+
+            createBackups.push(activityBackupData);
+            break;
+
+          default:
+            console.log(`Do not recognize type ${backup.type}.`)
+          // This should never happen. Don't recognize type, just continue / skip.
+        }
+      } catch (error) {
+        console.log(`error: ${errorToString(error)}`)
+        // Nothing in this operation should disrupt registration flow
+      }
+    }
+    await saveBackupAndUpdateStorage({user, session, newBackupData: createBackups})
+    await storage.deleteUnregisteredUser();
+  }
+}
+
+

@@ -7,6 +7,7 @@ import { ChipIssuer } from "@types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import RegisterChipless from "@/features/register/chipless/Register";
 
 const Register: React.FC = () => {
   const router = useRouter();
@@ -16,13 +17,7 @@ const Register: React.FC = () => {
   useEffect(() => {
     const loadSavedTap = async () => {
       const tap = await storage.loadSavedTapInfo();
-      if (!tap) {
-        // TODO: Enable registration without a saved tap
-        logClientEvent("register-no-saved-tap", {});
-        toast.error("No saved tap found!");
-        router.push("/");
-        return;
-      } else {
+      if (tap) {
         await storage.deleteSavedTapInfo();
 
         if (tap.tapResponse.chipIsRegistered) {
@@ -45,19 +40,19 @@ const Register: React.FC = () => {
     loadSavedTap();
   }, [router]);
 
-  if (!attemptedToLoadSavedTap || !savedTap) {
+  if (!attemptedToLoadSavedTap) {
     return null;
   }
 
-  if (savedTap.tapResponse.chipIssuer === ChipIssuer.DEVCON_2024) {
+  if (savedTap?.tapResponse.chipIssuer === ChipIssuer.DEVCON_2024) {
     return <RegisterDevcon savedTap={savedTap} />;
   }
 
-  if (savedTap.tapResponse.chipIssuer === ChipIssuer.ETH_INDIA_2024) {
+  if (savedTap?.tapResponse.chipIssuer === ChipIssuer.ETH_INDIA_2024) {
     return <RegisterEthIndia savedTap={savedTap} />;
+  } else {
+    return <RegisterChipless />;
   }
-
-  return null;
 };
 
 export default Register;

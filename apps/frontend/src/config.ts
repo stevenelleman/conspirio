@@ -7,6 +7,7 @@ import {
   OAuthAppDetails,
   RefreshRateType,
 } from "@types";
+import { SUPPORT_EMAIL } from "@/constants";
 
 export const fontBase = Inter({ subsets: ["latin"], variable: "--font-base" });
 
@@ -70,7 +71,7 @@ export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
 export const APP_CONFIG = {
   APP_NAME: "Conspirio",
   APP_DESCRIPTION: "Conspirio",
-  SUPPORT_EMAIL: "hello@cursive.team",
+  SUPPORT_EMAIL: SUPPORT_EMAIL,
   ALLOW_INCOGNITO: false, // Set to false to disable incognito mode
   IS_MOBILE_ONLY: true, // Set to true to disable the web version
   FOOTER_ICON_SIZE: 10,
