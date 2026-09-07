@@ -43,8 +43,6 @@ export interface iChipClient {
     entryType: LeaderboardEntryType,
     count: number | undefined
   ): Promise<LeaderboardEntry[] | null>;
-  SubmitProofJob(username: string, jobId: string): Promise<void>;
-  PollProofResults(): Promise<void>;
   IncrementLeaderboardEntry(
     username: string,
     chipIssuer: ChipIssuer,

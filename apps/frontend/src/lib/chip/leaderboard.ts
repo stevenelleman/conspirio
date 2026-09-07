@@ -270,36 +270,3 @@ export async function getTopLeaderboardEntries(
     throw error;
   }
 }
-
-export async function submitProofJob(jobId: string): Promise<void> {
-  const { user, session } = await storage.getUserAndSession();
-
-  try {
-    const response = await fetch(`${BASE_API_URL}/chip/submit_proof_job`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        authToken: session.authTokenValue,
-        username: user.userData.username,
-        jobId,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      console.error(
-        `HTTP error! status: ${response.status}, message: ${errorResponse.error}`
-      );
-      throw new Error(
-        `HTTP error! status: ${response.status}, message: ${errorResponse.error}`
-      );
-    }
-
-    return;
-  } catch (error) {
-    console.error("Error submitting proof job:", error);
-    throw error;
-  }
-}
