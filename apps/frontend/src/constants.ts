@@ -3,20 +3,19 @@ import { ChipIssuer } from "@types";
 export const communitiesEnum: { [key: string]: string } = {
   lanna: ChipIssuer.EDGE_CITY_LANNA,
   devcon: ChipIssuer.DEVCON_2024,
-  embassy: ChipIssuer.EMBASSY,
   testing: ChipIssuer.TESTING,
 };
 
 export const communitiesHumanReadable: { [key: string]: string } = {
   lanna: "Edge City Lanna",
   devcon: "Dev Con 2014",
-  embassy: "Embassy",
   testing: "Testing",
 };
 
 export const ERROR_SUPPORT_CONTACT = "https://t.me/stevenelleman";
 
-export const SUPPORT_EMAIL = "hello@conspirio.space";
+// TODO: Update to conspirio email
+export const SUPPORT_EMAIL = "steven.elleman@gmail.com";
 
 export const devconLocationMapping: {
   [key: string]: { name: string; exhibitor: string; description: string };

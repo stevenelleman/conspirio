@@ -83,25 +83,6 @@ async function main() {
     skipDuplicates: true,
   });
 
-  const testEmbassyChips = [
-    { chipId: "TESTEMBASSY001" },
-    { chipId: "TESTEMBASSY002" },
-    { chipId: "TESTEMBASSY003" },
-    { chipId: "TESTEMBASSY004" },
-    { chipId: "TESTEMBASSY005" },
-  ];
-
-  await prisma.chip.createMany({
-    data: testEmbassyChips.map((chip) => ({
-      chipIssuer: "EMBASSY",
-      chipId: chip.chipId,
-      chipVariant: "NTAG212",
-      chipIsRegistered: false,
-      chipTapCount: 0,
-    })),
-    skipDuplicates: true,
-  });
-
   const testLocationChips = [
     { chipId: "TESTLOC001" },
     { chipId: "TESTLOC002" },

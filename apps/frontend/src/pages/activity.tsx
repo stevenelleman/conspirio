@@ -41,7 +41,6 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
         EDGE_CITY_LANNA: "Edge City Lanna",
         DEVCON_2024: "Devcon 2024",
         ETH_INDIA_2024: "Eth India 2024",
-        EMBASSY: "Embassy",
         TESTING: "Testing",
       };
       return {
