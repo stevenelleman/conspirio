@@ -89,15 +89,15 @@ const CommunityPage = () => {
   }
 
   // Until Embassy chips are added, allow Embassy to be seen by default
-  /*if (userChips.length === 0) {
-    return (
+  if (userChips.length === 0) {
+    /*return (
       <div className="flex min-h-screen justify-center items-center text-center px-4">
         <span className="text-label-secondary">
           No communities found. Register a chip to join a community.
         </span>
       </div>
-    );
-  }*/
+    );*/
+  }
 
   return (
     <>
