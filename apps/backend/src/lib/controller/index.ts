@@ -357,12 +357,4 @@ export class Controller {
   ): Promise<GraphEdgeResponse | ErrorResponse> {
     return this.graphClient.GetGraphEdges(fetchUpdatedAtAfter);
   }
-
-  SubmitProofJob(username: string, jobId: string): Promise<void> {
-    return this.chipClient.SubmitProofJob(username, jobId);
-  }
-
-  PollProofResults(): Promise<void> {
-    return this.chipClient.PollProofResults();
-  }
 }

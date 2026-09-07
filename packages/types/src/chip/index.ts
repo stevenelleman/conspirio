@@ -213,10 +213,3 @@ export const LeaderboardDetailsSchema = z.object({
 });
 
 export type LeaderboardDetails = z.infer<typeof LeaderboardDetailsSchema>;
-
-export const SubmitProofJobRequestSchema = z.object({
-  authToken: z.string(),
-  jobId: z.string(),
-});
-
-export type SubmitProofJobRequest = z.infer<typeof SubmitProofJobRequestSchema>;
