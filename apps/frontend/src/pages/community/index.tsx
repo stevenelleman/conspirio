@@ -13,6 +13,7 @@ import AppLayout from "@/layouts/AppLayout";
 import { DisplayedDashboard } from "@/components/cards/CommunityCard";
 import { NavTab } from "@/components/ui/NavTab";
 import EthIndiaCommunityPage from "@/features/community/EthIndiaCommunityPage";
+import EmbassyCommunityPage from "@/features/community/EmbassyCommunityPage";
 
 export const metadata: Metadata = {
   title: "Community",
@@ -22,6 +23,7 @@ enum ActiveTab {
   ETHINDIA,
   DEVCON,
   LANNA,
+  EMBASSY,
   NONE,
 }
 
@@ -67,6 +69,9 @@ const CommunityPage = () => {
         } else if (userChipIssuers.includes(ChipIssuer.EDGE_CITY_LANNA)) {
           setActiveTab(ActiveTab.LANNA);
         }
+      } else {
+        // Until chips are issued, set default to Embassy
+        setActiveTab(ActiveTab.EMBASSY);
       }
 
       setLoading(false);
@@ -83,14 +88,15 @@ const CommunityPage = () => {
     );
   }
 
+  // Until Embassy chips are added, allow Embassy to be seen by default
   if (userChips.length === 0) {
-    return (
+    /*return (
       <div className="flex min-h-screen justify-center items-center text-center px-4">
         <span className="text-label-secondary">
           No communities found. Register a chip to join a community.
         </span>
       </div>
-    );
+    );*/
   }
 
   return (
@@ -111,7 +117,9 @@ const CommunityPage = () => {
                   }}
                 ></div>
               </div>
-              <div className="py-3 flex gap-6">
+              {/*
+               // NOTE: Until community-issued chips are offered, show existing communities
+               <div className="py-3 flex gap-6">
                 {userChips && userChips.includes(ChipIssuer.ETH_INDIA_2024) && (
                   <NavTab
                     active={activeTab === ActiveTab.ETHINDIA}
@@ -143,6 +151,40 @@ const CommunityPage = () => {
                       Edge Lanna
                     </NavTab>
                   )}
+              </div>*/}
+              <div className="py-3 flex gap-6">
+                <NavTab
+                  active={activeTab === ActiveTab.ETHINDIA}
+                  onClick={() => {
+                    setActiveTab(ActiveTab.ETHINDIA);
+                  }}
+                >
+                  EthIndia
+                </NavTab>
+                <NavTab
+                  active={activeTab === ActiveTab.DEVCON}
+                  onClick={() => {
+                    setActiveTab(ActiveTab.DEVCON);
+                  }}
+                >
+                  Devcon
+                </NavTab>
+                <NavTab
+                  active={activeTab === ActiveTab.LANNA}
+                  onClick={() => {
+                    setActiveTab(ActiveTab.LANNA);
+                  }}
+                >
+                  Edge Lanna
+                </NavTab>
+                <NavTab
+                  active={activeTab === ActiveTab.EMBASSY}
+                  onClick={() => {
+                    setActiveTab(ActiveTab.EMBASSY);
+                  }}
+                >
+                  Embassy
+                </NavTab>
               </div>
             </div>
           )
@@ -163,6 +205,12 @@ const CommunityPage = () => {
         )}
         {activeTab === ActiveTab.ETHINDIA && (
           <EthIndiaCommunityPage
+            displayedDashboard={displayedDashboard}
+            setDisplayedDashboard={setDisplayedDashboard}
+          />
+        )}
+        {activeTab === ActiveTab.EMBASSY && (
+          <EmbassyCommunityPage
             displayedDashboard={displayedDashboard}
             setDisplayedDashboard={setDisplayedDashboard}
           />

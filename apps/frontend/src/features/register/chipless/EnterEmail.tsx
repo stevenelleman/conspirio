@@ -53,7 +53,7 @@ const EnterEmail: React.FC<EnterEmailProps> = ({
         description={
           <div className="flex flex-col gap-2">
             <span>
-              {`Use programmable cryptography to connect safely and expressively with others -- find your conspirators and co-schemers.`}
+              {`Use programmable cryptography to connect safely and expressively with others. Find your conspirators and co-schemers.`}
             </span>
           </div>
         }
