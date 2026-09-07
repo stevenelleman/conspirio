@@ -156,7 +156,8 @@ export enum LeaderboardEntryType {
   ETHINDIA_2024_TAP_COUNT = "ETHINDIA_2024_TAP_COUNT",
   USER_REGISTRATION_ONBOARDING = "USER_REGISTRATION_ONBOARDING", // NOTE: This leaderboard type *increments* the EntryValue. The default updates the value to whats passed in.
 
-  EMBASSY_TAP_COUNT = "EMBASSY_TAP_COUNT"
+  EMBASSY_TAP_COUNT = "EMBASSY_TAP_COUNT",
+  EMBASSY_TOTAL_WORKOUT_COUNT = "EMBASSY_TOTAL_WORKOUT_COUNT",
 }
 
 export const LeaderboardEntryTypeSchema = z.nativeEnum(LeaderboardEntryType);
