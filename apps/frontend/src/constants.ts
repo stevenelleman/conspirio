@@ -14,8 +14,7 @@ export const communitiesHumanReadable: { [key: string]: string } = {
 
 export const ERROR_SUPPORT_CONTACT = "https://t.me/stevenelleman";
 
-// TODO: Update to conspirio email
-export const SUPPORT_EMAIL = "steven.elleman@gmail.com";
+export const SUPPORT_EMAIL = "hello@conspirio.space";
 
 export const devconLocationMapping: {
   [key: string]: { name: string; exhibitor: string; description: string };

@@ -6,6 +6,7 @@ export enum ChipIssuer {
   EDGE_CITY_LANNA = "EDGE_CITY_LANNA",
   DEVCON_2024 = "DEVCON_2024",
   ETH_INDIA_2024 = "ETH_INDIA_2024",
+  EMBASSY = "EMBASSY",
   TESTING = "TESTING",
 }
 
@@ -154,6 +155,8 @@ export enum LeaderboardEntryType {
   DEVCON_2024_TAP_COUNT_NO_PROOF = "DEVCON_2024_TAP_COUNT_NO_PROOF",
   ETHINDIA_2024_TAP_COUNT = "ETHINDIA_2024_TAP_COUNT",
   USER_REGISTRATION_ONBOARDING = "USER_REGISTRATION_ONBOARDING", // NOTE: This leaderboard type *increments* the EntryValue. The default updates the value to whats passed in.
+
+  EMBASSY_TAP_COUNT = "EMBASSY_TAP_COUNT"
 }
 
 export const LeaderboardEntryTypeSchema = z.nativeEnum(LeaderboardEntryType);

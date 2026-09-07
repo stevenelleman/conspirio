@@ -13,6 +13,7 @@ import AppLayout from "@/layouts/AppLayout";
 import { DisplayedDashboard } from "@/components/cards/CommunityCard";
 import { NavTab } from "@/components/ui/NavTab";
 import EthIndiaCommunityPage from "@/features/community/EthIndiaCommunityPage";
+import EmbassyCommunityPage from "@/features/community/EmbassyCommunityPage";
 
 export const metadata: Metadata = {
   title: "Community",
@@ -22,6 +23,7 @@ enum ActiveTab {
   ETHINDIA,
   DEVCON,
   LANNA,
+  EMBASSY,
   NONE,
 }
 
@@ -67,6 +69,9 @@ const CommunityPage = () => {
         } else if (userChipIssuers.includes(ChipIssuer.EDGE_CITY_LANNA)) {
           setActiveTab(ActiveTab.LANNA);
         }
+      } else {
+        // Until chips are issued, set default to Embassy
+        setActiveTab(ActiveTab.EMBASSY);
       }
 
       setLoading(false);
@@ -163,6 +168,12 @@ const CommunityPage = () => {
         )}
         {activeTab === ActiveTab.ETHINDIA && (
           <EthIndiaCommunityPage
+            displayedDashboard={displayedDashboard}
+            setDisplayedDashboard={setDisplayedDashboard}
+          />
+        )}
+        {activeTab === ActiveTab.EMBASSY && (
+          <EmbassyCommunityPage
             displayedDashboard={displayedDashboard}
             setDisplayedDashboard={setDisplayedDashboard}
           />
