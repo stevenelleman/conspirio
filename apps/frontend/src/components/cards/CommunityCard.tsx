@@ -20,6 +20,7 @@ export enum DisplayedDashboard {
   ETHINDIA_2024_TAP_COUNT = "ethindia-total-taps",
 
   EMBASSY_TAP_COUNT = "embassy-total-taps",
+  EMBASSY_TOTAL_WORKOUTS = "embassy-total-workouts",
 }
 
 export interface CommunityCardProps {

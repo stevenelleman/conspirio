@@ -18,6 +18,7 @@ import { logoutUser } from "@/lib/auth";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
 import ImportDevconButton from "@/features/oauth/ImportDevconButton";
+import ImportStravaButton from "@/features/oauth/ImportStravaButton";
 import ToggleSwitch from "@/components/ui/Switch";
 import useSettings from "@/hooks/useSettings";
 import { storeAddChipRequest } from "@/lib/chip/addChip";
@@ -100,9 +101,11 @@ const ProfilePage: React.FC = () => {
 
   const hasGithubToAdd =
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.GITHUB);
+  const hasStravaToAdd =
+    !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.STRAVA);
   const hasDevconToAdd = !Object.keys(user.userData).includes("devcon");
 
-  const hasOauthToAdd = hasGithubToAdd || hasDevconToAdd;
+  const hasOauthToAdd = hasGithubToAdd || hasStravaToAdd || hasDevconToAdd;
   const hasDataToAdd = hasOauthToAdd || !user.userData.tensionsRating;
 
   const hasVaultData =
@@ -212,6 +215,15 @@ const ProfilePage: React.FC = () => {
                           }
                         >
                           <ImportGithubButton />
+                        </div>
+                      )}
+                      {hasStravaToAdd && (
+                        <div
+                          onClick={() =>
+                            logClientEvent("user-profile-strava-clicked", {})
+                          }
+                        >
+                          <ImportStravaButton />
                         </div>
                       )}
                       {hasDevconToAdd && <ImportDevconButton />}

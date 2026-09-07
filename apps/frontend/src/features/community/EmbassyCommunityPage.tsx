@@ -4,7 +4,7 @@ import {
   DisplayedDashboard,
 } from "@/components/cards/CommunityCard";
 import { DashboardDetail } from "@/components/dashboard/DashboardDetail";
-import { StoreBanner } from "@/components/StoreBanner";
+import { ChipPickup } from "@/components/ChipPickup";
 import { CursiveLogo } from "@/components/ui/HeaderCover";
 import {
   getTopLeaderboardEntries,
@@ -23,6 +23,14 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { User } from "@/lib/storage/types";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
+import ImportStravaButton from "@/features/oauth/ImportStravaButton";
+
+// NOTE: Consider moving to constants.ts?
+const UserOnboardingTarget = 100;
+const GithubCommitTarget = 200;
+const TapTarget = 100;
+const StravaRunTarget = 100;
+const WorkoutTarget = 50;
 
 export default function EmbassyCommunityPage({
   displayedDashboard,
@@ -50,6 +58,16 @@ export default function EmbassyCommunityPage({
   const [githubLeaderboardEntries, setGithubLeaderboardEntries] =
     useState<LeaderboardEntries | null>(null);
 
+  const [stravaLeaderboardDetails, setStravaLeaderboardDetails] =
+    useState<LeaderboardDetails | null>(null);
+  const [stravaLeaderboardEntries, setStravaLeaderboardEntries] =
+    useState<LeaderboardEntries | null>(null);
+
+  const [embassyTotalWorkoutDetails, setEmbassyTotalWorkoutDetails] =
+    useState<LeaderboardDetails | null>(null);
+  const [embassyTotalWorkoutEntries, setEmbassyTotalWorkoutEntries] =
+    useState<LeaderboardEntries | null>(null);
+
   const [cardProps, setCardProps] = useState<CommunityCardProps[]>([]);
 
   useEffect(() => {
@@ -68,6 +86,10 @@ export default function EmbassyCommunityPage({
       let totalTapEntries: LeaderboardEntries | null = null;
       let githubDetails: LeaderboardDetails | null = null;
       let githubEntries: LeaderboardEntries | null = null;
+      let stravaDetails: LeaderboardDetails | null = null;
+      let stravaEntries: LeaderboardEntries | null = null;
+      let embassyTotalWorkoutDetails: LeaderboardDetails | null = null;
+      let embassyTotalWorkoutEntries: LeaderboardEntries | null = null;
 
       let totalOnboardingDetails: LeaderboardDetails | null = null;
       let totalOnboardingEntries: LeaderboardEntries | null = null;
@@ -79,6 +101,10 @@ export default function EmbassyCommunityPage({
           totalTapEntries,
           githubDetails,
           githubEntries,
+          stravaDetails,
+          stravaEntries,
+          embassyTotalWorkoutDetails,
+          embassyTotalWorkoutEntries,
         ] = await Promise.all([
           storage.getUser(),
           getUserLeaderboardDetails(
@@ -97,6 +123,22 @@ export default function EmbassyCommunityPage({
             communityIssuer,
             LeaderboardEntryType.GITHUB_CONTRIBUTIONS_LAST_YEAR
           ),
+          getUserLeaderboardDetails(
+            communityIssuer,
+            LeaderboardEntryType.STRAVA_PREVIOUS_MONTH_RUN_DISTANCE
+          ),
+          getTopLeaderboardEntries(
+            communityIssuer,
+            LeaderboardEntryType.STRAVA_PREVIOUS_MONTH_RUN_DISTANCE
+          ),
+          getUserLeaderboardDetails(
+            communityIssuer,
+            LeaderboardEntryType.EMBASSY_TOTAL_WORKOUT_COUNT
+          ),
+          getTopLeaderboardEntries(
+            communityIssuer,
+            LeaderboardEntryType.EMBASSY_TOTAL_WORKOUT_COUNT
+          )
         ]);
 
         [totalOnboardingDetails, totalOnboardingEntries] = await Promise.all([
@@ -121,7 +163,11 @@ export default function EmbassyCommunityPage({
         !totalTapDetails ||
         !totalTapEntries ||
         !githubDetails ||
-        !githubEntries
+        !githubEntries ||
+        !stravaDetails ||
+        !stravaEntries ||
+        !embassyTotalWorkoutDetails ||
+        !embassyTotalWorkoutEntries
       ) {
         toast.error("User leaderboard info not found.");
         router.push("/profile");
@@ -145,45 +191,79 @@ export default function EmbassyCommunityPage({
       setGithubLeaderboardDetails(githubDetails);
       setGithubLeaderboardEntries(githubEntries);
 
+      setStravaLeaderboardDetails(stravaDetails);
+      setStravaLeaderboardEntries(stravaEntries);
+
+      setEmbassyTotalWorkoutDetails(embassyTotalWorkoutDetails);
+      setEmbassyTotalWorkoutEntries(embassyTotalWorkoutEntries);
+
       const props: CommunityCardProps[] = [
         {
           image: "/images/week.png",
           title: "User Onboarding Leaderboard 🤝",
-          description: `${totalOnboardingDetails.totalValue} of 100 onboardings`,
+          description: `${totalOnboardingDetails.totalValue} of ${UserOnboardingTarget} onboardings`,
           type: "active",
           position: totalOnboardingDetails.userPosition,
           totalContributors: totalOnboardingDetails.totalContributors,
           progressPercentage: Math.min(
             100,
-            Math.round((totalOnboardingDetails.totalValue / 100) * 100)
+            Math.round((totalOnboardingDetails.totalValue / UserOnboardingTarget) * 100)
           ),
           dashboard: DisplayedDashboard.USER_REGISTRATION_ONBOARDING,
         },
         {
           image: "/images/buildclub.png",
           title: "GitHub Commit Leaderboard 👩‍💻",
-          description: `${githubDetails.totalValue} of 2000 contributions`,
+          description: `${githubDetails.totalValue} of ${GithubCommitTarget} contributions`,
           type: "active",
           position: githubDetails.userPosition,
           totalContributors: githubDetails.totalContributors,
           progressPercentage: Math.min(
             100,
-            Math.round((githubDetails.totalValue / 2000) * 100)
+            Math.round((githubDetails.totalValue / GithubCommitTarget) * 100)
           ),
           dashboard: DisplayedDashboard.GITHUB,
         },
         {
           image: "/images/hand.png",
           title: "Tap Leaderboard 🏆",
-          description: `${totalTapDetails.totalValue} of 500 taps`,
+          description: `${totalTapDetails.totalValue} of ${TapTarget} taps`,
           type: "active",
           position: totalTapDetails.userPosition,
           totalContributors: totalTapDetails.totalContributors,
           progressPercentage: Math.min(
             100,
-            Math.round((totalTapDetails.totalValue / 500) * 100)
+            Math.round((totalTapDetails.totalValue / TapTarget) * 100)
           ),
-          dashboard: DisplayedDashboard.ETHINDIA_2024_TAP_COUNT,
+          dashboard: DisplayedDashboard.EMBASSY_TAP_COUNT,
+        },
+        {
+          image: "/images/runclub.png",
+          title: "Embassy Run Club 🏃‍♂️",
+          description: `${(stravaDetails.totalValue / 1000).toFixed(
+            2
+          )} of ${StravaRunTarget} km`,
+          type: "active",
+          position: stravaDetails.userPosition,
+          totalContributors: stravaDetails.totalContributors,
+          progressPercentage: Math.min(
+            100,
+            Math.round((stravaDetails.totalValue / (StravaRunTarget * 1000)) * 100)
+          ),
+          dashboard: DisplayedDashboard.STRAVA,
+        },
+        {
+          image: "/images/yoga.png",
+          title: "Embassy Workouts 🥊",
+          description: `${embassyTotalWorkoutDetails.totalValue} of ${WorkoutTarget} workouts`,
+          type: "active",
+          position: embassyTotalWorkoutDetails.userPosition,
+          totalContributors: embassyTotalWorkoutDetails.totalContributors,
+          progressPercentage: Math.min(
+            100,
+            Math.round((embassyTotalWorkoutDetails.totalValue / WorkoutTarget) * 100)
+          ),
+          dashboard: DisplayedDashboard.EMBASSY_TOTAL_WORKOUTS,
         },
       ];
 
@@ -212,7 +292,7 @@ export default function EmbassyCommunityPage({
         }
         leaderboardDetails={leaderboardTapDetails}
         leaderboardEntries={leaderboardTapEntries}
-        goal={500}
+        goal={TapTarget}
         unit="tap"
         organizer="Conspirio"
         organizerDescription="Cryptography for human connection"
@@ -242,7 +322,7 @@ export default function EmbassyCommunityPage({
         }
         leaderboardDetails={leaderboardOnboardingDetails}
         leaderboardEntries={leaderboardOnboardingEntries}
-        goal={100}
+        goal={UserOnboardingTarget}
         unit="invites"
         organizer="Conspirio"
         organizerDescription="Cryptography for human connection"
@@ -264,7 +344,7 @@ export default function EmbassyCommunityPage({
         description={`Share your open source GitHub contributions over the last year with the Builder community!`}
         leaderboardDetails={githubLeaderboardDetails}
         leaderboardEntries={githubLeaderboardEntries}
-        goal={2000}
+        goal={GithubCommitTarget}
         unit="contribution"
         organizer="Conspirio"
         organizerDescription="Cryptography for human connection"
@@ -286,10 +366,78 @@ export default function EmbassyCommunityPage({
     );
   }
 
+  if (
+    stravaLeaderboardDetails &&
+    stravaLeaderboardEntries &&
+    displayedDashboard === DisplayedDashboard.STRAVA
+  ) {
+    return (
+      <DashboardDetail
+        image="/images/runclub_wide.png"
+        title="Embassy Run Club 🏃‍♂️"
+        description={`Share your Strava running distance to participate in the Embassy Run Club!`}
+        leaderboardDetails={{
+          ...stravaLeaderboardDetails,
+          totalValue: stravaLeaderboardDetails.totalValue / 1000,
+        }}
+        leaderboardEntries={{
+          entries: stravaLeaderboardEntries.entries.map((entry) => ({
+            ...entry,
+            entryValue: entry.entryValue / 1000,
+          })),
+        }}
+        goal={StravaRunTarget}
+        unit="km"
+        organizer="Conspirio"
+        organizerDescription="Cryptography for human connection"
+        actionItem={
+          user &&
+          (!user.oauth ||
+            (user.oauth && !Object.keys(user?.oauth).includes("strava"))) && (
+            <div
+              className="w-full"
+              onClick={() => logClientEvent("community-strava-clicked", {})}
+            >
+              <ImportStravaButton fullWidth />
+            </div>
+          )
+        }
+        type="active"
+        returnToHome={() => setDisplayedDashboard(DisplayedDashboard.NONE)}
+      />
+    );
+  }
+
+  if (
+    embassyTotalWorkoutDetails &&
+    embassyTotalWorkoutEntries &&
+    displayedDashboard === DisplayedDashboard.EMBASSY_TOTAL_WORKOUTS
+  ) {
+    return (
+      <DashboardDetail
+        image="/images/runclub_wide.png"
+        title="Embassy Workouts 🥊"
+        description={
+          "Help us reach the Embassy goal of 50 workouts during the month!"
+        }
+        leaderboardDetails={embassyTotalWorkoutDetails}
+        leaderboardEntries={embassyTotalWorkoutEntries}
+        goal={WorkoutTarget}
+        unit="workout"
+        organizer="Conspirio"
+        organizerDescription="Cryptography for human connection"
+        type="active"
+        returnToHome={() => setDisplayedDashboard(DisplayedDashboard.NONE)}
+        prize={true}
+      />
+    );
+  }
+
+  // NOTE: Add a Banner about picking up chip -- who to get from? how to register?
   return (
     <>
       <div className="py-3">
-        <StoreBanner />
+        <ChipPickup />
       </div>
       {!leaderboardTapDetails ||
       !leaderboardTapEntries ||
