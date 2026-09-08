@@ -22,12 +22,6 @@ const CreatingAccount: React.FC<CreatingAccountProps> = ({
 
   const slides = [
     {
-      title: "Build a private & verifiable social graph",
-      description:
-        "With a simple tap, you can share socials and a verifiable proof of meeting for use in ZK apps. This social graph is private to you and exportable.",
-      image: "/images/social-graph-wide.png",
-    },
-    {
       title: "Discover commonalities, grow your garden!",
       description:
         "Use MPC to find out common contacts & interests without revealing anything else. The more overlap, the more a shared digital flower will grow!",
@@ -38,6 +32,12 @@ const CreatingAccount: React.FC<CreatingAccountProps> = ({
       description:
         "Add hot takes and data from GitHub to discover more meaningful commonalities with other attendees! All the data you import is private to you.",
       image: "/images/buildclub_wide.png",
+    },
+    {
+      title: "Build a private & verifiable social graph",
+      description:
+        "With a simple tap, you can share socials and a verifiable proof of meeting for use in ZK apps. This social graph is private to you and exportable.",
+      image: "/images/social-graph-wide.png",
     },
   ];
 
