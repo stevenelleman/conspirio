@@ -217,7 +217,7 @@ const RegisterEmbassy: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
         DisplayState.CREATING_ACCOUNT,
       ].includes(displayState) && (
         <HeaderCover
-          image="ethindia" // NOTE: Add embassy here once there is an associated image cover
+          image="embassy"
           // isLoading={[DisplayState.CREATING_ACCOUNT].includes(displayState)}
           isLoading={isCreatingAccount}
         />

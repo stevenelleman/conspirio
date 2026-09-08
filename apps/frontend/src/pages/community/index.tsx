@@ -62,16 +62,15 @@ const CommunityPage = () => {
 
       // Set initial selected community
       if (userChipIssuers.length > 0) {
-        if (userChipIssuers.includes(ChipIssuer.ETH_INDIA_2024)) {
+        if (userChipIssuers.includes(ChipIssuer.EMBASSY)) {
+          setActiveTab(ActiveTab.EMBASSY);
+        } else if (userChipIssuers.includes(ChipIssuer.ETH_INDIA_2024)) {
           setActiveTab(ActiveTab.ETHINDIA);
         } else if (userChipIssuers.includes(ChipIssuer.DEVCON_2024)) {
           setActiveTab(ActiveTab.DEVCON);
         } else if (userChipIssuers.includes(ChipIssuer.EDGE_CITY_LANNA)) {
           setActiveTab(ActiveTab.LANNA);
         }
-      } else {
-        // Until chips are issued, set default to Embassy
-        setActiveTab(ActiveTab.EMBASSY);
       }
 
       setLoading(false);
@@ -116,39 +115,8 @@ const CommunityPage = () => {
                   }}
                 ></div>
               </div>
-               <div className="py-3 flex gap-6">
-                {userChips && userChips.includes(ChipIssuer.ETH_INDIA_2024) && (
-                  <NavTab
-                    active={activeTab === ActiveTab.ETHINDIA}
-                    onClick={() => {
-                      setActiveTab(ActiveTab.ETHINDIA);
-                    }}
-                  >
-                    EthIndia
-                  </NavTab>
-                )}
-                {userChips && userChips.includes(ChipIssuer.DEVCON_2024) && (
-                  <NavTab
-                    active={activeTab === ActiveTab.DEVCON}
-                    onClick={() => {
-                      setActiveTab(ActiveTab.DEVCON);
-                    }}
-                  >
-                    Devcon
-                  </NavTab>
-                )}
-                {userChips &&
-                  userChips.includes(ChipIssuer.EDGE_CITY_LANNA) && (
-                    <NavTab
-                      active={activeTab === ActiveTab.LANNA}
-                      onClick={() => {
-                        setActiveTab(ActiveTab.LANNA);
-                      }}
-                    >
-                      Edge Lanna
-                    </NavTab>
-                  )}
-                 {userChips &&
+                <div className="py-3 flex gap-6">
+                  {userChips &&
                    userChips.includes(ChipIssuer.EMBASSY) && (
                      <NavTab
                        active={activeTab === ActiveTab.EMBASSY}
@@ -159,10 +127,40 @@ const CommunityPage = () => {
                        Embassy
                      </NavTab>
                    )}
-
+                  {userChips && userChips.includes(ChipIssuer.ETH_INDIA_2024) && (
+                    <NavTab
+                      active={activeTab === ActiveTab.ETHINDIA}
+                      onClick={() => {
+                        setActiveTab(ActiveTab.ETHINDIA);
+                      }}
+                    >
+                      EthIndia
+                    </NavTab>
+                  )}
+                  {userChips && userChips.includes(ChipIssuer.DEVCON_2024) && (
+                    <NavTab
+                      active={activeTab === ActiveTab.DEVCON}
+                      onClick={() => {
+                        setActiveTab(ActiveTab.DEVCON);
+                      }}
+                    >
+                      Devcon
+                    </NavTab>
+                  )}
+                  {userChips &&
+                    userChips.includes(ChipIssuer.EDGE_CITY_LANNA) && (
+                      <NavTab
+                        active={activeTab === ActiveTab.LANNA}
+                        onClick={() => {
+                          setActiveTab(ActiveTab.LANNA);
+                        }}
+                      >
+                        Edge Lanna
+                      </NavTab>
+                    )}
+                </div>
               </div>
-            </div>
-          )
+            )
         }
         withContainer={displayedDashboard === DisplayedDashboard.NONE}
       >

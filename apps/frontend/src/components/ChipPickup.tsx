@@ -32,7 +32,7 @@ export const ChipPickup = () => {
               Join the Embassy community!
             </h2>
             <p className="text-xs font-medium text-label-quaternary">
-              To make connections and participate in activities you need an Embassy-issued NFC sticker! Pick up a sticker from Steven.
+              To make connections and participate in activities you need an Embassy-issued NFC sticker! Tell your friends to pick up a sticker from Steven.
             </p>
           </div>
         </div>
