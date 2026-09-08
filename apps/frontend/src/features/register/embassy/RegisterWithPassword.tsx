@@ -34,7 +34,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
     <div className="flex flex-col grow">
       <div className="flex flex-col gap-2 py-4">
         <span className="text-[20px] font-semibold font-sans text-label-primary">
-          Set up your Cursive account
+          Set up your Conspirio account
         </span>
         <span className="font-sans text-sm font-normal text-label-primary">
           Your data is private to you, encrypted by your password and backed up.
