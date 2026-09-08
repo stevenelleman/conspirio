@@ -88,10 +88,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           // Ensure toast only called once
           setIsToastDisabled(false);
 
+          // Note: if a contact has been collected while logged out, will it automatically be back-filled at login?
+          // Probably good feature to eventually have.
           if (!isToastDisabled) {
             toast(<div>
-              {"Unregistered users can only collect contacts. Get a chip at the Cursive booth near entrance to access" +
-                " other features! If you already have an account, "}
+              {"Unregistered users can only collect contacts. Get an Embassy-issued chip to try community features! If you already have an account, "}
               <Link
                 href={`${FRONTEND_URL}/login`}
                 className="underline font-bold"
