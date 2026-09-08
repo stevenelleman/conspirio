@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
-import { errorToString, Json, UsernameSchema } from "@types";
+import { EmailSchema, errorToString, Json, UsernameSchema } from "@types";
 import EnterUserInfo from "@/features/register/embassy/EnterUserInfo";
 import RegisterWithPassword from "@/features/register/embassy/RegisterWithPassword";
-import { verifyUsernameIsUnique } from "@/lib/auth/util";
+import { verifyEmailIsUnique, verifyUsernameIsUnique } from "@/lib/auth/util";
 import { TapInfo } from "@/lib/storage/types";
 import { registerChip } from "@/lib/chip/register";
 import { applyBackupsToChippedNewUser, registerUser } from "@/lib/auth/register";
@@ -24,11 +24,11 @@ enum DisplayState {
   CREATING_ACCOUNT,
 }
 
-interface RegisterETHIndiaProps {
+interface RegisterEmbassyProps {
   savedTap: TapInfo;
 }
 
-const RegisterEmbassy: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
+const RegisterEmbassy: React.FC<RegisterEmbassyProps> = ({ savedTap }) => {
   const router = useRouter();
   const { pageHeight } = useSettings();
   const [displayState, setDisplayState] = useState<DisplayState>(
@@ -58,9 +58,26 @@ const RegisterEmbassy: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
   };
 
   const handleRegisterWithPassword = async (
+    email: string,
     username: string,
     password: string
   ) => {
+    // Check email is valid
+    let parsedEmail;
+    try {
+      parsedEmail = EmailSchema.parse(email);
+    } catch (error) {
+      toast.error("Invalid email");
+      console.error(error);
+      return;
+    }
+
+    const emailIsUnique = await verifyEmailIsUnique(parsedEmail);
+    if (!emailIsUnique) {
+      toast.error("Email is already taken");
+      return;
+    }
+
     // Check username is valid
     let parsedUsername;
     try {
@@ -91,10 +108,11 @@ const RegisterEmbassy: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
     logClientEvent("register-register-with-password", {
       chipIssuer: savedTap.tapResponse.chipIssuer,
     });
-    await handleCreateAccount(username, password, false, undefined);
+    await handleCreateAccount(email, username, password, false, undefined);
   };
 
   const handleCreateAccount = async (
+    email: string,
     username: string,
     backupPassword: string,
     registeredWithPasskey: boolean,
@@ -108,7 +126,7 @@ const RegisterEmbassy: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
     setIsCreatingAccount(true);
     try {
       await registerUser({
-        email: username,
+        email,
         password: backupPassword,
         username,
         displayName,

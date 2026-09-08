@@ -5,7 +5,7 @@ import { AppButton } from "@/components/ui/Button";
 import { AppCopy } from "@/components/ui/AppCopy";
 
 interface RegisterWithPasswordProps {
-  onSubmit: (username: string, password: string) => Promise<void>;
+  onSubmit: (email: string, username: string, password: string) => Promise<void>;
   onGoBack: () => void;
 }
 
@@ -13,6 +13,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
   onSubmit,
   onGoBack,
 }) => {
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -27,7 +28,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
       toast.error("Password must be at least 8 characters long");
       return;
     }
-    onSubmit(username, password);
+    onSubmit(email, username, password);
   };
 
   return (
@@ -43,6 +44,16 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
       </div>
       <div className="flex flex-col mt-auto gap-4">
         <form onSubmit={handleSubmit} className="space-y-4">
+          <AppInput
+            id="email"
+            name="email"
+            type="text"
+            label="Email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
           <AppInput
             id="username"
             name="username"

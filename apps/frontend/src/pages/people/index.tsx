@@ -503,6 +503,7 @@ const PeoplePage: React.FC = () => {
                 Troubleshoot tapping{" "}
                 <a
                   href="https://cursive.team/tap-help"
+                  // TODO: Update url
                   className="underline"
                   target="_blank"
                   rel="noopener noreferrer"
