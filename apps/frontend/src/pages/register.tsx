@@ -45,12 +45,12 @@ const Register: React.FC = () => {
     return null;
   }
 
-  if (savedTap?.tapResponse.chipIssuer === ChipIssuer.DEVCON_2024) {
+  if (savedTap?.tapResponse.chipIssuer === ChipIssuer.EMBASSY) {
+    return <RegisterEmbassy savedTap={savedTap} />;
+  } else if (savedTap?.tapResponse.chipIssuer === ChipIssuer.DEVCON_2024) {
     return <RegisterDevcon savedTap={savedTap} />;
   } else if (savedTap?.tapResponse.chipIssuer === ChipIssuer.ETH_INDIA_2024) {
     return <RegisterEthIndia savedTap={savedTap} />;
-  } else if (savedTap?.tapResponse.chipIssuer === ChipIssuer.EMBASSY) {
-    return <RegisterEmbassy savedTap={savedTap} />;
   } else {
     return <RegisterChipless />;
   }

@@ -54,6 +54,9 @@ Testing Secret Values:
 
 - For the email service, `AWS_SES_SENDER_EMAIL`, `AWS_ACCESS_KEY_ID`, `AWS_REGION`, and `AWS_SECRET_ACCESS_KEY` must be set with target email and key info.
 
+To test the chip registration flow:
+- `localhost:3000/tap?chipId=TESTEMBASSY001`
+
 Manually registering community-issued NFC chip: 
 
 - Insert in DB: `INSERT INTO "public"."Chip" ("chipIssuer", "chipId", "chipVariant", "id") VALUES ('EMBASSY', '8739ecdbecd2a1df', 'NTAG424', '316d73d5-a3c7-474b-9eb9-32f04c866fc5');`
