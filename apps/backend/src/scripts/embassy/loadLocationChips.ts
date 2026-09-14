@@ -3,7 +3,7 @@ import { generateSignatureKeyPair } from "../../lib/util";
 import { v4 as uuidv4 } from "uuid";
 // NOTE: this is the how specific values were inputted
 //  - basically a the locationChips was updated with the values, and the script was run
-import { EMBASSY_LOCATION_CHIPS } from "./locationChips";
+// import { EMBASSY_LOCATION_CHIPS } from "./locationChips";
 
 const prisma = new PrismaClient();
 
@@ -16,8 +16,8 @@ export interface LocationChip {
 async function loadLocationChips() {
   try {
     console.log("Starting to load location chips...");
-    const chipSource: LocationChip[] = EMBASSY_LOCATION_CHIPS;
-    //const chipSource: LocationChip[] = [];
+    // const chipSource: LocationChip[] = EMBASSY_LOCATION_CHIPS;
+    const chipSource: LocationChip[] = [];
     const chipsToCreate = chipSource
       .map(({ uid, name, description }) => {
         const { signingKey, verifyingKey } = generateSignatureKeyPair();
