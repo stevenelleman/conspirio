@@ -7,7 +7,6 @@ From root:
 - Create local postgres database, set name to be `connections_test` and port to `5432` (the default).
 - `CREATE DATABASE connections_test;`
 - `pnpm install`
-- `export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/connections_test?schema=public"`
 
 Frontend:
 

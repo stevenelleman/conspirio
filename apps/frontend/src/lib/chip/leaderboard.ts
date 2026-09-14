@@ -134,6 +134,16 @@ export async function updateTapLeaderboardEntry(
     // };
     // requests.push(updateTotalTapsRequest);
 
+    if (chipIssuer === ChipIssuer.EMBASSY) {
+      const updateDevconTapsRequest: UpdateLeaderboardEntryRequest = {
+        authToken: session.authTokenValue,
+        chipIssuer,
+        entryType: LeaderboardEntryType.EMBASSY_TAP_COUNT,
+        entryValue: totalTapCount,
+      };
+      requests.push(updateDevconTapsRequest);
+    }
+
     if (chipIssuer === ChipIssuer.ETH_INDIA_2024) {
       const updateEthIndiaTapsRequest: UpdateLeaderboardEntryRequest = {
         authToken: session.authTokenValue,

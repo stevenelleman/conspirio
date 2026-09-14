@@ -162,10 +162,12 @@ export class TelegramNotificationClient implements iNotificationClient {
 
     this.bot.command("feedback", async (ctx) => {
       await ctx.reply(
-        `Join the Conspirio Support channel and talk with the team!`
+        // TODO: Once there's a team, make a more official channel
+        //  - `https://t.me/conspirioappsupport`
+        //`Join the Conspirio Support channel and talk with the team!`
+        `Chat with the Conspirio maintainer, Steven!`
       );
-      // TODO: change telegram chat
-      await ctx.reply(`https://t.me/cursiveappsupport`);
+      await ctx.reply(`https://t.me/damazene`);
     });
 
     this.bot.command("help", async (ctx) => {
