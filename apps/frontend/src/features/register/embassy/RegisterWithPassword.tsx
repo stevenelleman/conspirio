@@ -53,6 +53,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
+            autoCapitalize="off"
           />
           <AppInput
             id="username"
@@ -63,6 +64,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"
+            autoCapitalize="off"
           />
           <AppInput
             type="password"
@@ -70,6 +72,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoCapitalize="off"
             required
           />
           <AppInput
@@ -78,6 +81,7 @@ const RegisterWithPassword: React.FC<RegisterWithPasswordProps> = ({
             label="Confirm password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            autoCapitalize="off"
             required
           />
           <AppButton type="submit">Submit</AppButton>
