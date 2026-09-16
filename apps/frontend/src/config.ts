@@ -99,7 +99,7 @@ export const ROUTER_ITEMS: RouterItem[] = [
   {
     label: "Community",
     href: "/community",
-    icon: Icons.Devcon,
+    icon: Icons.Community,
     iconSize: 20,
   },
   {
