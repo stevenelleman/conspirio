@@ -14,6 +14,7 @@ import { IoMenu as Menu } from "react-icons/io5";
 import { IoIosCloseCircle as CloseLocation } from "react-icons/io";
 import { FaTelegramPlane as Telegram } from "react-icons/fa";
 import { FaXTwitter as Twitter } from "react-icons/fa6";
+import { DiAtom as Community } from "react-icons/di";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Icons: Record<string, any> = {
@@ -500,4 +501,5 @@ c45 -2 69 1 76 10 6 7 15 42 22 78 23 126 56 260 64 260 5 0 7 -78 6 -172 l-2
       />
     </svg>
   ),
+  Community,
 };
