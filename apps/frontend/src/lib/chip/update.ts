@@ -13,6 +13,9 @@ interface UpdateChipArgs {
   ownerSignalUsername: string | null;
   ownerInstagramUsername: string | null;
   ownerFarcasterUsername: string | null;
+  ownerWhatsappNumber: string | null;
+  ownerSMSNumber: string | null;
+  ownerEmail: string | null;
   ownerPronouns: string | null;
 }
 
@@ -41,6 +44,21 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
   if (args.ownerFarcasterUsername) {
     ownerUserData.farcaster = {
       username: args.ownerFarcasterUsername,
+    };
+  }
+  if (args.ownerWhatsappNumber) {
+    ownerUserData.whatsapp = {
+      number: args.ownerWhatsappNumber,
+    };
+  }
+  if (args.ownerSMSNumber) {
+    ownerUserData.sms = {
+      number: args.ownerSMSNumber,
+    };
+  }
+  if (args.ownerEmail) {
+    ownerUserData.email = {
+      address: args.ownerEmail,
     };
   }
   if (args.ownerPronouns) {
@@ -94,6 +112,15 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       },
       farcaster: {
         username: args.ownerFarcasterUsername ?? undefined,
+      },
+      whatsapp: {
+        number: args.ownerWhatsappNumber ?? undefined,
+      },
+      sms: {
+        number: args.ownerSMSNumber ?? undefined,
+      },
+      email: {
+        address: args.ownerEmail ?? undefined,
       },
       pronouns: args.ownerPronouns ?? undefined,
     });

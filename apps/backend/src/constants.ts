@@ -2,6 +2,8 @@ import { OAuthAppDetails } from "@types";
 
 export const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
+export const TG_SUPPORT_ACCOUNT = "damazene";
+
 export const OAUTH_APP_DETAILS: Record<string, OAuthAppDetails> = {
   strava: {
     client_side_fetching: true,

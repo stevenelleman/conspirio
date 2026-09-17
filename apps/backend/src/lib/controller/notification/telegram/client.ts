@@ -2,6 +2,7 @@ import { Bot } from "grammy";
 import { iNotificationClient } from "../interfaces";
 import { PrismaClient } from "@prisma/client";
 import { CommandContext, Context } from "grammy";
+import { TG_SUPPORT_ACCOUNT } from "@/constants";
 
 export class TelegramNotificationClient implements iNotificationClient {
   private bot: Bot | undefined;
@@ -167,7 +168,7 @@ export class TelegramNotificationClient implements iNotificationClient {
         //`Join the Conspirio Support channel and talk with the team!`
         `Chat with the Conspirio maintainer, Steven!`
       );
-      await ctx.reply(`https://t.me/damazene`);
+      await ctx.reply(`https://t.me/${TG_SUPPORT_ACCOUNT}`);
     });
 
     this.bot.command("help", async (ctx) => {

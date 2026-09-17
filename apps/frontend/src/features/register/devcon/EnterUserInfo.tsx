@@ -62,9 +62,9 @@ const EnterUserInfo: React.FC<EnterUserInfoProps> = ({
     },
     {
       field: "twitterHandle",
-      question: "What is your Twitter handle?",
+      question: "What is your X handle?",
       required: false,
-      placeholder: "Twitter",
+      placeholder: "X",
     },
     {
       field: "bio",
@@ -129,7 +129,7 @@ const EnterUserInfo: React.FC<EnterUserInfoProps> = ({
 
   const handleNext = async (e: unknown) => {
     if (step === 1 || step === 2) {
-      // Validate Telegram and Twitter handles
+      // Validate Telegram and X handles
       const handle = formData[steps[step].field as keyof FormData];
       if (handle.includes("@")) {
         toast.error("Please enter handles without the '@' symbol");
