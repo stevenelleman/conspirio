@@ -89,6 +89,27 @@ export default function ProfileOverview() {
                   Add socials by editing your chip details!
                 </span>
               )}
+            {user?.userData?.email?.address && (
+              <LinkCardBox
+                label="Email"
+                value={`${user.userData.email.address}`}
+                href={`mailto:${user.userData.email.address}`}
+              />
+            )}
+            {user?.userData?.sms?.number && (
+              <LinkCardBox
+                label="SMS"
+                value={`${user.userData.sms.number}`}
+                href={`sms:+${user.userData.sms.number}`}
+              />
+            )}
+            {user?.userData?.whatsapp?.number && (
+              <LinkCardBox
+                label="Whatsapp"
+                value={`${user.userData.whatsapp.number}`}
+                href={`https://wa.me/${user.userData.whatsapp.number}`}
+              />
+            )}
             {user?.userData?.telegram?.username && (
               <LinkCardBox
                 label="Telegram"
@@ -98,9 +119,9 @@ export default function ProfileOverview() {
             )}
             {user?.userData?.twitter?.username && (
               <LinkCardBox
-                label="Twitter"
+                label="X"
                 value={`@${user.userData.twitter.username}`}
-                href={`https://twitter.com/${user.userData.twitter.username}`}
+                href={`https://x.com/${user.userData.twitter.username}`}
               />
             )}
             {user?.userData?.signal?.username && (

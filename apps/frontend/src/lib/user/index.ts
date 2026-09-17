@@ -27,7 +27,7 @@ export const getUserShareableData = (userData: UserData): UserData => {
 };
 
 export const shareableUserDataToJson = (userData: UserData): Json => {
-  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, pronouns} = UserDataSchema.parse(userData);
+  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, pronouns, whatsapp, email, sms} = UserDataSchema.parse(userData);
 
   return {
     username: username || null,
@@ -42,6 +42,9 @@ export const shareableUserDataToJson = (userData: UserData): Json => {
     instagram: instagram || null,
     farcaster: farcaster || null,
     pronouns: pronouns || null,
+    whatsapp: whatsapp || null,
+    email: email || null,
+    sms: sms || null,
   };
 };
 

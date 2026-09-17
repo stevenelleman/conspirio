@@ -577,6 +577,45 @@ const UserProfilePage: React.FC = () => {
                   No socials shared.
                 </span>
               )}
+              {connection?.user?.email?.address && (
+                <div
+                  onClick={() => {
+                    logClientEvent("user-profile-email-clicked", {});
+                  }}
+                >
+                  <LinkCardBox
+                    label="Email"
+                    value={`${connection.user.email.address}`}
+                    href={`mailto:${connection.user.email.address}`}
+                  />
+                </div>
+              )}
+              {connection?.user?.sms?.number && (
+                <div
+                  onClick={() => {
+                    logClientEvent("user-profile-sms-clicked", {});
+                  }}
+                >
+                  <LinkCardBox
+                    label="SMS"
+                    value={`${connection.user.sms.number}`}
+                    href={`sms:+${connection.user.sms.number}`}
+                  />
+                </div>
+              )}
+              {connection?.user?.whatsapp?.number && (
+                <div
+                  onClick={() => {
+                    logClientEvent("user-profile-whatsapp-clicked", {});
+                  }}
+                >
+                  <LinkCardBox
+                    label="Whatsapp"
+                    value={`@${connection.user.whatsapp.number}`}
+                    href={`https://wa.me/${connection.user.whatsapp.number}`}
+                  />
+                </div>
+              )}
               {connection?.user?.telegram?.username && (
                 <div
                   onClick={() => {
@@ -597,9 +636,9 @@ const UserProfilePage: React.FC = () => {
                   }}
                 >
                   <LinkCardBox
-                    label="Twitter"
+                    label="X"
                     value={`@${connection.user.twitter.username}`}
-                    href={`https://twitter.com/${connection.user.twitter.username}`}
+                    href={`https://x.com/${connection.user.twitter.username}`}
                   />
                 </div>
               )}

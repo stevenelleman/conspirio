@@ -27,6 +27,9 @@ type ChipEditFormData = {
   signalUsername?: string;
   instagramUsername?: string;
   farcasterUsername?: string;
+  whatsappNumber?: string;
+  smsNumber?: string;
+  emailAddress?: string;
   pronouns?: string;
 };
 
@@ -51,6 +54,9 @@ const ProfileEdit = () => {
           signalUsername: user.userData?.signal?.username || "",
           instagramUsername: user.userData?.instagram?.username || "",
           farcasterUsername: user.userData?.farcaster?.username || "",
+          whatsappNumber: user.userData?.whatsapp?.number || "",
+          smsNumber: user.userData?.sms?.number || "",
+          emailAddress: user.userData?.email?.address || "",
           pronouns: user.userData?.pronouns || "",
         });
       } else {
@@ -72,6 +78,9 @@ const ProfileEdit = () => {
       signalUsername,
       instagramUsername,
       farcasterUsername,
+      whatsappNumber,
+      smsNumber,
+      emailAddress,
       pronouns,
     } = formData;
     try {
@@ -87,6 +96,9 @@ const ProfileEdit = () => {
           ownerSignalUsername: signalUsername ?? null,
           ownerInstagramUsername: instagramUsername ?? null,
           ownerFarcasterUsername: farcasterUsername ?? null,
+          ownerWhatsappNumber: whatsappNumber ?? null,
+          ownerSMSNumber: smsNumber ?? null,
+          ownerEmail: emailAddress ?? null,
           ownerPronouns: pronouns ?? null,
         });
       }
@@ -151,6 +163,24 @@ const ProfileEdit = () => {
               variant="primary"
               placeholder="They/them, She/her, He/him"
               {...register("pronouns")}
+            />
+            <AppInput
+              label="Email"
+              variant="primary"
+              placeholder="Email address"
+              {...register("emailAddress")}
+            />
+            <AppInput
+              label="SMS"
+              variant="primary"
+              placeholder="Number"
+              {...register("smsNumber")}
+            />
+            <AppInput
+              label="Whatsapp"
+              variant="primary"
+              placeholder="Number"
+              {...register("whatsappNumber")}
             />
             <AppInput
               label="Telegram"
