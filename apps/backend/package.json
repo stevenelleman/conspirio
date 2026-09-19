@@ -9,7 +9,9 @@
     "build": "prisma generate && tsc --project tsconfig.json && tsc-alias",
     "serve": "pnpm ts-node -r tsconfig-paths/register dist/apps/backend/src/index.js",
     "seed": "ts-node prisma/seed.ts",
-    "postinstall": "prisma migrate deploy && prisma generate"
+    "postinstall": "prisma migrate deploy && prisma generate",
+    "tsx-load-location-chips": "tsx --trace-warnings --trace-exit dist/apps/backend/src/scripts/embassy/loadLocationChips.js",
+    "ts-node-load-location-chips": "TS_NODE_DEBUG=true ts-node dist/apps/backend/src/scripts/embassy/loadLocationChips.js"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.662.0",
