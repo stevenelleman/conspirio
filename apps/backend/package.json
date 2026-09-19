@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
-    "start": "TS_NODE_DEBUG=true ts-node -r tsconfig-paths/register src/index.ts",
-    "build": "prisma generate && tsc --build --verbose && tsc --project tsconfig.json && tsc-alias",
-    "serve": "pnpm --loglevel=debug ts-node -r tsconfig-paths/register dist/apps/backend/src/index.js",
+    "start": "tsx -r tsconfig-paths/register src/index.ts",
+    "build": "prisma generate && tsc --project tsconfig.json && tsc-alias",
+    "serve": "node -r tsconfig-paths/register dist/apps/backend/src/index.js",
     "seed": "ts-node prisma/seed.ts",
     "postinstall": "prisma migrate deploy && prisma generate",
+
     "tsx-load-location-chips": "tsx --trace-warnings --trace-exit dist/apps/backend/src/scripts/embassy/loadLocationChips.js",
     "ts-node-load-location-chips": "TS_NODE_DEBUG=true ts-node dist/apps/backend/src/scripts/embassy/loadLocationChips.js"
   },
