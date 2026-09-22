@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { updateChip } from "@/lib/chip/update";
 import { SupportToast } from "@/components/ui/SupportToast";
 import { errorToString } from "@types";
@@ -204,7 +204,7 @@ const ProfileEdit = () => {
       ) : (
         <div className="flex items-center justify-center min-h-screen bg-white">
           <div className="text-center">
-            <CursiveLogo isLoading />
+            <ConspirioLogo isLoading />
           </div>
         </div>
       )}

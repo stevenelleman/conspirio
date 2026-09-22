@@ -8,15 +8,15 @@ interface HeaderCoverProps {
   image?: "edge-city" | "devcon" | "ethindia" | "embassy";
 }
 
-export const CursiveLogo = ({
+export const ConspirioLogo = ({
   isLoading = false,
   className = "",
   size = 68,
 }: HeaderCoverProps) => {
   return (
     <Image
-      src="/images/cursive-logo.png"
-      alt="cursive logo"
+      src="/images/conspirio-logo.png"
+      alt="conspirio logo"
       className={cn(className, isLoading && "animate-pulse-scale")}
       width={size}
       height={size}
@@ -55,7 +55,7 @@ export const HeaderCover = ({ isLoading = false, image }: HeaderCoverProps) => {
               width={400}
               height={300}
             />
-            <CursiveLogo
+            <ConspirioLogo
               className="position absolute -bottom-9 left-1/2 -ml-[30px]"
               isLoading={isLoading}
               image={image}
@@ -71,7 +71,7 @@ export const HeaderCover = ({ isLoading = false, image }: HeaderCoverProps) => {
               width={400}
               height={300}
             />
-            <CursiveLogo
+            <ConspirioLogo
               className="position absolute -bottom-9 left-1/2 -ml-[30px]"
               isLoading={isLoading}
               image={image}
@@ -87,7 +87,7 @@ export const HeaderCover = ({ isLoading = false, image }: HeaderCoverProps) => {
               width={400}
               height={300}
             />
-            <CursiveLogo
+            <ConspirioLogo
               className="position absolute -bottom-9 left-1/2 -ml-[30px]"
               isLoading={isLoading}
               image={image}

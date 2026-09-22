@@ -11,7 +11,7 @@ import AppLayout from "@/layouts/AppLayout";
 import { LinkCardBox } from "@/components/ui/LinkCardBox";
 import { AppTextarea } from "@/components/ui/Textarea";
 import { ProfileImage } from "@/components/ui/ProfileImage";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { hotTakeLabels, tensionPairs } from "@/common/constants";
 import Link from "next/link";
@@ -467,7 +467,7 @@ const UserProfilePage: React.FC = () => {
   ) {
     return (
       <div className="flex min-h-screen justify-center items-center text-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     );
   }

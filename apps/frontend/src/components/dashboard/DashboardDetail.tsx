@@ -1,7 +1,7 @@
 "use client";
 import { Icons } from "@/components/icons/Icons";
 import { AppButton } from "@/components/ui/Button";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import AppLayout from "@/layouts/AppLayout";
 import { cn } from "@/lib/frontend/util";
 import { LeaderboardDetails, LeaderboardEntries } from "@types";
@@ -228,7 +228,7 @@ export function DashboardDetail({
               Organizer
             </span>
             <div className="flex items-start gap-4 py-4">
-              <CursiveLogo size={48} />
+              <ConspirioLogo size={48} />
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-label-primary font-sans">
                   {organizer}

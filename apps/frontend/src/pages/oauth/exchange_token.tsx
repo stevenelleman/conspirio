@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { DataImportSourceSchema, errorToString } from "@types";
 import { storage } from "@/lib/storage";
 import { importData } from "@/lib/imports";
@@ -53,7 +53,7 @@ const OAuthAccessTokenPage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen justify-center items-center text-center">
-      <CursiveLogo isLoading />
+      <ConspirioLogo isLoading />
     </div>
   );
 };

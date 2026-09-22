@@ -9,7 +9,7 @@ import {
   getProfileBackgroundColor,
   ProfileImage,
 } from "@/components/ui/ProfileImage";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import Link from "next/link";
 import { Icons } from "@/components/icons/Icons";
 import { NextSeo } from "next-seo";
@@ -94,7 +94,7 @@ const ProfilePage: React.FC = () => {
   if (!user) {
     return (
       <div className="flex min-h-screen justify-center items-center text-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     );
   }

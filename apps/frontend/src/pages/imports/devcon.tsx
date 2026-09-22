@@ -12,7 +12,7 @@ import { errorToString } from "@types";
 import { ERROR_SUPPORT_CONTACT } from "@/constants";
 import { devFetchSchedule } from "@/lib/imports/integrations/devcon";
 import { updateUserData } from "@/lib/storage/localStorage/user/userData";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import Link from "next/link";
 
 
@@ -140,7 +140,7 @@ const DevconScheduleImportPage = () => {
      ) : (
         <div className="flex items-center justify-center min-h-screen bg-white">
           <div className="text-center">
-            <CursiveLogo isLoading />
+            <ConspirioLogo isLoading />
           </div>
         </div>
       )}

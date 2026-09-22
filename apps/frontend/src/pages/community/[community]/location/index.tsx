@@ -18,6 +18,7 @@ import { Icons } from "@/components/icons/Icons";
 import { AppInput } from "@/components/ui/AppInput";
 import { getCommunityLocations } from "@/lib/chip/location";
 import { ChipIssuer } from "@types";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 
 const LocationListItem: React.FC<{
   location: Location;
@@ -100,6 +101,15 @@ const LocationsPage: React.FC = () => {
 
     fetchLocations();
   }, [router]);
+
+  // If it's in the path, this should never happen, give it a few seconds to load
+  if (!locations) {
+    return (
+      <div className="flex min-h-screen justify-center items-center">
+        <ConspirioLogo isLoading />
+      </div>
+    );
+  }
 
   const handleUpdateSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
