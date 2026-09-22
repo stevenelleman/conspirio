@@ -4,7 +4,7 @@ import { TapDataSchema } from "@/lib/storage/types";
 import { createLocationTapActivity } from "@/lib/activity";
 import { saveBackupAndUpdateStorage } from "../../utils";
 import { getUserAndSession } from "..";
-import { LocationSchema } from "@/lib/storage/types/user/location";
+import { LocationTapsSchema } from "@/lib/storage/types/user/location";
 
 export const addLocationTap = async (
   tapResponse: ChipTapResponse
@@ -51,7 +51,7 @@ export const addLocationTap = async (
   });
   const newTaps = [...previousTaps, newTap];
 
-  const newLocation = LocationSchema.parse({
+  const newLocation = LocationTapsSchema.parse({
     ...newLocationData,
     taps: newTaps,
   });

@@ -43,7 +43,7 @@ router.post(
 );
 
 /**
- * @route POST /api/chip/od
+ * @route GET /api/chip/id
  * @desc Admin-authed endpoint that returns chip id
  */
 router.get(

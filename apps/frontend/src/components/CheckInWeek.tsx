@@ -45,6 +45,7 @@ export const CheckInWeek = ({
                     ? "bg-background text-label-primary"
                     : "bg-background/20 text-label-primary"
                 }`}
+                style={isActive ? {"backgroundColor": "var(--color-link-primary)"} : {}}
                 aria-label={day.full}
               >
                 {day.abbr}

@@ -7,8 +7,8 @@ import {
 import {
   Chip,
   ChipSchema,
-  NTAG212TapParamsSchema, NTAG215TapParamsSchema,
-  NTAG424TapParamsSchema,
+  tapParamsSchema,
+  encryptedTapParamsSchema,
 } from "@/lib/controller/chip/types";
 import { PrismaClient } from "@prisma/client";
 import { getCounterMessage, sign } from "@/lib/util";
@@ -29,30 +29,8 @@ export async function getChipFromTapParams(
   tapParams: TapParams,
   registration: boolean
 ): Promise<Chip | null> {
-  // Try to parse the tapParams as a NTAG215
   try {
-    const validatedTapParams = NTAG215TapParamsSchema.parse(tapParams);
-
-    const chip = await prisma.chip.findUnique({
-      where: { chipId: validatedTapParams.chipId },
-    });
-
-    // If the chip exists, return it, otherwise continue parsing other schemas
-    if (chip) {
-      try {
-        return ChipSchema.parse(chip);
-      } catch (error) {
-        console.error("error:", errorToString(error));
-        throw error;
-      }
-    }
-  } catch (error) {}
-
-
-
-  // Try to parse the tapParams as an NTAG212
-  try {
-    const validatedTapParams = NTAG212TapParamsSchema.parse(tapParams);
+    const validatedTapParams = tapParamsSchema.parse(tapParams);
 
     const chip = await prisma.chip.findUnique({
       where: { chipId: validatedTapParams.chipId },
@@ -71,7 +49,7 @@ export async function getChipFromTapParams(
 
   // Try to parse the tapParams as an NTAG424
   try {
-    const { encryptedChipId } = NTAG424TapParamsSchema.parse(tapParams);
+    const { encryptedChipId } = encryptedTapParamsSchema.parse(tapParams);
 
     let data;
     let retries = 0;

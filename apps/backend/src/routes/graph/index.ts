@@ -70,6 +70,7 @@ router.get(
     res: Response<{} | ErrorResponse>
   ) => {
     try {
+      // TODO: change
       // Allow Micah's origin
       res.header('Access-Control-Allow-Origin', 'https://micahscopes.github.io');
       res.header('Access-Control-Allow-Methods', 'GET');

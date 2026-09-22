@@ -1,16 +1,24 @@
 import useSettings from "@/hooks/useSettings";
 import { cn } from "@/lib/frontend/util";
 import Image from "next/image";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useRouter } from "next/router";
 
-export const ChipPickup = () => {
+export const LocationBanner = ({ community }: {community: string}) => {
+  const router = useRouter();
   const { darkTheme } = useSettings();
+  if (!community) {
+    toast.error("Error getting community.");
+    router.push("/community");
+  }
+  console.log("Community", community)
+  const lower = community.toString().toLowerCase();
   return (
-    <Link href={ERROR_SUPPORT_CONTACT}>
+    <Link href={`/community/${lower}/location`}>
       <div className="flex flex-col gap-1">
         <span className="text-base font-bold font-sans text-label-primary">
-          NFC Sticker Pickup
+          Chip Locations
         </span>
         <div
           className={cn(
@@ -21,7 +29,7 @@ export const ChipPickup = () => {
           <div className="p-2 flex items-center gap-[10px]">
             <div className="flex-shrink-0">
               <Image
-                src="/images/shop-cover-ethindia.png"
+                src="/images/location-chip-purple.png"
                 alt="chip pickup"
                 width={80}
                 height={80}
@@ -31,10 +39,10 @@ export const ChipPickup = () => {
             <div className="flex flex-col flex-1">
               {/* <p className="text-xs font-bold text-label-quaternary">47 taps</p> */}
               <h2 className="text-sm font-bold text-label-primary">
-                Join the Embassy community!
+                Discover location chips around Embassy!
               </h2>
               <p className="text-xs font-medium text-label-quaternary">
-                To make connections and participate in activities you need an Embassy-issued NFC sticker! Tell your friends to pick up a sticker from Steven.
+                To track activities and narrowcast to friends to join (or stay away!).
               </p>
             </div>
           </div>

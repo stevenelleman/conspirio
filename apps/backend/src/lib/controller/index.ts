@@ -29,7 +29,7 @@ import {
   AccessToken,
   DataImportSource,
   GraphEdgeResponse,
-  ErrorResponse,
+  ErrorResponse, CommunityLocations, CommunityLocation,
 } from "@types";
 import { Chip } from "@/lib/controller/chip/types";
 import { iChipClient } from "@/lib/controller/chip/interfaces";
@@ -55,6 +55,8 @@ export class Controller {
   graphClient: iGraphClient;
 
   constructor() {
+    // TODO: have all the prisma clients use the same global client, pass global client in as argument, consider making the global client here
+
     // Default client, could also pass through mock
     this.postgresClient = new PrismaPostgresClient();
 
@@ -186,6 +188,28 @@ export class Controller {
   GetTapFromChip(tapParams: TapParams): Promise<ChipTapResponse> {
     return this.chipClient.GetTapFromChip(tapParams);
   }
+
+  // Location
+
+  GetLocationChips(
+    chipIssuer: ChipIssuer,
+  ): Promise<CommunityLocations> {
+    return this.chipClient.GetLocationChips(
+      chipIssuer,
+    );
+  }
+
+  GetLocationChip(
+    chipIssuer: ChipIssuer,
+    id: string,
+  ): Promise<CommunityLocation> {
+    return this.chipClient.GetLocationChip(
+      chipIssuer,
+      id,
+    );
+  }
+
+  // Leaderboards
 
   GetLeaderboardEntryValue(
     username: string,

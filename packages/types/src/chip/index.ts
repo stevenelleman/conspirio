@@ -219,3 +219,44 @@ export const LeaderboardDetailsSchema = z.object({
 });
 
 export type LeaderboardDetails = z.infer<typeof LeaderboardDetailsSchema>;
+
+export const GetLocationsRequestSchema = z.object({
+  authToken: z.string(),
+});
+
+export type GetLocationsRequest = z.infer<
+  typeof GetLocationsRequestSchema
+>;
+
+export const CommunityParamsSchema = z.object({
+  community: z.string(),
+});
+
+export type CommunityParams = z.infer<
+  typeof CommunityParamsSchema
+>;
+
+export const GetLocationRequestSchema = z.object({
+  authToken: z.string(),
+  id: z.string(),
+});
+
+export type GetLocationRequest = z.infer<
+  typeof GetLocationRequestSchema
+>;
+
+export const CommunityLocationSchema = z.object({
+  id: z.string(),
+  chipIssuer: ChipIssuerSchema,
+  chipVariant: ChipVariantSchema,
+  chipIsRegistered: z.boolean(),
+  locationId: z.string().nullable(),
+  locationName: z.string().nullable(),
+  locationDescription: z.string().nullable(),
+});
+
+export type CommunityLocation = z.infer<typeof CommunityLocationSchema>;
+
+export const CommunityLocationsSchema = z.array(CommunityLocationSchema);
+
+export type CommunityLocations = z.infer<typeof CommunityLocationsSchema>;

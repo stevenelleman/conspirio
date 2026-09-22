@@ -5,7 +5,7 @@ import {
   ChipIssuer,
   UpdateChipRequest,
   LeaderboardEntry,
-  LeaderboardEntryType,
+  LeaderboardEntryType, CommunityLocations, CommunityLocation,
 } from "@types";
 import { Chip } from "./types";
 
@@ -14,6 +14,13 @@ export interface iChipClient {
   UpdateChip(updateChip: UpdateChipRequest): Promise<Chip>;
   GetChipId(chipIssuer: ChipIssuer, username: string): Promise<string>;
   GetTapFromChip(tapParams: TapParams): Promise<ChipTapResponse>;
+  GetLocationChips(chipIssuer: ChipIssuer): Promise<CommunityLocations>
+  GetLocationChip(
+    chipIssuer: ChipIssuer,
+    id: string,
+  ): Promise<CommunityLocation>
+
+
   GetLeaderboardEntryValue(
     username: string,
     chipIssuer: ChipIssuer,

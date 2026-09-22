@@ -92,7 +92,7 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
       );
       return {
         text: `You checked into ${locationName}`,
-        link: `/locations/${locationId}`,
+        link: `/location/${locationId}`,
         timestamp: activity.timestamp,
       };
     default:

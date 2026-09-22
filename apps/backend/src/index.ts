@@ -1,6 +1,7 @@
 import express from "express";
 import userRoutes from "./routes/user";
 import chipRoutes from "./routes/chip";
+import communityLocationRoutes from "./routes/community/[community]/location";
 import messageRoutes from "./routes/message";
 import healthRoutes from "./routes/health";
 import oauthRoutes from "./routes/oauth";
@@ -36,6 +37,7 @@ app.use(express.json());
 // Routes
 app.use("/api/user", userRoutes);
 app.use("/api/chip", chipRoutes);
+app.use("/api/community/:community/location", communityLocationRoutes)
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/lanna", lannaRoutes);
 app.use("/api/message", messageRoutes);

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { generateSignatureKeyPair } from "../../lib/util";
 import { v4 as uuidv4 } from "uuid";
+import { ChipVariant } from "@types";
 // NOTE: this is the how specific values were inputted
 //  - basically a the locationChips was updated with the values, and the script was run
 // import { EMBASSY_LOCATION_CHIPS } from "./locationChips";
@@ -24,7 +25,7 @@ async function loadLocationChips() {
         return {
           chipId: uid,
           chipIssuer: "EMBASSY",
-          chipVariant: "NTAG215",
+          chipVariant: ChipVariant.NTAG424,
           chipIsRegistered: true,
           chipRegisteredAt: new Date(),
           chipPublicKey: verifyingKey,
@@ -39,6 +40,7 @@ async function loadLocationChips() {
       .filter((chip) => chip !== null);
 
     try {
+      // TODO: upsertMany?
       const res = await prisma.chip.createMany({
         data: chipsToCreate,
         skipDuplicates: true,

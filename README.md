@@ -60,6 +60,10 @@ Manually registering community-issued NFC chip:
 
 - Insert in DB: `INSERT INTO "public"."Chip" ("chipIssuer", "chipId", "chipVariant", "id") VALUES ('EMBASSY', '8739ecdbecd2a1df', 'NTAG424', '316d73d5-a3c7-474b-9eb9-32f04c866fc5');`
 
+To load locations chips in production, in web service shell:
+- Define array of type `LocationChip` and set to `export const EMBASSY_LOCATION_CHIPS` in `locationChips.ts`.
+- Run: `pnpm tsx src/scripts/embassy/loadLocationChips.ts`.
+
 Adding OAuth App to Github: 
 - Redirect URI: `https://conspirio.space/oauth/exchange_token&approval_prompt=force&scope=read`
 - Set client ID in frontend env vars. 
