@@ -14,10 +14,11 @@ export const communitiesHumanReadable: { [key: string]: string } = {
   testing: "Testing",
 };
 
-export const ERROR_SUPPORT_CONTACT = "https://t.me/stevenelleman";
+export const ERROR_SUPPORT_CONTACT = "https://t.me/damazene";
 
 export const SUPPORT_EMAIL = "hello@conspirio.space";
 
+// TODO: clean up
 export const devconLocationMapping: {
   [key: string]: { name: string; exhibitor: string; description: string };
 } = {

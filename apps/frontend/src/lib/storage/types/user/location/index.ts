@@ -6,7 +6,7 @@ export const LocationDataSchema = z.object({});
 
 export type LocationData = z.infer<typeof LocationDataSchema>;
 
-export const LocationSchema = z.object({
+export const LocationTapsSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
@@ -16,4 +16,4 @@ export const LocationSchema = z.object({
   taps: z.array(TapDataSchema),
 });
 
-export type Location = z.infer<typeof LocationSchema>;
+export type LocationTaps = z.infer<typeof LocationTapsSchema>;

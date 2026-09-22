@@ -84,6 +84,8 @@ const TapPage: React.FC = () => {
             // Save tap to local storage
             await storage.addLocationTap(response);
 
+            // TODO: add location chip leaderboards here?
+
             // Update workout leaderboard entry if the chip issuer is Edge City Lanna
             if (response.chipIssuer === ChipIssuer.EDGE_CITY_LANNA) {
               await updateLannaWorkoutLeaderboardEntry();
@@ -92,7 +94,8 @@ const TapPage: React.FC = () => {
             // Save tap to populate modal upon redirect
             await storage.saveTapInfo({ tapParams, tapResponse: response });
 
-            router.push(`/locations/${response.locationTap.locationId}`);
+            const community = response.chipIssuer.toLowerCase()
+            router.push(`/community/${community}/location/${response.locationTap.locationId}`);
             return;
           } else {
             // Process valid user taps

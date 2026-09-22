@@ -40,15 +40,11 @@ export type Chip = z.infer<typeof ChipSchema>;
 
 // ChipTapResponse is a shared type
 
-export const NTAG212TapParamsSchema = z.object({
+export const tapParamsSchema = z.object({
   chipId: z.string(),
 });
 
-export const NTAG215TapParamsSchema = z.object({
-  chipId: z.string(),
-});
-
-
-export const NTAG424TapParamsSchema = z.object({
+export const encryptedTapParamsSchema = z.object({
   encryptedChipId: z.string(),
 });
+

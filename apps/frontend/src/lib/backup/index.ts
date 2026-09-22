@@ -13,8 +13,8 @@ import {
   ChipSchema,
   Connection,
   ConnectionSchema,
-  Location,
-  LocationSchema,
+  LocationTaps,
+  LocationTapsSchema,
   User,
   UserData,
   UserDataSchema,
@@ -140,7 +140,7 @@ export const processUserBackup = ({
         if (!user) {
           throw new Error("LOCATION backup entry found before INITIAL");
         }
-        const location: Location = LocationSchema.parse(
+        const location: LocationTaps = LocationTapsSchema.parse(
           JSON.parse(decryptedData)
         );
         if (!user.locations) {
@@ -489,7 +489,7 @@ export const createOAuthBackup = ({
 export interface CreateLocationBackupArgs {
   email: string;
   password: string;
-  location: Location;
+  location: LocationTaps;
 }
 
 export const createLocationBackup = ({

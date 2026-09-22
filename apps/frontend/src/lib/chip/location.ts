@@ -14,8 +14,7 @@ export async function getCommunityLocations(
 
   try {
     const response = await fetch(
-      // TODO: change locations -> location
-      `${BASE_API_URL}/community/${chipIssuer.toLowerCase()}/locations?authToken=${session.authTokenValue}`,
+      `${BASE_API_URL}/community/${chipIssuer.toLowerCase()}/location?authToken=${session.authTokenValue}`,
       {
         method: "GET",
         headers: {
@@ -37,8 +36,6 @@ export async function getCommunityLocations(
     const data = await response.json();
     const parsedData = CommunityLocationsSchema.parse(data);
 
-    console.log("Parsed Data", parsedData)
-
     return parsedData;
   } catch (error) {
     console.error("Error getting locations:", error);
@@ -54,8 +51,7 @@ export async function getCommunityLocation(
 
   try {
     const response = await fetch(
-      // TODO: better uRL?
-      `${BASE_API_URL}/community/${chipIssuer}/locations/id?id=${id}&authToken=${session.authTokenValue}`,
+      `${BASE_API_URL}/community/${chipIssuer}/location/id?id=${id}&authToken=${session.authTokenValue}`,
       {
         method: "GET",
         headers: {
@@ -63,8 +59,6 @@ export async function getCommunityLocation(
         },
       }
     );
-
-    console.log("Check response", response)
 
     if (!response.ok) {
       const errorResponse = await response.json();
@@ -78,8 +72,6 @@ export async function getCommunityLocation(
 
     const data = await response.json();
     const parsedData = CommunityLocationSchema.parse(data);
-
-    console.log("Parsed Data", parsedData)
 
     return parsedData;
   } catch (error) {

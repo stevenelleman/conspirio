@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { User } from "@/lib/storage/types";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
 import ImportStravaButton from "@/features/oauth/ImportStravaButton";
+import { LocationBanner } from "@/components/LocationBanner";
 
 // NOTE: Consider moving to constants.ts?
 const UserOnboardingTarget = 100;
@@ -437,14 +438,17 @@ export default function EmbassyCommunityPage({
   return (
     <>
       <div className="py-3">
-        <ChipPickup />
+        <ChipPickup/>
+      </div>
+      <div className="py-3">
+        <LocationBanner community={ChipIssuer.EMBASSY.toString()}/>
       </div>
       {!leaderboardTapDetails ||
       !leaderboardTapEntries ||
       !leaderboardOnboardingDetails ||
       !leaderboardOnboardingEntries ? (
         <div className="flex justify-center items-center pt-4">
-          <CursiveLogo isLoading />
+          <CursiveLogo isLoading/>
         </div>
       ) : (
         <div className="flex flex-col gap-6 pt-2 pb-6">

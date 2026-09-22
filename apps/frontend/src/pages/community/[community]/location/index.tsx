@@ -6,22 +6,18 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { storage } from "@/lib/storage";
-import { Locations, Location, User } from "@/lib/storage/types";
+import { Locations, Location } from "@/lib/storage/types";
 import AppLayout from "@/layouts/AppLayout";
 import { MdKeyboardArrowRight as ArrowRight } from "react-icons/md";
-import { ProfileImage } from "@/components/ui/ProfileImage";
-import { Banner } from "@/components/cards/Banner";
+//import { ProfileImage } from "@/components/ui/ProfileImage";
 import useSettings from "@/hooks/useSettings";
 import { useRouter } from "next/router";
-import { NavTab } from "@/components/ui/NavTab";
 import { cn } from "@/lib/frontend/util";
-import Image from "next/image";
-import { logClientEvent } from "@/lib/frontend/metrics";
+//import { logClientEvent } from "@/lib/frontend/metrics";
 import { Icons } from "@/components/icons/Icons";
 import { AppInput } from "@/components/ui/AppInput";
-import { getCommunityLocations } from "@/lib/chip/locations";
+import { getCommunityLocations } from "@/lib/chip/location";
 import { ChipIssuer } from "@types";
-import { flowerSize, flowerType } from "@/lib/garden";
 
 const LocationListItem: React.FC<{
   location: Location;
@@ -30,8 +26,7 @@ const LocationListItem: React.FC<{
 }> = ({index, darkTheme, location }) => {
   return (
     <li
-      /*key={location.user.username}*/
-      key={index}
+      key={location.id}
       className="p-4"
       style={{
         borderTop:
@@ -45,7 +40,7 @@ const LocationListItem: React.FC<{
     >
       <Link
         className="grid grid-cols-[1fr_20px] items-center gap-4"
-        href={`/community/${location.chipIssuer.toLowerCase()}/locations/${location.id}`}
+        href={`/community/${location.chipIssuer.toLowerCase()}/location/${location.id}`}
       >
         <div className="flex items-center gap-4">
           {/*<ProfileImage user={connection.user} />*/}
@@ -72,15 +67,10 @@ type SearchResults = {
 };
 
 const LocationsPage: React.FC = () => {
-  console.log("LocationsPage")
-
   const router = useRouter();
   const { community } = router.query;
-  console.log("Params:", community)
-
   const { darkTheme } = useSettings();
   const [locations, setLocations] = useState<Locations | null>(null);
-  const [user, setUser] = useState<User | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResults | null>(
@@ -89,20 +79,23 @@ const LocationsPage: React.FC = () => {
 
   useEffect(() => {
     const fetchLocations = async () => {
-
-      // get community locations
-
       const user = await storage.getUser();
       if (!user) {
         router.push("/");
         return;
       }
 
-      // TODO: pass in params from route
-      console.log("GetLocations")
-      const locations = await getCommunityLocations(ChipIssuer.EMBASSY);
-      console.log("Fetch locations", locations)
-      setLocations(locations)
+      // Get ChipIssuer from path param
+      const communityUpperCase = community?.toString().toUpperCase() || "";
+      const chipIssuer = Object.values(ChipIssuer).includes(communityUpperCase as ChipIssuer) ? communityUpperCase as ChipIssuer : null;
+      if (!chipIssuer) {
+        // Only possible option is that the given community isn't an option
+        router.push("/community");
+        return;
+      }
+
+      const locations = await getCommunityLocations(chipIssuer);
+      setLocations(locations);
     };
 
     fetchLocations();
@@ -117,12 +110,13 @@ const LocationsPage: React.FC = () => {
       return;
     }
 
-    const results: SearchResults = {
+    // TODO: Add back search results in a follow up PR.
+    /*const results: SearchResults = {
       names: {},
-      bios: {},
-      notes: {},
-      labels: {},
-    };
+      descriptions: {},
+      //notes: {},
+      //labels: {},
+    };*/
 
     // Still use, but for location chips
     /*Object.entries(connections).forEach(([key, connection]) => {
@@ -155,7 +149,7 @@ const LocationsPage: React.FC = () => {
       }
     });*/
 
-    setSearchResults(results);
+    // setSearchResults(results);
   };
 
   const handleCloseSearch = () => {
@@ -386,7 +380,7 @@ const LocationsPage: React.FC = () => {
                           >
                       <Link
                         className="mt-auto"
-                        href={`/community/${location.chipIssuer.toLowerCase()}/locations/${location.id}`}
+                        href={`/community/${location.chipIssuer.toLowerCase()}/location/${location.id}`}
                       >
                         {
                           location.locationName?.split(" ").map((word, index) => word.length > 8 && index === 0 ? `${word.slice(0, 8)}-${word.slice(8)}` : word).join(" ")
@@ -398,7 +392,7 @@ const LocationsPage: React.FC = () => {
                       <div className="mt-auto relative w-full h-full">
                         <Link
                           className="mt-auto"
-                          href={`/community/${location.chipIssuer.toLowerCase()}/locations/${location.id}`}
+                          href={`/community/${location.chipIssuer.toLowerCase()}/location/${location.id}`}
                         >
                         </Link>
                       </div>

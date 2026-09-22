@@ -6,13 +6,13 @@ import {
   TapParams,
   ChipIssuer,
   LeaderboardEntry,
-  LeaderboardEntryType,
+  LeaderboardEntryType, CommunityLocations, CommunityLocation,
 } from "@types";
 import { Chip } from "@/lib/controller/chip/types";
 import { TelegramNotificationClient } from "../../notification/telegram/client";
 
 // NOTE: Hoist all prototype methods -- if you do not import the method file, the method(s) will evaluate to undefined at runtime
-import("@/lib/controller/chip/managed/update");
+import("@/lib/controller/chip/managed/chips");
 import("@/lib/controller/chip/managed/leaderboard");
 import("@/lib/controller/chip/managed/register");
 import("@/lib/controller/chip/managed/tap");
@@ -37,6 +37,16 @@ export class ManagedChipClient implements iChipClient {
 
   // @ts-expect-error (ts2391)
   GetChipId(chipIssuer: ChipIssuer, username: string): Promise<string>;
+
+  // @ts-expect-error (ts2391)
+  GetLocationChips(chipIssuer: ChipIssuer): Promise<CommunityLocations>
+
+  // @ts-expect-error (ts2391)
+  GetLocationChip(
+    chipIssuer: ChipIssuer,
+    id: string,
+  ): Promise<CommunityLocation>
+
 
   // @ts-expect-error (ts2391)
   GetLeaderboardEntryValue(

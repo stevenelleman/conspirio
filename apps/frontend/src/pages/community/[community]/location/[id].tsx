@@ -14,13 +14,12 @@ import { toast } from "sonner";
 import { LocationTaps, User } from "@/lib/storage/types";
 import { TapParams, ChipTapResponse, ChipIssuer, CommunityLocation } from "@types";
 import { devconLocationMapping } from "@/constants";
-import { getCommunityLocation } from "@/lib/chip/locations";
+import { getCommunityLocation } from "@/lib/chip/location";
 import { CursiveLogo } from "@/components/ui/HeaderCover";
 
 // Dynamically import the Lottie component with SSR disabled
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
-// TODO: clean this up
 enum TapState {
   SUCCESS,
   ERROR,
@@ -103,20 +102,6 @@ const LocationTapModal: React.FC<LocationTapModalProps> = ({
 
 export default function LocationPage() {
   const router = useRouter();
-  const { community, id } = router.query;
-
-  // TODO: extract into a helper function
-  const communityUpperCase = community?.toString().toUpperCase() || "";
-  const chipIssuer = Object.values(ChipIssuer).includes(communityUpperCase as ChipIssuer) ? communityUpperCase as ChipIssuer : null;
-
-  // If it's in the path, this should never happen, give it a few seconds to load
-  if (!chipIssuer) {
-    return (
-      <div className="flex min-h-screen justify-center items-center">
-        <CursiveLogo isLoading />
-      </div>
-    );
-  }
 
   const [user, setUser] = useState<User | null>(null);
   const [locationTaps, setLocationTaps] = useState<LocationTaps | null>(null);
@@ -129,10 +114,21 @@ export default function LocationPage() {
   const [seeFullLeaderboard, setSeeFullLeaderboard] = useState(false);
   const [showTapModal, setShowTapModal] = useState(false);
   const [weeklyTapDays, setWeeklyTapDays] = useState<number[]>([]);
-  // const [loading, setLoading] = useState(true);
+
+  const { community, id } = router.query;
+
+  // TODO: extract into a helper function
+  const communityUpperCase = community?.toString().toUpperCase() || "";
+  const chipIssuer = Object.values(ChipIssuer).includes(communityUpperCase as ChipIssuer) ? communityUpperCase as ChipIssuer : null;
+
 
   useEffect(() => {
     const fetchLocationAndTapInfo = async () => {
+      if (!chipIssuer) {
+        // If it's in the path, this should never happen, give it a few seconds to load
+        return;
+      }
+
       const user = await storage.getUser();
       const session = await storage.getSession();
 
@@ -149,14 +145,10 @@ export default function LocationPage() {
       if (locationTap) {
         setLocationTaps(locationTap);
 
-        console.log("Check taps:", locationTap.taps)
-
         // Compute the days of the week that the user has tapped in
         const tapDays = computeWeeklyTapDays(
           locationTap.taps?.map((tap) => new Date(tap.timestamp)));
         setWeeklyTapDays(tapDays);
-
-        console.log("Check tapdays", tapDays)
       }
 
       // If location doesn't exist, fetch location from backend
@@ -183,6 +175,15 @@ export default function LocationPage() {
     fetchLocationAndTapInfo();
   }, [id, router]);
 
+  // If it's in the path, this should never happen, give it a few seconds to load
+  if (!chipIssuer) {
+    return (
+      <div className="flex min-h-screen justify-center items-center">
+        <CursiveLogo isLoading />
+      </div>
+    );
+  }
+
   // Compute the days of the week that the user has tapped in
   const computeWeeklyTapDays = (tapDates: Date[]): number[] => {
     // Get start of current week (Sunday) in user's timezone
@@ -190,8 +191,6 @@ export default function LocationPage() {
     const startOfWeek = new Date(now);
     startOfWeek.setDate(now.getDate() - now.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
-
-    console.log("check 1: ", now, startOfWeek)
 
     const tapDays: number[] = [];
     const today = now.getDay();
@@ -230,7 +229,7 @@ export default function LocationPage() {
   const prize: any = null;
 
   // Href for back button
-  const backhref: string = `/community/${community}/locations`;
+  const backhref: string = `/community/${community}/location`;
 
   if (seeFullLeaderboard) {
     let contributorMsg = `You are #${leaderboardDetails?.userPosition} of ${leaderboardDetails?.totalContributors} contributors!`;
@@ -302,7 +301,7 @@ export default function LocationPage() {
           back={{
             label: "Back",
             href: backhref,
-          }} // TODO: add chipIssuer?
+          }}
           className="mx-auto"
         >
           <div className="flex flex-col gap-4">

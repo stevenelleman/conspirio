@@ -77,7 +77,7 @@ router.get(
       const { authToken, id } = validatedData;
 
       if (!community) {
-        return res.status(401).json({ error: "Missing community" }); // Check right status code
+        return res.status(401).json({ error: "Missing community" });
       }
 
       // Fetch user by auth token
