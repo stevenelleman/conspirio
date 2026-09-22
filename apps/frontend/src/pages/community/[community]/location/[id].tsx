@@ -8,16 +8,19 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import React from "react";
 import dynamic from "next/dynamic";
-import locationSuccess from "../../../public/animations/location-success.json";
+import locationSuccess from "public/animations/location-success.json";
 import { storage } from "@/lib/storage";
 import { toast } from "sonner";
-import { Location, User } from "@/lib/storage/types";
-import { TapParams, ChipTapResponse } from "@types";
+import { LocationTaps, User } from "@/lib/storage/types";
+import { TapParams, ChipTapResponse, ChipIssuer, CommunityLocation } from "@types";
 import { devconLocationMapping } from "@/constants";
+import { getCommunityLocation } from "@/lib/chip/locations";
+import { CursiveLogo } from "@/components/ui/HeaderCover";
 
 // Dynamically import the Lottie component with SSR disabled
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
+// TODO: clean this up
 enum TapState {
   SUCCESS,
   ERROR,
@@ -100,37 +103,67 @@ const LocationTapModal: React.FC<LocationTapModalProps> = ({
 
 export default function LocationPage() {
   const router = useRouter();
-  const { id } = router.query;
+  const { community, id } = router.query;
+
+  // TODO: extract into a helper function
+  const communityUpperCase = community?.toString().toUpperCase() || "";
+  const chipIssuer = Object.values(ChipIssuer).includes(communityUpperCase as ChipIssuer) ? communityUpperCase as ChipIssuer : null;
+
+  // If it's in the path, this should never happen, give it a few seconds to load
+  if (!chipIssuer) {
+    return (
+      <div className="flex min-h-screen justify-center items-center">
+        <CursiveLogo isLoading />
+      </div>
+    );
+  }
+
   const [user, setUser] = useState<User | null>(null);
-  const [location, setLocation] = useState<Location | null>(null);
+  const [locationTaps, setLocationTaps] = useState<LocationTaps | null>(null);
+  const [location, setLocation] = useState<CommunityLocation | null>(null);
   const [tapInfo, setTapInfo] = useState<{
     tapParams: TapParams;
     tapResponse: ChipTapResponse;
   } | null>(null);
   const [tapState, setTapState] = useState(TapState.SUCCESS);
   const [seeFullLeaderboard, setSeeFullLeaderboard] = useState(false);
-  const [showTapModal, setShowTapModal] = useState(true);
+  const [showTapModal, setShowTapModal] = useState(false);
   const [weeklyTapDays, setWeeklyTapDays] = useState<number[]>([]);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLocationAndTapInfo = async () => {
       const user = await storage.getUser();
       const session = await storage.getSession();
-      const location = user?.locations?.[id as string];
-      if (!user || !session || !location) {
-        console.error("Location not found");
-        toast.error("Location not found");
+
+      if (!user || !session) {
+        console.error("User not found");
+        toast.error("User not found");
         router.push("/profile");
         return;
       }
       setUser(user);
-      setLocation(location);
 
-      // Compute the days of the week that the user has tapped in
-      const tapDays = computeWeeklyTapDays(
-        location.taps?.map((tap) => new Date(tap.timestamp))
-      );
-      setWeeklyTapDays(tapDays);
+      // Check if user has recent location tap
+      const locationTap = user?.locations?.[id as string];
+      if (locationTap) {
+        setLocationTaps(locationTap);
+
+        console.log("Check taps:", locationTap.taps)
+
+        // Compute the days of the week that the user has tapped in
+        const tapDays = computeWeeklyTapDays(
+          locationTap.taps?.map((tap) => new Date(tap.timestamp)));
+        setWeeklyTapDays(tapDays);
+
+        console.log("Check tapdays", tapDays)
+      }
+
+      // If location doesn't exist, fetch location from backend
+      if (!locationTap) {
+        const fetchedLocation = await getCommunityLocation(chipIssuer, id as string);
+        setLocation(fetchedLocation);
+      }
 
       const savedTapInfo = await storage.loadSavedTapInfo();
       // Delete saved tap info after fetching
@@ -157,6 +190,8 @@ export default function LocationPage() {
     const startOfWeek = new Date(now);
     startOfWeek.setDate(now.getDate() - now.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
+
+    console.log("check 1: ", now, startOfWeek)
 
     const tapDays: number[] = [];
     const today = now.getDay();
@@ -186,13 +221,16 @@ export default function LocationPage() {
     userPosition: 0,
     userValue: 0,
     totalContributors: 0,
-    username: "test",
+    username: "test", // TODO: update?
   };
   const leaderboardEntries = {
     entries: [],
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const prize: any = null;
+
+  // Href for back button
+  const backhref: string = `/community/${community}/locations`;
 
   if (seeFullLeaderboard) {
     let contributorMsg = `You are #${leaderboardDetails?.userPosition} of ${leaderboardDetails?.totalContributors} contributors!`;
@@ -205,6 +243,7 @@ export default function LocationPage() {
       <AppLayout
         withContainer={false}
         showFooter={false}
+        back={{ label: "Back", href: backhref }}
         header={
           <div>
             <div className="flex-row w-full px-1 pt-8 pb-4 bg-background justify-between items-center inline-flex">
@@ -254,16 +293,16 @@ export default function LocationPage() {
     );
   }
 
-  if (location && devconLocationMapping[location.id]) {
-    const { name, exhibitor, description } = devconLocationMapping[location.id];
+  if (locationTaps && devconLocationMapping[locationTaps.id]) {
+    const { name, exhibitor, description } = devconLocationMapping[locationTaps.id];
     return (
       <>
         <AppLayout
-          seoTitle={`${location}`}
+          seoTitle={`${locationTaps}`}
           back={{
             label: "Back",
-            href: "/",
-          }}
+            href: backhref,
+          }} // TODO: add chipIssuer?
           className="mx-auto"
         >
           <div className="flex flex-col gap-4">
@@ -278,10 +317,10 @@ export default function LocationPage() {
                 <span className="text-sm text-label-tertiary font-normal">
                   {description}
                 </span>
-                {location.taps?.[0] && (
+                {locationTaps.taps?.[0] && (
                   <span className="text-sm text-label-tertiary font-normal">
                     <span className="font-bold">Visited on:</span>
-                    {` ${location.taps?.[0]?.timestamp.toLocaleString("en-US", {
+                    {` ${locationTaps.taps?.[0]?.timestamp.toLocaleString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
@@ -292,10 +331,10 @@ export default function LocationPage() {
                     })}`}
                   </span>
                 )}
-                {location.taps?.[0] && (
+                {locationTaps.taps?.[0] && (
                   <span className="text-sm text-label-tertiary font-normal truncate">
                     <span className="font-bold">Signature:</span>
-                    {` ${location.taps?.[0]?.signature}`}
+                    {` ${locationTaps.taps?.[0]?.signature}`}
                   </span>
                 )}
               </div>
@@ -334,27 +373,90 @@ export default function LocationPage() {
     );
   }
 
-  const username = user?.userData?.username;
-  const locationName = location?.name;
-  const tapDate = tapInfo?.tapResponse.locationTap?.timestamp;
+  if (locationTaps) {
+    const username = user?.userData?.username;
+    const locationName = locationTaps?.name;
+    const tapDate = tapInfo?.tapResponse.locationTap?.timestamp;
+    return (
+      <>
+        {showTapModal && username && locationName && tapDate && (
+          <LocationTapModal
+            username={username}
+            locationName={locationName}
+            tapDate={tapDate}
+            tapState={tapState}
+            onClose={() => {
+              setShowTapModal(false);
+            }}
+          />
+        )}
+        <AppLayout
+          seoTitle={`${locationTaps}`}
+          back={{
+            label: "Back",
+            href: backhref,
+          }}
+          className="mx-auto"
+        >
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col pt-4">
+              <div className="flex flex-col gap-4 pb-6">
+              <span className="text-xl text-label-primary font-bold">
+                {`${locationName || "Location"}`}
+              </span>
+                <span className="text-sm text-label-tertiary font-normal">
+                {locationTaps?.description || "No description"}
+              </span>
+              </div>
+              <CheckInWeek
+                checkInCount={locationTaps?.taps?.length || 0}
+                activeDaysIndexes={weeklyTapDays}
+              />
+            </div>
+            {/*
+             // TODO: fix this
+             <div className="flex flex-col gap-4">
+             <div className="flex items-center">
+             <Icons.Menu className="text-label-quaternary" />
+             <span className="text-xs font-bold text-label-quaternary ml-2">
+             This week
+             </span>
+             </div>
+             </div>
+             <div className="flex flex-col gap-4">
+             <div className=" items-center flex justify-between">
+             <span className="text-base font-bold text-label-primary font-sans">
+             Top 5 contributors
+             </span>
+             <AppButton
+             variant="outline"
+             className="rounded-full max-w-[120px]"
+             icon={<Icons.Star className="mr-2" />}
+             onClick={() => {
+             logClientEvent("dashboard-leaderboard-clicked", {
+             location: location as string,
+             });
+             setSeeFullLeaderboard(true);
+             }}
+             >
+             See all
+             </AppButton>
+             </div>
+             </div> */}
+          </div>
+        </AppLayout>
+      </>
+    );
+  }
+
+
   return (
     <>
-      {showTapModal && username && locationName && tapDate && (
-        <LocationTapModal
-          username={username}
-          locationName={locationName}
-          tapDate={tapDate}
-          tapState={tapState}
-          onClose={() => {
-            setShowTapModal(false);
-          }}
-        />
-      )}
       <AppLayout
-        seoTitle={`${location}`}
+        seoTitle={`${locationTaps}`}
         back={{
           label: "Back",
-          href: "/",
+          href: backhref,
         }}
         className="mx-auto"
       >
@@ -362,47 +464,46 @@ export default function LocationPage() {
           <div className="flex flex-col pt-4">
             <div className="flex flex-col gap-4 pb-6">
               <span className="text-xl text-label-primary font-bold">
-                {`${locationName || "Location"}`}
+                {`${location?.locationName || "Location"}`}
               </span>
               <span className="text-sm text-label-tertiary font-normal">
-                {location?.description || "No description"}
-              </span>
-            </div>
-            <CheckInWeek
-              checkInCount={location?.taps?.length || 0}
-              activeDaysIndexes={weeklyTapDays}
-            />
-          </div>
-          {/* <div className="flex flex-col gap-4">
-            <div className="flex items-center">
-              <Icons.Menu className="text-label-quaternary" />
-              <span className="text-xs font-bold text-label-quaternary ml-2">
-                This week
+                {location?.locationDescription || "No description"}
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <div className=" items-center flex justify-between">
-              <span className="text-base font-bold text-label-primary font-sans">
-                Top 5 contributors
-              </span>
-              <AppButton
-                variant="outline"
-                className="rounded-full max-w-[120px]"
-                icon={<Icons.Star className="mr-2" />}
-                onClick={() => {
-                  logClientEvent("dashboard-leaderboard-clicked", {
-                    location: location as string,
-                  });
-                  setSeeFullLeaderboard(true);
-                }}
-              >
-                See all
-              </AppButton>
-            </div>
-          </div> */}
+          {/*
+           // TODO: fix this
+           <div className="flex flex-col gap-4">
+           <div className="flex items-center">
+           <Icons.Menu className="text-label-quaternary" />
+           <span className="text-xs font-bold text-label-quaternary ml-2">
+           This week
+           </span>
+           </div>
+           </div>
+           <div className="flex flex-col gap-4">
+           <div className=" items-center flex justify-between">
+           <span className="text-base font-bold text-label-primary font-sans">
+           Top 5 contributors
+           </span>
+           <AppButton
+           variant="outline"
+           className="rounded-full max-w-[120px]"
+           icon={<Icons.Star className="mr-2" />}
+           onClick={() => {
+           logClientEvent("dashboard-leaderboard-clicked", {
+           location: location as string,
+           });
+           setSeeFullLeaderboard(true);
+           }}
+           >
+           See all
+           </AppButton>
+           </div>
+           </div> */}
         </div>
       </AppLayout>
     </>
   );
+
 }
