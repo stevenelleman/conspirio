@@ -16,7 +16,6 @@ import {
 import {
   EmailDataSchema,
   SMSDataSchema,
-  SnapchatDataSchema,
   WhatsappDataSchema,
   TwitterDataSchema,
   TelegramDataSchema,
@@ -103,7 +102,6 @@ export {
   type WhatsappData, WhatsappDataSchema,
   type SMSData, SMSDataSchema,
   type EmailData, EmailDataSchema,
-  type SnapchatData, SnapchatDataSchema,
 
 } from "@/lib/storage/types/user/userData/socials";
 

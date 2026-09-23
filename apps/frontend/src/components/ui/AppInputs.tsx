@@ -194,6 +194,8 @@ const AppTagsInput = forwardRef<TagsInputHandle, TagsInputProps>(
     };
 
     // Commit whatever is left so a final value isn't lost on submit.
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleBlur = (_e: FocusEvent<HTMLTextAreaElement>) => {
       if (draft.trim()) addTags([draft]);
       setDraft("");

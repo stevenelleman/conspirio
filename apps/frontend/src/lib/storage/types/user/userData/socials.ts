@@ -50,9 +50,3 @@ export const EmailDataSchema = z.object({
 
 export type EmailData = z.infer<typeof TelegramDataSchema>;
 
-export const SnapchatDataSchema = z.object({
-  username: nullToUndefined(z.string()),
-});
-
-export type SnapchatData = z.infer<typeof TelegramDataSchema>;
-
