@@ -18,6 +18,7 @@ import { updateChip } from "@/lib/chip/update";
 import { SupportToast } from "@/components/ui/SupportToast";
 import { errorToString } from "@types";
 import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { AppTagsInput } from "@/components/ui/AppInputs";
 
 type ChipEditFormData = {
   displayName?: string;
@@ -27,6 +28,11 @@ type ChipEditFormData = {
   signalUsername?: string;
   instagramUsername?: string;
   farcasterUsername?: string;
+  emailAddress?: string;
+  smsNumber?: string;
+  whatsappNumber?: string;
+  personalWebsiteHandles?: string[];
+  substackHandle?: string;
   pronouns?: string;
 };
 
@@ -51,6 +57,11 @@ const ProfileEdit = () => {
           signalUsername: user.userData?.signal?.username || "",
           instagramUsername: user.userData?.instagram?.username || "",
           farcasterUsername: user.userData?.farcaster?.username || "",
+          emailAddress: user.userData?.email?.address || "",
+          smsNumber: user.userData?.sms?.number || "",
+          whatsappNumber: user.userData?.whatsapp?.number || "",
+          personalWebsiteHandles: user.userData?.personalWebsites?.websites || [],
+          substackHandle: user.userData?.substack?.handle || "",
           pronouns: user.userData?.pronouns || "",
         });
       } else {
@@ -72,6 +83,11 @@ const ProfileEdit = () => {
       signalUsername,
       instagramUsername,
       farcasterUsername,
+      emailAddress,
+      smsNumber,
+      whatsappNumber,
+      personalWebsiteHandles,
+      substackHandle,
       pronouns,
     } = formData;
     try {
@@ -87,6 +103,11 @@ const ProfileEdit = () => {
           ownerSignalUsername: signalUsername ?? null,
           ownerInstagramUsername: instagramUsername ?? null,
           ownerFarcasterUsername: farcasterUsername ?? null,
+          ownerEmail: emailAddress ?? null,
+          ownerSMSNumber: smsNumber ?? null,
+          ownerWhatsappNumber: whatsappNumber ?? null,
+          ownerPersonalWebsites: personalWebsiteHandles ?? null,
+          ownerSubstack: substackHandle ?? null,
           ownerPronouns: pronouns ?? null,
         });
       }
@@ -98,7 +119,7 @@ const ProfileEdit = () => {
         SupportToast(
           "",
           true,
-          "Error updating chip",
+          `Error updating chip: "${errorToString(error)}"`,
           ERROR_SUPPORT_CONTACT,
           errorToString(error)
         )
@@ -153,6 +174,24 @@ const ProfileEdit = () => {
               {...register("pronouns")}
             />
             <AppInput
+              label="Email"
+              variant="primary"
+              placeholder="Email address"
+              {...register("emailAddress")}
+            />
+            <AppInput
+              label="SMS"
+              variant="primary"
+              placeholder="Number"
+              {...register("smsNumber")}
+            />
+            <AppInput
+              label="Whatsapp"
+              variant="primary"
+              placeholder="Number"
+              {...register("whatsappNumber")}
+            />
+            <AppInput
               label="Telegram"
               placeholder="Telegram"
               variant="primary"
@@ -161,14 +200,14 @@ const ProfileEdit = () => {
             />
             <AppInput
               label="Twitter"
-              placeholder="Twitter"
+              placeholder="Handle"
               variant="primary"
               icon={<TwitterIcon className=" invert" />}
               {...register("twitterUsername")}
             />
             <AppInput
               label="Instagram"
-              placeholder="Instagram"
+              placeholder="Handle"
               variant="primary"
               icon={<InstagramIcon className=" invert" />}
               {...register("instagramUsername")}
@@ -184,6 +223,18 @@ const ProfileEdit = () => {
               placeholder="Farcaster"
               variant="primary"
               {...register("farcasterUsername")}
+            />
+            <AppTagsInput
+              label="Personal Websites"
+              placeholder="Address"
+              variant="primary"
+              {...register("personalWebsiteHandles")}
+            />
+            <AppInput
+              label="Substack"
+              placeholder="Handle"
+              variant="primary"
+              {...register("substackHandle")}
             />
             <AppTextarea
               label="Bio"

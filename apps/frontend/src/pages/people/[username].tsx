@@ -30,6 +30,7 @@ import { getChipId } from "@/lib/chip/update";
 import { flowerSize, flowerType } from "@/lib/garden";
 import { Intersection, refreshPSI, triggerConnectionRefreshPSI, updateConnectionPSISize } from "@/lib/psi/refresh";
 import { upsertConnectionRefreshPSI } from "@/lib/storage/localStorage/user/connection/upsert";
+import { LinksCardBox } from "@/components/ui/LinksCardBox";
 
 interface CommentModalProps {
   username: string;
@@ -577,6 +578,45 @@ const UserProfilePage: React.FC = () => {
                   No socials shared.
                 </span>
               )}
+              {connection?.user?.email?.address && (
+                <div
+                  onClick={() => {
+                    logClientEvent("user-profile-email-clicked", {});
+                  }}
+                >
+                  <LinkCardBox
+                    label="Email"
+                    value={`${connection.user.email.address}`}
+                    href={`mailto:${connection.user.email.address}`}
+                  />
+                </div>
+              )}
+              {connection?.user?.sms?.number && (
+                <div
+                  onClick={() => {
+                    logClientEvent("user-profile-sms-clicked", {});
+                  }}
+                >
+                  <LinkCardBox
+                    label="SMS"
+                    value={`${connection.user.sms.number}`}
+                    href={`sms:+${connection.user.sms.number}`}
+                  />
+                </div>
+              )}
+              {connection?.user?.whatsapp?.number && (
+                <div
+                  onClick={() => {
+                    logClientEvent("user-profile-whatsapp-clicked", {});
+                  }}
+                >
+                  <LinkCardBox
+                    label="Whatsapp"
+                    value={`@${connection.user.whatsapp.number}`}
+                    href={`https://wa.me/${connection.user.whatsapp.number}`}
+                  />
+                </div>
+              )}
               {connection?.user?.telegram?.username && (
                 <div
                   onClick={() => {
@@ -597,9 +637,9 @@ const UserProfilePage: React.FC = () => {
                   }}
                 >
                   <LinkCardBox
-                    label="Twitter"
+                    label="X"
                     value={`@${connection.user.twitter.username}`}
-                    href={`https://twitter.com/${connection.user.twitter.username}`}
+                    href={`https://x.com/${connection.user.twitter.username}`}
                   />
                 </div>
               )}
@@ -645,7 +685,50 @@ const UserProfilePage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 py-4 px-4">
+          <div className="!divide-y !divide-quaternary/20">
+            <div className="flex flex-col gap-2 py-4 px-4">
+            <span className="text-sm font-semibold text-label-primary font-sans">
+              Portfolio
+            </span>
+              <div className="flex flex-col gap-4">
+                {!connection?.user?.personalWebsites && !connection?.user?.substack && (
+                  <span className="text-sm text-label-secondary font-sans font-normal">
+                  No portfolio shared.
+                </span>
+                )}
+                {connection?.user?.personalWebsites?.websites && (
+                  <div
+                    onClick={() => {
+                      logClientEvent("user-profile-personal-website-clicked", {});
+                    }}
+                  >
+                    <LinksCardBox
+                      label="Personal Websites"
+                      values={connection?.user?.personalWebsites?.websites}
+                      hrefs={connection?.user?.personalWebsites?.websites}
+                    />
+                  </div>
+                )}
+                {connection?.user?.substack?.handle && (
+                  <div
+                    onClick={() => {
+                      logClientEvent("user-profile-substack-clicked", {});
+                    }}
+                  >
+                    <LinkCardBox
+                      label="Substack"
+                      value={`${connection?.user?.substack?.handle}`}
+                      href={`https://substack.com/@${connection?.user?.substack?.handle}`}
+                    />
+                  </div>
+                )}
+
+              </div>
+            </div>
+          </div>
+
+
+            <div className="flex flex-col gap-4 py-4 px-4">
             <div className=" grid grid-cols-[1fr_60px] gap-6">
               <span className="flex flex-col gap-5 text-sm font-semibold text-label-primary font-sans">
                 <span>Discover intersections in your encrypted data. </span>

@@ -181,7 +181,7 @@ const PeoplePage: React.FC = () => {
                           }}
                         >
                           <Link
-                            href={`https://twitter.com/${connection.user.twitter.username}`}
+                            href={`https://x.com/${connection.user.twitter.username}`}
                           >
                             <Icons.Twitter
                               size={24}

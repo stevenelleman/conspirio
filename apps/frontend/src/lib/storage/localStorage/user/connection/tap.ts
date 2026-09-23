@@ -25,6 +25,12 @@ import { getSession } from "@/lib/storage/localStorage/session";
 import { createUnregisteredUser } from "@/lib/auth";
 import { storage } from "@/lib/storage";
 import { ChipTap } from "@/lib/storage/types/user/tap";
+import {
+  PersonalWebsites,
+  PersonalWebsitesSchema,
+  SubstackData,
+  SubstackDataSchema
+} from "@/lib/storage/types/user/userData/portfolio";
 
 export const addUserTap = async (
   tapResponse: ChipTap
@@ -60,6 +66,8 @@ export const addUserTap = async (
   let ownerSignal: SignalData | undefined;
   let ownerInstagram: InstagramData | undefined;
   let ownerFarcaster: FarcasterData | undefined;
+  let ownerSubstack: SubstackData | undefined;
+  let ownerPersonWebsites: PersonalWebsites | undefined;
   let ownerPronouns: string | undefined;
   if (
     tap.ownerUserData &&
@@ -117,6 +125,26 @@ export const addUserTap = async (
       }
     }
     if (
+      "substack" in tap.ownerUserData &&
+      typeof tap.ownerUserData.substack === "object"
+    ) {
+      try {
+        ownerSubstack = SubstackDataSchema.parse(tap.ownerUserData.substack);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.substack:", error);
+      }
+    }
+    if (
+      "personalWebsites" in tap.ownerUserData &&
+      typeof tap.ownerUserData.personalWebsites === "object"
+    ) {
+      try {
+        ownerPersonWebsites = PersonalWebsitesSchema.parse(tap.ownerUserData.personalWebsites);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.personalWebsites:", error);
+      }
+    }
+    if (
       "pronouns" in tap.ownerUserData &&
       typeof tap.ownerUserData.pronouns === "string"
     ) {
@@ -143,6 +171,8 @@ export const addUserTap = async (
     signal: ownerSignal,
     instagram: ownerInstagram,
     farcaster: ownerFarcaster,
+    substack: ownerSubstack,
+    personalWebsites: ownerPersonWebsites,
     pronouns: ownerPronouns,
   };
 

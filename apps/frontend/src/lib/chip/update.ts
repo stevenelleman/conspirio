@@ -1,6 +1,7 @@
 import { BASE_API_URL } from "@/config";
 import { ChipIssuer, errorToString, GetChipIdResponse, GetChipIdResponseSchema, Json, UpdateChipRequest } from "@types";
 import { storage } from "../storage";
+import { validateEmail, validateHttpsDomain } from "@/lib/frontend/util";
 
 interface UpdateChipArgs {
   authToken: string;
@@ -13,6 +14,11 @@ interface UpdateChipArgs {
   ownerSignalUsername: string | null;
   ownerInstagramUsername: string | null;
   ownerFarcasterUsername: string | null;
+  ownerEmail: string | null;
+  ownerSMSNumber: string | null;
+  ownerWhatsappNumber: string | null;
+  ownerPersonalWebsites: string[] | null;
+  ownerSubstack: string | null;
   ownerPronouns: string | null;
 }
 
@@ -41,6 +47,48 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
   if (args.ownerFarcasterUsername) {
     ownerUserData.farcaster = {
       username: args.ownerFarcasterUsername,
+    };
+  }
+  if (args.ownerEmail) {
+    if (!validateEmail(args.ownerEmail)) {
+      throw new Error("Email not valid");
+    }
+    ownerUserData.email = {
+      address: args.ownerEmail,
+    };
+  }
+  if (args.ownerSMSNumber) {
+    if (args.ownerSMSNumber.length < 11) {
+      throw new Error("SMS number too short, did you include the country code?");
+    }
+
+    ownerUserData.sms = {
+      number: args.ownerSMSNumber,
+    };
+  }
+  if (args.ownerWhatsappNumber) {
+    if (args.ownerWhatsappNumber.length < 11) {
+      throw new Error("Whatsapp number too short, did you include the country code?");
+    }
+    ownerUserData.whatsapp = {
+      number: args.ownerWhatsappNumber,
+    };
+  }
+  if (args.ownerPersonalWebsites) {
+    for (const website of args.ownerPersonalWebsites) {
+      const valid = validateHttpsDomain(website);
+      if (!valid) {
+        throw new Error(`Website '${website}' missing https`);
+      }
+    }
+
+    ownerUserData.personalWebsites = {
+      websites: args.ownerPersonalWebsites,
+    };
+  }
+  if (args.ownerSubstack) {
+    ownerUserData.substack = {
+      handle: args.ownerSubstack,
     };
   }
   if (args.ownerPronouns) {
@@ -94,6 +142,21 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       },
       farcaster: {
         username: args.ownerFarcasterUsername ?? undefined,
+      },
+      email: {
+        address: args.ownerEmail ?? undefined,
+      },
+      sms: {
+        number: args.ownerSMSNumber ?? undefined,
+      },
+      whatsapp: {
+        number: args.ownerWhatsappNumber ?? undefined,
+      },
+      personalWebsites: {
+        websites: args.ownerPersonalWebsites ?? undefined,
+      },
+      substack: {
+        handle: args.ownerSubstack ?? undefined,
       },
       pronouns: args.ownerPronouns ?? undefined,
     });

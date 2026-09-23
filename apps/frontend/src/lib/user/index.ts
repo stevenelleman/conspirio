@@ -8,7 +8,7 @@ import { Json } from "@types";
 // To prevent accidental sharing, default ensure shareable data needs to be added to this method
 // TODO: offer a more expressive way to define / set shareable data based on community / persona
 export const getUserShareableData = (userData: UserData): UserData => {
-  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, pronouns} = UserDataSchema.parse(userData);
+  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, substack, personalWebsites, pronouns} = UserDataSchema.parse(userData);
 
   return {
     username,
@@ -22,12 +22,14 @@ export const getUserShareableData = (userData: UserData): UserData => {
     signal,
     instagram,
     farcaster,
+    substack,
+    personalWebsites,
     pronouns,
   };
 };
 
 export const shareableUserDataToJson = (userData: UserData): Json => {
-  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, pronouns} = UserDataSchema.parse(userData);
+  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, whatsapp, email, sms, substack, personalWebsites, pronouns} = UserDataSchema.parse(userData);
 
   return {
     username: username || null,
@@ -41,6 +43,11 @@ export const shareableUserDataToJson = (userData: UserData): Json => {
     signal: signal || null,
     instagram: instagram || null,
     farcaster: farcaster || null,
+    whatsapp: whatsapp || null,
+    email: email || null,
+    sms: sms || null,
+    substack: substack || null,
+    personalWebsites: personalWebsites || null,
     pronouns: pronouns || null,
   };
 };

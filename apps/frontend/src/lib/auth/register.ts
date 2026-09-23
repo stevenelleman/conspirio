@@ -70,7 +70,7 @@ async function getUserKeys (): Promise<{
  * @param args.displayName - The display name of the user.
  * @param args.bio - The bio of the user.
  * @param args.telegramHandle - The telegram handle of the user.
- * @param args.twitterHandle - The twitter handle of the user.
+ * @param args.twitterHandle - The X handle of the user.
  * @param args.registeredWithPasskey - Whether the user registered with a passkey.
  * @param args.passkeyAuthPublicKey - The public key of the authenticator if registering with passkey.
  */

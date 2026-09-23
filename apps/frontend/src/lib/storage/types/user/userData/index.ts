@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { nullToUndefined } from "@types";
-import { TwitterDataSchema } from "./twitterData";
-import { TelegramDataSchema } from "./telegramData";
-import { SignalDataSchema } from "./signalData";
-import { InstagramDataSchema } from "./instagramData";
-import { FarcasterDataSchema } from "./farcasterData";
+
 import {
   HotTakesRatingSchema,
   LannaDataSchema,
@@ -17,6 +13,17 @@ import { DevconSchema } from "./devconData";
 import {
   ConnectionPSISizeSchema,
 } from "@/lib/storage/types/user/userData/psiSizeData";
+import {
+  EmailDataSchema,
+  SMSDataSchema,
+  WhatsappDataSchema,
+  TwitterDataSchema,
+  TelegramDataSchema,
+  SignalDataSchema,
+  InstagramDataSchema,
+  FarcasterDataSchema
+} from "@/lib/storage/types/user/userData/socials";
+import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/user/userData/portfolio";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
@@ -41,6 +48,11 @@ export const UserDataSchema = z.object({
   signal: nullToUndefined(SignalDataSchema),
   instagram: nullToUndefined(InstagramDataSchema),
   farcaster: nullToUndefined(FarcasterDataSchema),
+  whatsapp: nullToUndefined(WhatsappDataSchema),
+  sms: nullToUndefined(SMSDataSchema),
+  email: nullToUndefined(EmailDataSchema),
+  substack: nullToUndefined(SubstackDataSchema),
+  personalWebsites: nullToUndefined(PersonalWebsitesSchema),
   pronouns: nullToUndefined(z.string()),
   lanna: nullToUndefined(LannaDataSchema),
   tensionsRating: nullToUndefined(TensionsRatingSchema),
@@ -76,15 +88,22 @@ export const FlattenedUserDataSchema = z.object({
   pronouns: z.string().optional(),
   note: z.string().optional(),
   emoji: z.string().optional(),
+  // interests
 });
 
 export type FlattenedUserData = z.infer<typeof FlattenedUserDataSchema>;
 
-export { type TwitterData, TwitterDataSchema } from "./twitterData";
-export { type TelegramData, TelegramDataSchema } from "./telegramData";
-export { type SignalData, SignalDataSchema } from "./signalData";
-export { type InstagramData, InstagramDataSchema } from "./instagramData";
-export { type FarcasterData, FarcasterDataSchema } from "./farcasterData";
+export {
+  type TwitterData, TwitterDataSchema,
+  type TelegramData, TelegramDataSchema,
+  type SignalData, SignalDataSchema,
+  type InstagramData, InstagramDataSchema,
+  type FarcasterData, FarcasterDataSchema,
+  type WhatsappData, WhatsappDataSchema,
+  type SMSData, SMSDataSchema,
+  type EmailData, EmailDataSchema,
+
+} from "@/lib/storage/types/user/userData/socials";
 
 export {
   type LannaDesiredConnections,
