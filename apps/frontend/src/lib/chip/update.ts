@@ -14,9 +14,9 @@ interface UpdateChipArgs {
   ownerSignalUsername: string | null;
   ownerInstagramUsername: string | null;
   ownerFarcasterUsername: string | null;
-  ownerWhatsappNumber: string | null;
-  ownerSMSNumber: string | null;
   ownerEmail: string | null;
+  ownerSMSNumber: string | null;
+  ownerWhatsappNumber: string | null;
   ownerPersonalWebsites: string[] | null;
   ownerSubstack: string | null;
   ownerPronouns: string | null;
@@ -49,12 +49,12 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       username: args.ownerFarcasterUsername,
     };
   }
-  if (args.ownerWhatsappNumber) {
-    if (args.ownerWhatsappNumber.length < 11) {
-      throw new Error("Whatsapp number too short, did you include the country code?");
+  if (args.ownerEmail) {
+    if (!validateEmail(args.ownerEmail)) {
+      throw new Error("Email not valid");
     }
-    ownerUserData.whatsapp = {
-      number: args.ownerWhatsappNumber,
+    ownerUserData.email = {
+      address: args.ownerEmail,
     };
   }
   if (args.ownerSMSNumber) {
@@ -66,12 +66,12 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       number: args.ownerSMSNumber,
     };
   }
-  if (args.ownerEmail) {
-    if (!validateEmail(args.ownerEmail)) {
-      throw new Error("Email not valid");
+  if (args.ownerWhatsappNumber) {
+    if (args.ownerWhatsappNumber.length < 11) {
+      throw new Error("Whatsapp number too short, did you include the country code?");
     }
-    ownerUserData.email = {
-      address: args.ownerEmail,
+    ownerUserData.whatsapp = {
+      number: args.ownerWhatsappNumber,
     };
   }
   if (args.ownerPersonalWebsites) {
@@ -143,14 +143,14 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       farcaster: {
         username: args.ownerFarcasterUsername ?? undefined,
       },
-      whatsapp: {
-        number: args.ownerWhatsappNumber ?? undefined,
+      email: {
+        address: args.ownerEmail ?? undefined,
       },
       sms: {
         number: args.ownerSMSNumber ?? undefined,
       },
-      email: {
-        address: args.ownerEmail ?? undefined,
+      whatsapp: {
+        number: args.ownerWhatsappNumber ?? undefined,
       },
       personalWebsites: {
         websites: args.ownerPersonalWebsites ?? undefined,

@@ -28,9 +28,9 @@ type ChipEditFormData = {
   signalUsername?: string;
   instagramUsername?: string;
   farcasterUsername?: string;
-  whatsappNumber?: string;
-  smsNumber?: string;
   emailAddress?: string;
+  smsNumber?: string;
+  whatsappNumber?: string;
   personalWebsiteHandles?: string[];
   substackHandle?: string;
   pronouns?: string;
@@ -57,9 +57,9 @@ const ProfileEdit = () => {
           signalUsername: user.userData?.signal?.username || "",
           instagramUsername: user.userData?.instagram?.username || "",
           farcasterUsername: user.userData?.farcaster?.username || "",
-          whatsappNumber: user.userData?.whatsapp?.number || "",
-          smsNumber: user.userData?.sms?.number || "",
           emailAddress: user.userData?.email?.address || "",
+          smsNumber: user.userData?.sms?.number || "",
+          whatsappNumber: user.userData?.whatsapp?.number || "",
           personalWebsiteHandles: user.userData?.personalWebsites?.websites || [],
           substackHandle: user.userData?.substack?.handle || "",
           pronouns: user.userData?.pronouns || "",
@@ -83,9 +83,9 @@ const ProfileEdit = () => {
       signalUsername,
       instagramUsername,
       farcasterUsername,
-      whatsappNumber,
-      smsNumber,
       emailAddress,
+      smsNumber,
+      whatsappNumber,
       personalWebsiteHandles,
       substackHandle,
       pronouns,
@@ -103,9 +103,9 @@ const ProfileEdit = () => {
           ownerSignalUsername: signalUsername ?? null,
           ownerInstagramUsername: instagramUsername ?? null,
           ownerFarcasterUsername: farcasterUsername ?? null,
-          ownerWhatsappNumber: whatsappNumber ?? null,
-          ownerSMSNumber: smsNumber ?? null,
           ownerEmail: emailAddress ?? null,
+          ownerSMSNumber: smsNumber ?? null,
+          ownerWhatsappNumber: whatsappNumber ?? null,
           ownerPersonalWebsites: personalWebsiteHandles ?? null,
           ownerSubstack: substackHandle ?? null,
           ownerPronouns: pronouns ?? null,

@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const LinksCardBox = ({ label, values, hrefs }: {label: string, values: string[], hrefs: string[] }) => {
   return (
       <div className="grid items-center grid-cols-[auto_1fr_auto] gap-1">
