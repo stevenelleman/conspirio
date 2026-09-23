@@ -24,6 +24,7 @@ import {
   InstagramDataSchema,
   FarcasterDataSchema
 } from "@/lib/storage/types/user/userData/socials";
+import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/user/userData/portfolio";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
@@ -51,6 +52,8 @@ export const UserDataSchema = z.object({
   whatsapp: nullToUndefined(WhatsappDataSchema),
   sms: nullToUndefined(SMSDataSchema),
   email: nullToUndefined(EmailDataSchema),
+  substack: nullToUndefined(SubstackDataSchema),
+  personalWebsites: nullToUndefined(PersonalWebsitesSchema),
   pronouns: nullToUndefined(z.string()),
   lanna: nullToUndefined(LannaDataSchema),
   tensionsRating: nullToUndefined(TensionsRatingSchema),

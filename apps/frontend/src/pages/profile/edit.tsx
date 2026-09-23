@@ -18,6 +18,7 @@ import { updateChip } from "@/lib/chip/update";
 import { SupportToast } from "@/components/ui/SupportToast";
 import { errorToString } from "@types";
 import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { AppTagsInput } from "@/components/ui/AppInputs";
 
 type ChipEditFormData = {
   displayName?: string;
@@ -30,6 +31,8 @@ type ChipEditFormData = {
   whatsappNumber?: string;
   smsNumber?: string;
   emailAddress?: string;
+  personalWebsiteHandles?: string[];
+  substackHandle?: string;
   pronouns?: string;
 };
 
@@ -57,6 +60,8 @@ const ProfileEdit = () => {
           whatsappNumber: user.userData?.whatsapp?.number || "",
           smsNumber: user.userData?.sms?.number || "",
           emailAddress: user.userData?.email?.address || "",
+          personalWebsiteHandles: user.userData?.personalWebsites?.websites || [],
+          substackHandle: user.userData?.substack?.handle || "",
           pronouns: user.userData?.pronouns || "",
         });
       } else {
@@ -81,6 +86,8 @@ const ProfileEdit = () => {
       whatsappNumber,
       smsNumber,
       emailAddress,
+      personalWebsiteHandles,
+      substackHandle,
       pronouns,
     } = formData;
     try {
@@ -99,6 +106,8 @@ const ProfileEdit = () => {
           ownerWhatsappNumber: whatsappNumber ?? null,
           ownerSMSNumber: smsNumber ?? null,
           ownerEmail: emailAddress ?? null,
+          ownerPersonalWebsites: personalWebsiteHandles ?? null,
+          ownerSubstack: substackHandle ?? null,
           ownerPronouns: pronouns ?? null,
         });
       }
@@ -110,7 +119,7 @@ const ProfileEdit = () => {
         SupportToast(
           "",
           true,
-          "Error updating chip",
+          `Error updating chip: "${errorToString(error)}"`,
           ERROR_SUPPORT_CONTACT,
           errorToString(error)
         )
@@ -191,14 +200,14 @@ const ProfileEdit = () => {
             />
             <AppInput
               label="Twitter"
-              placeholder="Twitter"
+              placeholder="Handle"
               variant="primary"
               icon={<TwitterIcon className=" invert" />}
               {...register("twitterUsername")}
             />
             <AppInput
               label="Instagram"
-              placeholder="Instagram"
+              placeholder="Handle"
               variant="primary"
               icon={<InstagramIcon className=" invert" />}
               {...register("instagramUsername")}
@@ -214,6 +223,18 @@ const ProfileEdit = () => {
               placeholder="Farcaster"
               variant="primary"
               {...register("farcasterUsername")}
+            />
+            <AppTagsInput
+              label="Personal Websites"
+              placeholder="Address"
+              variant="primary"
+              {...register("personalWebsiteHandles")}
+            />
+            <AppInput
+              label="Substack"
+              placeholder="Handle"
+              variant="primary"
+              {...register("substackHandle")}
             />
             <AppTextarea
               label="Bio"
