@@ -5,7 +5,7 @@ import {
 } from "@/components/cards/CommunityCard";
 import { DashboardDetail } from "@/components/dashboard/DashboardDetail";
 import { StoreBanner } from "@/components/StoreBanner";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import {
   getTopLeaderboardEntries,
   getUserLeaderboardDetails,
@@ -296,7 +296,7 @@ export default function EthIndiaCommunityPage({
       !leaderboardOnboardingDetails ||
       !leaderboardOnboardingEntries ? (
         <div className="flex justify-center items-center pt-4">
-          <CursiveLogo isLoading />
+          <ConspirioLogo isLoading />
         </div>
       ) : (
         <div className="flex flex-col gap-6 pt-2 pb-6">

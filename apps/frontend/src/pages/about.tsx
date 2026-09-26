@@ -1,7 +1,7 @@
-import { Icons } from "@/components/icons/Icons";
 import AppLayout from "@/layouts/AppLayout";
-import Link from "next/link";
 import React from "react";
+import { StoreBanner } from "@/components/StoreBanner";
+import { BlogBanner } from "@/components/BlogBanner";
 
 export default function AboutPage() {
   return (
@@ -9,6 +9,7 @@ export default function AboutPage() {
       <h1 className="font-sans text-[30px] leading-[30px] font-semibold text-label-primary tracking-[-0.22px]">
         Experience cryptography for human connection.
       </h1>
+
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <span className="text-label-primary font-medium text-lg tracking-[-0.1px]">
@@ -33,9 +34,15 @@ export default function AboutPage() {
           <span className="text-label-tertiary font-sans text-base font-medium">
             <i>Conspirio</i> is a cottage industry and design studio focused on
             cryptography for human connection.
+            <br/><br/>
+            {'If you want to get really literal "conspirator" can mean "to share spirit with".' +
+              ' "Con"-together, "spir"-spirit. The' +
+              ' suffix "-io"' +
+              ' is "the act of", therefore, Con-spir-io means the act of finding and sharing spirit together.'}
           </span>
+
         </div>
-        <Link
+        {/*<Link
           href={"https://github.com/stevenelleman/conspirio"}
           target="_blank"
         >
@@ -45,8 +52,10 @@ export default function AboutPage() {
             </span>
             <Icons.ExternalLink className="text-gray-10" />
           </div>
-        </Link>
+        </Link>*/}
       </div>
+      <StoreBanner/>
+      <BlogBanner/>
     </AppLayout>
   );
 }

@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { AppButton } from "@/components/ui/Button";
 import { AppInput } from "@/components/ui/AppInput";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { AppTextarea } from "@/components/ui/Textarea";
 import { AppCopy } from "@/components/ui/AppCopy";
 
@@ -76,7 +76,7 @@ const EnterUserInfo: React.FC<EnterUserInfoProps> = ({
             "",
             true,
             "An error occurred while submitting the form",
-            ERROR_SUPPORT_CONTACT,
+            SUPPORT_CONTACT,
             errorToString(error)
           )
         );

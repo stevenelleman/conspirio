@@ -11,14 +11,14 @@ import AppLayout from "@/layouts/AppLayout";
 import { LinkCardBox } from "@/components/ui/LinkCardBox";
 import { AppTextarea } from "@/components/ui/Textarea";
 import { ProfileImage } from "@/components/ui/ProfileImage";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { hotTakeLabels, tensionPairs } from "@/common/constants";
 import Link from "next/link";
-import { TensionSlider } from "../tensions";
+import { TensionSlider } from "../templates/tensions";
 import { Icons } from "@/components/icons/Icons";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { sendMessages } from "@/lib/message";
 import useSettings from "@/hooks/useSettings";
 import { cn } from "@/lib/frontend/util";
@@ -31,6 +31,8 @@ import { flowerSize, flowerType } from "@/lib/garden";
 import { Intersection, refreshPSI, triggerConnectionRefreshPSI, updateConnectionPSISize } from "@/lib/psi/refresh";
 import { upsertConnectionRefreshPSI } from "@/lib/storage/localStorage/user/connection/upsert";
 import { LinksCardBox } from "@/components/ui/LinksCardBox";
+import { GITHUB_IMPORT_URL } from "@/config";
+import { AppTagList } from "@/components/ui/AppTagList";
 
 interface CommentModalProps {
   username: string;
@@ -383,7 +385,7 @@ const UserProfilePage: React.FC = () => {
           "",
           true,
           "Failed to add comment",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );
@@ -450,7 +452,7 @@ const UserProfilePage: React.FC = () => {
           "",
           true,
           "Failed to update overlap. Please try again",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );
@@ -468,7 +470,7 @@ const UserProfilePage: React.FC = () => {
   ) {
     return (
       <div className="flex min-h-screen justify-center items-center text-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     );
   }
@@ -494,6 +496,7 @@ const UserProfilePage: React.FC = () => {
   }
   const flowerImage = `/flowers/flower-${flowerIndex}-${flowerStage}.svg`;
 
+  // TODO: When roles added, change this logic
   const isUserAdmin = (
     user?.userData?.username === "stevenelleman" ||
     user?.userData?.username === "vivek" ||
@@ -502,8 +505,26 @@ const UserProfilePage: React.FC = () => {
   
   let chipLink = ""
   if (connection) {
-    chipLink = `https://nfc.cursive.team/bracelets?chipId=${chipId}`;
+    chipLink = `https://conspirio.space/tap?chipId=${chipId}`;
   }
+
+  // Filled out imports?
+  const devconImported = !!user?.userData?.devcon;
+  const githubImported = !!user?.userData?.github;
+
+  // Using publicInterests infer vanilla vs spicy interests
+  let theirVanilla: string[] = [];
+  let theirSpicy: string[] = [];
+  if (connection.user.publicInterests && verifiedIntersection?.interests) {
+    for (const sharedInterest of verifiedIntersection.interests) {
+      if (connection.user.publicInterests.includes(sharedInterest)) {
+        theirVanilla = theirVanilla.concat(sharedInterest);
+      } else {
+        theirSpicy = theirSpicy.concat(sharedInterest);
+      }
+    }
+  }
+
 
   return (
     <>
@@ -727,8 +748,30 @@ const UserProfilePage: React.FC = () => {
             </div>
           </div>
 
+          <div className="!divide-y !divide-quaternary/20">
+            <div className="flex flex-col gap-2 py-4 px-4">
+            <span className="text-sm font-semibold text-label-primary font-sans">
+              Public Disclosures
+            </span>
+              <div className="flex flex-col gap-4">
+                {!connection?.user?.publicInterests && (
+                  <span className="text-sm text-label-secondary font-sans font-normal">
+                  No templates completed.
+                </span>
+                )}
+                {connection?.user?.publicInterests && (
+                  <AppTagList
+                    label="Vanilla Interests"
+                    values={connection?.user?.publicInterests || []}
+                    maxVisible={5}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
 
-            <div className="flex flex-col gap-4 py-4 px-4">
+
+          <div className="flex flex-col gap-4 py-4 px-4">
             <div className=" grid grid-cols-[1fr_60px] gap-6">
               <span className="flex flex-col gap-5 text-sm font-semibold text-label-primary font-sans">
                 <span>Discover intersections in your encrypted data. </span>
@@ -761,9 +804,28 @@ const UserProfilePage: React.FC = () => {
                         <span className="text-label-primary">
                           {index !== 0 && " | "}
                         </span>
-                          <Link href={`/people/${contact}`}>{contact}</Link>
+                          <Link href={`/people/${contact}`} onClick={() => setVerifiedIntersection(null)}>{contact}</Link>
                         </div>
                       ))}
+                    </div>
+                  )}
+                </IntersectionAccordion>
+
+                <IntersectionAccordion
+                  label="🍦 What flavors do you share? 🌶"
+                >
+                  {!verifiedIntersection.interests ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/templates/vanilla-spicy"}>Submit your interests</a> and refresh to see results!
+                    </div>
+                  ) : verifiedIntersection.interests.length === 0 ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      No flavors in common! Whoopsie daisies! 😳
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-4">
+                      <AppTagList label="Their Vanilla" maxVisible={5} values={theirVanilla}/>
+                      <AppTagList label="Their Spicy" tagClassName="bg-tag-active" maxVisible={5} values={theirSpicy}/>
                     </div>
                   )}
                 </IntersectionAccordion>
@@ -774,7 +836,8 @@ const UserProfilePage: React.FC = () => {
                 >
                   {verifiedIntersection.hotTakes.length === 0 ? (
                     <div className="text-sm text-label-primary font-sans font-normal">
-                      Submit your hot takes and refresh to see results!
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/templates/hot-takes"}>Submit your hot takes</a> and refresh to see
+                      results!
                     </div>
                   ) : verifiedIntersection.hotTakes.every(
                       (hotTake) => hotTake === "0"
@@ -811,7 +874,8 @@ const UserProfilePage: React.FC = () => {
                 >
                   {verifiedIntersection.tensions.length === 0 ? (
                     <div className="text-sm text-label-primary font-sans font-normal">
-                      Play the tensions game and refresh to see results!
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/templates/tensions"}>Play the tensions game</a> and
+                        refresh to see results!
                     </div>
                   ) : verifiedIntersection.tensions.every(
                       (tension) => tension === "0"
@@ -848,48 +912,62 @@ const UserProfilePage: React.FC = () => {
                 </IntersectionAccordion>
 
                 <IntersectionAccordion label="Shared Devcon events" icon="📅">
-                  {verifiedIntersection.devconEvents.length === 0 ? (
+                  {!devconImported ? (
                     <div className="text-sm text-label-primary font-sans font-normal">
-                      No common events.
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/imports/devcon"}>Import your calendar</a> and refresh to see results!
                     </div>
-                  ) : (
-                    <ul>
-                      <div className="text-sm text-link-primary font-sans font-normal">
-                        {verifiedIntersection.devconEvents.map(
-                          (event, index) => (
-                            <li key={index}>
-                              <Link href={`https://app.devcon.org/schedule`}>
-                                - {event}
-                              </Link>
-                            </li>
-                          )
-                        )}
+                    ) : verifiedIntersection.devconEvents.length === 0 ? (
+                      <div className="text-sm text-label-primary font-sans font-normal">
+                        No common events.
                       </div>
-                    </ul>
-                  )}
+                    ) : (
+                      <ul>
+                        <div className="text-sm text-link-primary font-sans font-normal">
+                          {verifiedIntersection.devconEvents.map(
+                            (event, index) => (
+                              <li key={index}>
+                                <Link href={`https://app.devcon.org/schedule`}>
+                                  - {event}
+                                </Link>
+                              </li>
+                            )
+                          )}
+                        </div>
+                      </ul>
+                    )
+                  }
                 </IntersectionAccordion>
 
                 <IntersectionAccordion label="Shared Github starred repositories" icon="🛠️">
-                  {verifiedIntersection.contacts.length === 0 ? (
-                    <div className="text-sm text-label-primary font-sans font-normal">
-                      No starred repositories.
-                    </div>
-                  ) : (
-                    <div className="text-sm text-link-primary font-sans font-normal">
-                      {verifiedIntersection.starredRepos.map((repo, index) => (
-                        <>
-                          <span className="text-label-primary">
-                            {index !== 0 && " | "}
-                          </span>
-                          <Link href={`https://github.com/${repo}`}>{repo}</Link>
-                        </>
-                      ))}
-                    </div>
+                  {!githubImported ? (
+                      <div className="text-sm text-label-primary font-sans font-normal">
+                        <a className="text-link-primary" style={{textDecoration: "underline"}} href={GITHUB_IMPORT_URL}>Import Github data</a> and
+                        refresh to see results!
+                      </div>
+                    ) : verifiedIntersection.starredRepos.length === 0 ? (
+                      <div className="text-sm text-label-primary font-sans font-normal">
+                        No starred repositories.
+                      </div>
+                    ) : (
+                      <div className="text-sm text-link-primary font-sans font-normal">
+                        {verifiedIntersection.starredRepos.map((repo, index) => (
+                          <>
+                            <span className="text-label-primary">
+                              {index !== 0 && " | "}
+                            </span>
+                            <Link href={`https://github.com/${repo}`}>{repo}</Link>
+                          </>
+                        ))}
+                      </div>
                   )}
                 </IntersectionAccordion>
 
                 <IntersectionAccordion label="Shared programming languages" icon="🤖">
-                  {verifiedIntersection.contacts.length === 0 ? (
+                  {!githubImported ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={GITHUB_IMPORT_URL}>Import Github data</a> and refresh to see results!
+                    </div>
+                    ) : verifiedIntersection.programmingLangs.length === 0 ? (
                     <div className="text-sm text-label-primary font-sans font-normal">
                       No programming languages.
                     </div>

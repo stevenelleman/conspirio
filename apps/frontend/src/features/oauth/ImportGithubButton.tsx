@@ -1,8 +1,8 @@
 import { Icons } from "@/components/icons/Icons";
 import { Tag } from "@/components/ui/Tag";
-import { FRONTEND_URL } from "@/config";
 import { cn } from "@/lib/frontend/util";
 import Link from "next/link";
+import { GITHUB_IMPORT_URL } from "@/config";
 
 const ImportGithubButton = ({
   addElement = true,
@@ -13,7 +13,7 @@ const ImportGithubButton = ({
 }) => {
   return (
     <Link
-      href={`https://www.github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_OAUTH_GITHUB_CLIENT_ID}&state=github&response_type=code&redirect_uri=${FRONTEND_URL}/oauth/exchange_token&approval_prompt=force&scope=read`}
+      href={GITHUB_IMPORT_URL}
     >
       <Tag
         emoji={<Icons.GitHub />}

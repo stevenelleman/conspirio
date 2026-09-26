@@ -31,6 +31,7 @@ router.post(
         devconEvents: devconEvents0,
         programmingLangs: programmingLangs0,
         starredRepos: starredRepos0,
+        interests: interests0,
       } = intersectionState;
 
       if (req.app.locals.intersectionState[secretHash][1 - index]) {
@@ -41,6 +42,7 @@ router.post(
           devconEvents: devconEvents1,
           programmingLangs: programmingLangs1,
           starredRepos: starredRepos1,
+          interests: interests1,
         } =
           req.app.locals.intersectionState[secretHash][1 - index];
 
@@ -50,6 +52,7 @@ router.post(
         const newDevconEvents: string[] = [];
         const newProgrammingLangs: string[] = [];
         const newStarredRepos: string[] = [];
+        const newInterests: string[] = [];
 
         if (
           tensions0.length !== 0 &&
@@ -123,6 +126,16 @@ router.post(
           }
         }
 
+        // Create a Set from contacts0 for efficient lookup
+        const interestSet = new Set(interests0);
+
+        // Find intersection by checking each contact in contacts1
+        for (const interest of interests1) {
+          if (interestSet.has(interest)) {
+            newInterests.push(interest);
+          }
+        }
+
         return res.status(200).json({
           success: true,
           verifiedIntersectionState: {
@@ -132,6 +145,7 @@ router.post(
             devconEvents: newDevconEvents,
             programmingLangs: newProgrammingLangs,
             starredRepos: newStarredRepos,
+            interests: newInterests,
           },
         });
       }
@@ -145,6 +159,7 @@ router.post(
           devconEvents: [],
           programmingLangs: [],
           starredRepos: [],
+          interests: [],
         },
       });
     } catch (error) {

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { DataImportSourceSchema, errorToString } from "@types";
 import { storage } from "@/lib/storage";
 import { importData } from "@/lib/imports";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 
 const OAuthAccessTokenPage: React.FC = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const OAuthAccessTokenPage: React.FC = () => {
               "",
               true,
               "Data import failed",
-              ERROR_SUPPORT_CONTACT,
+              SUPPORT_CONTACT,
               errorToString(error)
             )
           );
@@ -53,7 +53,7 @@ const OAuthAccessTokenPage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen justify-center items-center text-center">
-      <CursiveLogo isLoading />
+      <ConspirioLogo isLoading />
     </div>
   );
 };

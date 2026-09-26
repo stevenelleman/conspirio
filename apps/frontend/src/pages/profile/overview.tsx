@@ -10,9 +10,10 @@ import { storage } from "@/lib/storage";
 import { User, UserData } from "@/lib/storage/types";
 import Link from "next/link";
 import router from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { LinksCardBox } from "@/components/ui/LinksCardBox";
+import { AppTagList } from "@/components/ui/AppTagList";
 
 export default function ProfileOverview() {
   const [user, setUser] = useState<User | null>(null);
@@ -174,6 +175,24 @@ export default function ProfileOverview() {
                 href={`https://substack.com/@${user?.userData?.substack?.handle}`}
               />
             )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 p-4">
+          <div className="flex flex-col gap-2">
+            <AppTagList
+              label="Vanilla Interests"
+              values={user?.userData?.publicInterests || []}
+              maxVisible={5}
+              emptyState="Add your public interests by editing your profile!" //TODO: link to vanilla-spicy
+            />
+            <br/>
+            {/* TODO: should it be included in the overview? Should only public info live there? */}
+            <AppTagList
+              label="Spicy Interests"
+              values={user?.userData?.privateInterests || []}
+              maxVisible={5}
+              emptyState="Add your private interests by editing your profile! 😏 🤫"
+            />
           </div>
         </div>
         {user?.userData.bio !== "" && (

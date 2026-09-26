@@ -14,7 +14,7 @@ import useSettings from "@/hooks/useSettings";
 import { HeaderCover } from "@/components/ui/HeaderCover";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { zxcvbn } from "@zxcvbn-ts/core";
 import CreatingAccount from "./CreatingAccount";
 
@@ -182,7 +182,7 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
           "",
           true,
           "Failed to create account. Please try again",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

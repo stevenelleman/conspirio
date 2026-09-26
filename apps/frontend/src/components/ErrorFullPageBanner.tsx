@@ -3,7 +3,7 @@ import { APP_CONFIG } from "@/config";
 import useSettings from "@/hooks/useSettings";
 import { AppButton } from "./ui/Button";
 import { useState, useRef } from "react";
-import { CursiveLogo, HeaderCover } from "@/components/ui/HeaderCover";
+import { ConspirioLogo, HeaderCover } from "@/components/ui/HeaderCover";
 import { RegisterHeader as Header } from "@/components/ui/RegisterHeader";
 
 interface ErrorFullPageBannerProps {
@@ -69,7 +69,7 @@ const ErrorFullPageBanner = ({
       <div className="min-h-screen bg-background flex flex-col justify-center items-center">
         <div className="max-w-[350px] text-center">
           <div className="flex flex-col gap-2 items-center justify-center">
-            <CursiveLogo />
+            <ConspirioLogo />
             <span className="font-sans py-4 text-[30px] leading-[30px] font-semibold text-label-primary tracking-[-0.22px]">
               {APP_CONFIG.APP_NAME}
             </span>

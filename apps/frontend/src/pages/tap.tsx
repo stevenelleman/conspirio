@@ -14,10 +14,10 @@ import {
   updateTapLeaderboardEntry,
   updateLannaWorkoutLeaderboardEntry,
 } from "@/lib/chip";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { shareableUserDataToJson } from "@/lib/user";
 import { hasRecentAddChipRequest } from "@/lib/chip/addChip";
 import { upsertSocialGraphEdge } from "@/lib/graph";
@@ -251,7 +251,7 @@ const TapPage: React.FC = () => {
             "",
             true,
             errorToString(error),
-            ERROR_SUPPORT_CONTACT,
+            SUPPORT_CONTACT,
             errorToString(error)
           )
         );
@@ -267,7 +267,7 @@ const TapPage: React.FC = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
       <div className="text-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     </div>
   );

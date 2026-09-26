@@ -20,6 +20,8 @@ export const BASE_API_URL =
 export const BASE_API_WS =
   process.env.NEXT_PUBLIC_API_WS || "ws://localhost:8080";
 
+export const GITHUB_IMPORT_URL = `https://www.github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_OAUTH_GITHUB_CLIENT_ID}&state=github&response_type=code&redirect_uri=${FRONTEND_URL}/oauth/exchange_token&approval_prompt=force&scope=read`
+
 export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
   strava: {
     client_side_fetching: true,

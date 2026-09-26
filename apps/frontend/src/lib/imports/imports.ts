@@ -17,7 +17,7 @@ import { storage } from "@/lib/storage";
 import { getOAuthAccessToken, refreshAndSaveToken } from "@/lib/oauth";
 import { getChipIssuers } from "@/lib/storage/localStorage/user/chip";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 
 export async function fetchAndSaveImportedData(
   authToken: string,
@@ -250,7 +250,7 @@ export async function importData(
       "",
       true,
       "Unable to mint OAuth access token.",
-      ERROR_SUPPORT_CONTACT,
+      SUPPORT_CONTACT,
       ""
     );
     throw new Error("Unable to mint OAuth access token");
@@ -277,7 +277,7 @@ export async function importData(
           "",
           true,
           "Data import failed.",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         );
         console.error("Data import failed:", errorToString(error));

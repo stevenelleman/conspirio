@@ -6,7 +6,7 @@ import { AppInput } from "@/components/ui/AppInput";
 import { RegisterHeader } from "@/components/ui/RegisterHeader";
 import { AppCopy } from "@/components/ui/AppCopy";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 
 interface EnterUsernameProps {
   submitUsername: (username: string) => Promise<void>;
@@ -37,7 +37,7 @@ const EnterUsername: React.FC<EnterUsernameProps> = ({ submitUsername }) => {
           "",
           true,
           "Please enter a valid username",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );
@@ -68,6 +68,7 @@ const EnterUsername: React.FC<EnterUsernameProps> = ({ submitUsername }) => {
               required
               value={username}
               onChange={handleChange}
+              autoCapitalize="off"
             />
           </div>
           <AppButton loading={loading} type="submit">

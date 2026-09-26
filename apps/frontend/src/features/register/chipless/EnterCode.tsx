@@ -5,7 +5,7 @@ import { RegisterHeader } from "../../../components/ui/RegisterHeader";
 import { AppButton } from "@/components/ui/Button";
 import { AppCopy } from "@/components/ui/AppCopy";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT, SUPPORT_EMAIL } from "@/constants";
+import { SUPPORT_CONTACT, SUPPORT_EMAIL } from "@/constants";
 import useSettings from "@/hooks/useSettings";
 import { cn } from "@/lib/frontend/util";
 
@@ -32,7 +32,7 @@ const EnterCode: React.FC<EnterCodeProps> = ({ email, submitCode }) => {
           "",
           true,
           "Please enter a valid 6-digit code",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

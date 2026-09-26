@@ -6,7 +6,7 @@ import { AppInput } from "@/components/ui/AppInput";
 import { RegisterHeader } from "../../../components/ui/RegisterHeader";
 import { AppCopy } from "@/components/ui/AppCopy";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 
 interface EnterEmailProps {
   submitEmail: (email: string) => Promise<void>;
@@ -34,7 +34,7 @@ const EnterEmail: React.FC<EnterEmailProps> = ({
           "",
           true,
           "Please enter a valid email address",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

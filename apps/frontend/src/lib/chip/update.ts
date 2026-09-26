@@ -20,6 +20,7 @@ interface UpdateChipArgs {
   ownerPersonalWebsites: string[] | null;
   ownerSubstack: string | null;
   ownerPronouns: string | null;
+  ownerPublicInterests: string[] | null;
 }
 
 export async function updateChip(args: UpdateChipArgs): Promise<void> {
@@ -75,6 +76,11 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
     };
   }
   if (args.ownerPersonalWebsites) {
+    // Ensure that an empty list is set to null
+    if (args.ownerPersonalWebsites?.length == 0) {
+      ownerUserData.personalWebsites = null;
+    }
+
     for (const website of args.ownerPersonalWebsites) {
       const valid = validateHttpsDomain(website);
       if (!valid) {
@@ -93,6 +99,9 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
   }
   if (args.ownerPronouns) {
     ownerUserData.pronouns = args.ownerPronouns;
+  }
+  if (args.ownerPublicInterests) {
+    ownerUserData.publicInterests = args.ownerPublicInterests;
   }
 
   const request: UpdateChipRequest = {
@@ -159,6 +168,7 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
         handle: args.ownerSubstack ?? undefined,
       },
       pronouns: args.ownerPronouns ?? undefined,
+      publicInterests: args.ownerPublicInterests ?? undefined,
     });
   } catch (error) {
     console.error("Error updating chip:", errorToString(error));

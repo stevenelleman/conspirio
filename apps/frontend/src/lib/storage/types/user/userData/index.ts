@@ -25,6 +25,8 @@ import {
 } from "@/lib/storage/types/user/userData/socials";
 import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/user/userData/portfolio";
 
+import { interestsSchema } from "@/lib/storage/types/user/interests";
+
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
 
@@ -62,7 +64,9 @@ export const UserDataSchema = z.object({
   lannaHalloween: nullToUndefined(LannaHalloweenDataSchema),
   devcon: nullToUndefined(DevconSchema),
   connectionPSISize: nullToUndefined(ConnectionPSISizeSchema),
-  settings: nullToUndefined(UserSettingsSchema)
+  settings: nullToUndefined(UserSettingsSchema),
+  publicInterests: nullToUndefined(interestsSchema),
+  privateInterests: nullToUndefined(interestsSchema),
 });
 
 export type UserData = z.infer<typeof UserDataSchema>;

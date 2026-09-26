@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
 import { toast } from "sonner";
 import { ChipIssuer } from "@types";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import LannaCommunityPage from "@/features/community/LannaCommunityPage";
 import DevconCommunityPage from "@/features/community/DevconCommunityPage";
 import { Metadata } from "next";
@@ -82,7 +82,7 @@ const CommunityPage = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen justify-center items-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     );
   }

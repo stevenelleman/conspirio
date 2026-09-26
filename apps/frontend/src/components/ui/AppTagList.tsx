@@ -1,36 +1,46 @@
-import type * as Classed from "@tw-classed/react";
-import { classed } from "@tw-classed/react";
-import { ReactNode, useState } from "react";
+import { HTMLAttributes, ReactNode, useState } from "react";
 import { InputWrapper, InputWrapperProps } from "./InputWrapper";
 import { cn } from "@/lib/frontend/util";
 
+// Plain class strings (rather than a classed component) so that a passed
+// `className` is merged with `cn` and can override these defaults.
+const tagBaseClasses =
+  "inline-flex items-center gap-1 max-w-full rounded-[7px] py-1 pl-2 text-xs leading-[16px] text-label-primary";
+
 // Tags use the opposite surface of the input they sit under, so
 // `variant` matches the variant of the surrounding form fields.
-export const TagComponent = classed.span(
-  "inline-flex items-center gap-1 max-w-full rounded-[7px] py-1 pl-2 text-xs leading-[16px] text-label-primary",
-  {
-    variants: {
-      variant: {
-        primary: "bg-surface-quaternary border border-transparent",
-        secondary: "bg-surface-primary border border-stroke-secondary",
-      },
-      removable: {
-        true: "pr-1",
-        false: "pr-2",
-      },
-    },
-    defaultVariants: {
-      variant: "primary",
-      removable: false,
-    },
-  }
+const tagVariantClasses = {
+  primary: "bg-surface-quaternary border border-transparent",
+  secondary: "bg-surface-primary border border-stroke-secondary",
+} as const;
+
+export type TagVariant = keyof typeof tagVariantClasses;
+
+interface TagComponentProps extends HTMLAttributes<HTMLSpanElement> {
+  variant?: TagVariant;
+  removable?: boolean;
+}
+
+export const TagComponent = ({
+  variant = "primary",
+  removable = false,
+  className,
+  ...rest
+}: TagComponentProps) => (
+  <span
+    className={cn(
+      tagBaseClasses,
+      tagVariantClasses[variant],
+      removable ? "pr-1" : "pr-2",
+      className
+    )}
+    {...rest}
+  />
 );
 
-type TagComponentVariants = Classed.VariantProps<typeof TagComponent>;
-
 interface TagListProps
-  extends Pick<TagComponentVariants, "variant">,
-    Partial<Pick<InputWrapperProps, "label" | "description">> {
+  extends Partial<Pick<InputWrapperProps, "label" | "description">> {
+  variant?: TagVariant;
   values: string[];
   /** When provided, each tag gets a remove button. */
   onRemove?: (value: string, index: number) => void;
@@ -40,8 +50,8 @@ interface TagListProps
   emptyState?: ReactNode;
   disabled?: boolean;
   labelPosition?: "top" | "left";
-  /** Extra classes for the field label, merged with the defaults. */
-  labelClassName?: string;
+  /** Extra classes for every tag, merged with (and able to override) the defaults. */
+  tagClassName?: string;
   className?: string;
   "aria-label"?: string;
 }
@@ -56,7 +66,7 @@ const AppTagList = ({
   label,
   description,
   labelPosition = "top",
-  labelClassName,
+  tagClassName,
   className,
   "aria-label": ariaLabel = "Selected values",
 }: TagListProps) => {
@@ -79,7 +89,11 @@ const AppTagList = ({
       <ul className="flex flex-wrap gap-1" aria-label={ariaLabel}>
         {visible.map((value, index) => (
           <li key={value} className="max-w-full">
-            <TagComponent variant={variant} removable={!!onRemove}>
+            <TagComponent
+              variant={variant}
+              removable={!!onRemove}
+              className={tagClassName}
+            >
               <span className="truncate" title={value}>
                 {value}
               </span>
@@ -120,7 +134,7 @@ const AppTagList = ({
             >
               <TagComponent
                 variant={variant}
-                className="opacity-70 hover:opacity-100"
+                className={cn("opacity-70 hover:opacity-100", tagClassName)}
               >
                 {expanded ? "Show less" : `+${hiddenCount}`}
               </TagComponent>
@@ -141,7 +155,6 @@ const AppTagList = ({
       description={description}
       className={className}
       labelPosition={labelPosition}
-      labelClassName={labelClassName}
     >
       {list}
     </InputWrapper>
