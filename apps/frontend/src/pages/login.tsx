@@ -10,7 +10,7 @@ import { errorToString, UserLoginResponse } from "@types";
 import { storage } from "@/lib/storage";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import EnterUsername from "@/features/login/EnterUsername";
 
 enum LoginState {
@@ -65,7 +65,7 @@ const LoginPage: React.FC = () => {
           "",
           true,
           "Invalid username",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );
@@ -94,7 +94,7 @@ const LoginPage: React.FC = () => {
           "",
           true,
           "Invalid password. Please try again",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );
@@ -122,7 +122,7 @@ const LoginPage: React.FC = () => {
           "",
           true,
           "Passkey authentication failed",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

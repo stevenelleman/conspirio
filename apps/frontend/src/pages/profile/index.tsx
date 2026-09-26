@@ -9,7 +9,7 @@ import {
   getProfileBackgroundColor,
   ProfileImage,
 } from "@/components/ui/ProfileImage";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import Link from "next/link";
 import { Icons } from "@/components/icons/Icons";
 import { NextSeo } from "next-seo";
@@ -94,7 +94,7 @@ const ProfilePage: React.FC = () => {
   if (!user) {
     return (
       <div className="flex min-h-screen justify-center items-center text-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     );
   }
@@ -231,32 +231,30 @@ const ProfilePage: React.FC = () => {
                   </div>
                 )}
 
-                {!user.userData.hotTakesRating && (
-                  <Card.Base
-                    variant="gray"
-                    className="p-4 !rounded-lg !border !border-white"
-                    onClick={() => {
-                      logClientEvent("start_hot_takes", {});
-                      router.push("/hot-takes");
-                    }}
-                  >
-                    <div className="flex flex-col gap-[10px]">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <Icons.Clip className="text-icon-primary" />
-                          <span className="text-sm text-label-primary font-medium">
-                            Ethereum Hot Takes 🔥
-                          </span>
-                        </div>
-                        <Icons.Plus className="text-icon-primary" />
+
+                <Card.Base
+                  variant="gray"
+                  className="p-4 !rounded-lg !border !border-white"
+                  onClick={() => {
+                    logClientEvent("start_vanilla_spicy", {});
+                    router.push("/templates/vanilla-spicy");
+                  }}
+                >
+                  <div className="flex flex-col gap-[10px]">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-label-primary font-medium">
+                          🍦 Vanilla & Spicy 🌶️
+                        </span>
                       </div>
-                      <span className="text-xs font-medium text-label-tertiary">
-                        Weigh in on the *most important* topics in the
-                        community: based or cringe?
-                      </span>
+                      <Icons.Plus className="text-icon-primary" />
                     </div>
-                  </Card.Base>
-                )}
+                    <span className="text-xs font-medium text-label-tertiary">
+                      Who shares the vanilla and spice in your life?
+                    </span>
+                  </div>
+                </Card.Base>
+
 
                 {!user.userData.tensionsRating && (
                   <Card.Base
@@ -264,13 +262,13 @@ const ProfilePage: React.FC = () => {
                     className="p-4 !rounded-lg !border !border-white"
                     onClick={() => {
                       logClientEvent("start_tensions", {});
-                      router.push("/tensions");
+                      router.push("/templates/tensions");
                     }}
                   >
                     <div className="flex flex-col gap-[10px]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
-                          <Icons.Clip className="text-icon-primary" />
+                          {/*<Icons.Clip className="text-icon-primary" />*/}
                           <span className="text-sm text-label-primary font-medium">
                             Tensions 🪢
                           </span>
@@ -281,6 +279,32 @@ const ProfilePage: React.FC = () => {
                         Play the Tensions game from Summer of Protocols to
                         practice your decision making skills. Upon tap, discover
                         where you disagree to learn new perspectives.
+                      </span>
+                    </div>
+                  </Card.Base>
+                )}
+
+                {!user.userData.hotTakesRating && (
+                  <Card.Base
+                    variant="gray"
+                    className="p-4 !rounded-lg !border !border-white"
+                    onClick={() => {
+                      logClientEvent("start_hot_takes", {});
+                      router.push("/templates/hot-takes");
+                    }}
+                  >
+                    <div className="flex flex-col gap-[10px]">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-label-primary font-medium">
+                            Ethereum Hot Takes 🔥
+                          </span>
+                        </div>
+                        <Icons.Plus className="text-icon-primary" />
+                      </div>
+                      <span className="text-xs font-medium text-label-tertiary">
+                        Weigh in on the *most important* topics in the
+                        community: based or cringe?
                       </span>
                     </div>
                   </Card.Base>
@@ -325,7 +349,7 @@ const ProfilePage: React.FC = () => {
                     className="p-4 !rounded-lg !border !border-white"
                     onClick={() => {
                       logClientEvent("edit_hot_takes", {});
-                      router.push("/hot-takes");
+                      router.push("/templates/hot-takes");
                     }}
                   >
                     <div className="flex flex-col gap-[10px] ">
@@ -351,7 +375,7 @@ const ProfilePage: React.FC = () => {
                     className="p-4 !rounded-lg !border !border-white"
                     onClick={() => {
                       logClientEvent("edit_tensions", {});
-                      router.push("/tensions");
+                      router.push("/templates/tensions");
                     }}
                   >
                     <div className="flex flex-col gap-[10px] ">

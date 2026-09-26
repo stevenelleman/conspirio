@@ -9,7 +9,7 @@ import useSettings from "@/hooks/useSettings";
 import { AppButton } from "@/components/ui/Button";
 import { Icons } from "@/components/icons/Icons";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 
 interface FormData {
   displayName: string;
@@ -120,7 +120,7 @@ const EnterUserInfo: React.FC<EnterUserInfoProps> = ({
           "",
           true,
           "An error occurred while submitting the form",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

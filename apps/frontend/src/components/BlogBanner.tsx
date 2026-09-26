@@ -1,16 +1,16 @@
 import useSettings from "@/hooks/useSettings";
 import { cn } from "@/lib/frontend/util";
 import Image from "next/image";
-import Link from "next/link";
 import { SUPPORT_CONTACT } from "@/constants";
+import Link from "next/link";
 
-export const StoreBanner = () => {
+export const BlogBanner = () => {
   const { darkTheme } = useSettings();
   return (
     <Link href={SUPPORT_CONTACT}>
       <div className="flex flex-col gap-1">
         <span className="text-base font-bold font-sans text-label-primary">
-          Merch store - coming soon
+          Conspirio blog - coming soon
         </span>
         <div
           className={cn(
@@ -21,7 +21,7 @@ export const StoreBanner = () => {
           <div className="p-2 flex items-center gap-[10px]">
             <div className="flex-shrink-0">
               <Image
-                src="/images/location-chip-green.png"
+                src="/images/build.png"
                 alt="shop cover"
                 width={80}
                 height={80}
@@ -31,10 +31,10 @@ export const StoreBanner = () => {
             <div className="flex flex-col flex-1">
               {/* <p className="text-xs font-bold text-label-quaternary">47 taps</p> */}
               <h2 className="text-sm font-bold text-label-primary">
-                Merch designing is in progress!
+                Writing in progress!
               </h2>
               <p className="text-xs font-medium text-label-quaternary">
-                If you have any merch ideas, feel free to reach out and collab!
+                Featuring essays on the design, engineering, intentions, and inspiration behind Conspirio.
               </p>
             </div>
           </div>

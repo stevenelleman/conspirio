@@ -18,7 +18,7 @@ import { logClientEvent } from "@/lib/frontend/metrics";
 import { cn } from "@/lib/frontend/util";
 import { IoIosArrowBack as BackIcon } from "react-icons/io";
 import { SupportToast } from "@/components/ui/SupportToast";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { zxcvbn } from "@zxcvbn-ts/core";
 
 enum DisplayState {
@@ -210,7 +210,7 @@ const RegisterDevcon: React.FC<RegisterDevconProps> = ({ savedTap }) => {
           "",
           true,
           "Failed to create account. Please try again",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

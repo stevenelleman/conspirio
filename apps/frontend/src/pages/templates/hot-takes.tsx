@@ -8,7 +8,7 @@ import { hotTakeLabels } from "@/common/constants";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { SupportToast } from "@/components/ui/SupportToast";
 import { errorToString } from "@types";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { CringeSlider } from "@/components/ui/CringeSlider";
 
 export default function TensionsPage() {
@@ -88,7 +88,7 @@ export default function TensionsPage() {
           "",
           true,
           "Failed to save tensions. Please try again",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

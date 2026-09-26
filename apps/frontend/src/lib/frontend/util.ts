@@ -1,5 +1,6 @@
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { FuzzySearchFn } from "@/components/ui/AppInputsFuzzyMatch";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,3 +24,20 @@ export function validateHttpsDomain(inputString: string) {
     throw(error);
   }
 }
+
+export const fuzzyMatch: FuzzySearchFn = (query, options) => {
+  const q = query.toLowerCase();
+  const score = (option: string) => {
+    const o = option.toLowerCase();
+    if (o.startsWith(q)) return 0;
+    if (o.includes(q)) return 1;
+    let i = 0;
+    for (const char of o) if (char === q[i]) i++;
+    return i === q.length ? 2 : -1; // letters in order, gaps allowed
+  };
+  return options
+    .map((option) => ({ option, s: score(option) }))
+    .filter(({ s }) => s >= 0)
+    .sort((a, b) => a.s - b.s)
+    .map(({ option }) => option);
+};

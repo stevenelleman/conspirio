@@ -13,14 +13,14 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { updateChip } from "@/lib/chip/update";
 import { SupportToast } from "@/components/ui/SupportToast";
 import { errorToString } from "@types";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import { AppTagsInput } from "@/components/ui/AppInputs";
 
-type ChipEditFormData = {
+export type ChipEditFormData = {
   displayName?: string;
   bio?: string;
   twitterUsername?: string;
@@ -31,7 +31,7 @@ type ChipEditFormData = {
   emailAddress?: string;
   smsNumber?: string;
   whatsappNumber?: string;
-  personalWebsiteHandles?: string[];
+  personalWebsiteAddresses?: string[];
   substackHandle?: string;
   pronouns?: string;
 };
@@ -60,7 +60,7 @@ const ProfileEdit = () => {
           emailAddress: user.userData?.email?.address || "",
           smsNumber: user.userData?.sms?.number || "",
           whatsappNumber: user.userData?.whatsapp?.number || "",
-          personalWebsiteHandles: user.userData?.personalWebsites?.websites || [],
+          personalWebsiteAddresses: user.userData?.personalWebsites?.websites || [],
           substackHandle: user.userData?.substack?.handle || "",
           pronouns: user.userData?.pronouns || "",
         });
@@ -86,7 +86,7 @@ const ProfileEdit = () => {
       emailAddress,
       smsNumber,
       whatsappNumber,
-      personalWebsiteHandles,
+      personalWebsiteAddresses,
       substackHandle,
       pronouns,
     } = formData;
@@ -106,9 +106,10 @@ const ProfileEdit = () => {
           ownerEmail: emailAddress ?? null,
           ownerSMSNumber: smsNumber ?? null,
           ownerWhatsappNumber: whatsappNumber ?? null,
-          ownerPersonalWebsites: personalWebsiteHandles ?? null,
+          ownerPersonalWebsites: personalWebsiteAddresses ?? null,
           ownerSubstack: substackHandle ?? null,
           ownerPronouns: pronouns ?? null,
+          ownerPublicInterests: null,
         });
       }
       toast.success("Chip(s) updated successfully");
@@ -120,7 +121,7 @@ const ProfileEdit = () => {
           "",
           true,
           `Error updating chip: "${errorToString(error)}"`,
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );
@@ -178,6 +179,7 @@ const ProfileEdit = () => {
               variant="primary"
               placeholder="Email address"
               {...register("emailAddress")}
+              autoCapitalize="off"
             />
             <AppInput
               label="SMS"
@@ -197,6 +199,7 @@ const ProfileEdit = () => {
               variant="primary"
               icon={<TelegramIcon className=" invert" />}
               {...register("telegramUsername")}
+              autoCapitalize="off"
             />
             <AppInput
               label="Twitter"
@@ -204,6 +207,7 @@ const ProfileEdit = () => {
               variant="primary"
               icon={<TwitterIcon className=" invert" />}
               {...register("twitterUsername")}
+              autoCapitalize="off"
             />
             <AppInput
               label="Instagram"
@@ -211,30 +215,35 @@ const ProfileEdit = () => {
               variant="primary"
               icon={<InstagramIcon className=" invert" />}
               {...register("instagramUsername")}
+              autoCapitalize="off"
             />
             <AppInput
               label="Signal"
               placeholder="Signal"
               variant="primary"
               {...register("signalUsername")}
+              autoCapitalize="off"
             />
             <AppInput
               label="Farcaster"
               placeholder="Farcaster"
               variant="primary"
               {...register("farcasterUsername")}
+              autoCapitalize="off"
             />
             <AppTagsInput
               label="Personal Websites"
               placeholder="Address"
               variant="primary"
-              {...register("personalWebsiteHandles")}
+              autoCapitalize="off"
+              {...register("personalWebsiteAddresses")}
             />
             <AppInput
               label="Substack"
               placeholder="Handle"
               variant="primary"
               {...register("substackHandle")}
+              autoCapitalize="off"
             />
             <AppTextarea
               label="Bio"
@@ -255,7 +264,7 @@ const ProfileEdit = () => {
       ) : (
         <div className="flex items-center justify-center min-h-screen bg-white">
           <div className="text-center">
-            <CursiveLogo isLoading />
+            <ConspirioLogo isLoading />
           </div>
         </div>
       )}

@@ -27,7 +27,8 @@ export type Intersection = {
   contacts: string[];
   devconEvents: string[];
   programmingLangs: string[];
-  starredRepos: string[]
+  starredRepos: string[];
+  interests: string[];
 }
 
 export const refreshPSI = async (user: User, connection: Connection): Promise<Intersection | null> => {
@@ -112,6 +113,27 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
       );
     }
 
+    let combinedInterests: string[] = [];
+    if (user.userData?.publicInterests) {
+      combinedInterests = combinedInterests.concat(user.userData?.publicInterests);
+    }
+    if (user.userData?.privateInterests) {
+      combinedInterests = combinedInterests.concat(user.userData?.privateInterests);
+    }
+
+    // remove duplicates
+    const interestsSet = new Set<string>(combinedInterests);
+    const dedupedInterests: string[] = Array.from(interestsSet);
+
+    let interestHashes: string[] = [];
+    if (dedupedInterests && dedupedInterests.length > 0) {
+      interestHashes = await hashCommit(
+        user.encryptionPrivateKey,
+        connection.user.encryptionPublicKey,
+        dedupedInterests
+      );
+    }
+
     const [secretHash] = await hashCommit(
       user.encryptionPrivateKey,
       connection.user.encryptionPublicKey,
@@ -135,6 +157,7 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
             devconEvents,
             programmingLangs: programmingLangHashes,
             starredRepos: starredReposHashes,
+            interests: interestHashes,
           },
         }),
       }
@@ -182,6 +205,16 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         }
       }
 
+      const translatedInterests = [];
+      for (const hashInterest of data.verifiedIntersectionState.interests) {
+        const index = interestHashes.findIndex(
+          (interest) => interest === hashInterest
+        );
+        if (index !== -1) {
+          translatedInterests.push(combinedInterests[index]);
+        }
+      }
+
       // If intersections are ever added to user state + backups that would happen here
 
       return {
@@ -191,6 +224,7 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         devconEvents: translatedEvents,
         programmingLangs: translatedLangs,
         starredRepos: translatedRepos,
+        interests: translatedInterests,
       }
     }
     return null;

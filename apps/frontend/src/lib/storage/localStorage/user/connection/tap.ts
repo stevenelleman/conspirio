@@ -31,6 +31,7 @@ import {
   SubstackData,
   SubstackDataSchema
 } from "@/lib/storage/types/user/userData/portfolio";
+import { InterestsSchema } from "@/lib/storage/types/user/interests";
 
 export const addUserTap = async (
   tapResponse: ChipTap
@@ -69,6 +70,7 @@ export const addUserTap = async (
   let ownerSubstack: SubstackData | undefined;
   let ownerPersonWebsites: PersonalWebsites | undefined;
   let ownerPronouns: string | undefined;
+  let ownerPublicInterests: string[] | undefined;
   if (
     tap.ownerUserData &&
     typeof tap.ownerUserData === "object" &&
@@ -154,6 +156,16 @@ export const addUserTap = async (
         console.error("Error parsing ownerUserData.pronouns:", error);
       }
     }
+    if (
+      "publicInterests" in tap.ownerUserData &&
+      typeof tap.ownerUserData.publicInterests === "object"
+    ) {
+      try {
+        ownerPublicInterests = InterestsSchema.parse(tap.ownerUserData.publicInterests);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.publicInterests:", error);
+      }
+    }
   }
 
   // NOTE: For now, tapping a connection's chip will overwrite the existing connection data
@@ -174,6 +186,7 @@ export const addUserTap = async (
     substack: ownerSubstack,
     personalWebsites: ownerPersonWebsites,
     pronouns: ownerPronouns,
+    publicInterests: ownerPublicInterests,
   };
 
   // Taps will be appended to the existing taps

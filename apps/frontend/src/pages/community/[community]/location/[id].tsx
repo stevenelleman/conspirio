@@ -15,7 +15,7 @@ import { LocationTaps, User } from "@/lib/storage/types";
 import { TapParams, ChipTapResponse, ChipIssuer, CommunityLocation } from "@types";
 import { devconLocationMapping } from "@/constants";
 import { getCommunityLocation } from "@/lib/chip/location";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 
 // Dynamically import the Lottie component with SSR disabled
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -179,7 +179,7 @@ export default function LocationPage() {
   if (!chipIssuer) {
     return (
       <div className="flex min-h-screen justify-center items-center">
-        <CursiveLogo isLoading />
+        <ConspirioLogo isLoading />
       </div>
     );
   }

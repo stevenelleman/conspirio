@@ -1,13 +1,13 @@
 import useSettings from "@/hooks/useSettings";
 import { cn } from "@/lib/frontend/util";
 import Image from "next/image";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 import Link from "next/link";
 
 export const ChipPickup = () => {
   const { darkTheme } = useSettings();
   return (
-    <Link href={ERROR_SUPPORT_CONTACT}>
+    <Link href={SUPPORT_CONTACT}>
       <div className="flex flex-col gap-1">
         <span className="text-base font-bold font-sans text-label-primary">
           NFC Sticker Pickup

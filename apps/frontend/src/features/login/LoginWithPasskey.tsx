@@ -7,7 +7,7 @@ import { RegisterHeader } from "@/components/ui/RegisterHeader";
 import { AppCopy } from "@/components/ui/AppCopy";
 import { SupportToast } from "@/components/ui/SupportToast";
 import { errorToString } from "@types";
-import { ERROR_SUPPORT_CONTACT } from "@/constants";
+import { SUPPORT_CONTACT } from "@/constants";
 
 interface LoginWithPasskeyProps {
   onPasskeyLogin: (password: string) => Promise<void>;
@@ -34,7 +34,7 @@ const LoginWithPasskey: React.FC<LoginWithPasskeyProps> = ({
           "",
           true,
           "Authentication failed! Please try again",
-          ERROR_SUPPORT_CONTACT,
+          SUPPORT_CONTACT,
           errorToString(error)
         )
       );

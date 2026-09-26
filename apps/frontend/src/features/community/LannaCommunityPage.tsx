@@ -5,7 +5,7 @@ import {
 } from "@/components/cards/CommunityCard";
 import { DashboardDetail } from "@/components/dashboard/DashboardDetail";
 import { Icons } from "@/components/icons/Icons";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import { Tag } from "@/components/ui/Tag";
 import { BASE_API_URL } from "@/config";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
@@ -613,7 +613,7 @@ export default function LannaCommunityPage({
 
       {!leaderboardDetails || !leaderboardEntries ? (
         <div className="flex justify-center items-center pt-4">
-          <CursiveLogo isLoading />
+          <ConspirioLogo isLoading />
         </div>
       ) : (
         <div className="flex flex-col gap-6 pt-2 pb-6">

@@ -5,7 +5,7 @@ import {
 } from "@/components/cards/CommunityCard";
 import { DashboardDetail } from "@/components/dashboard/DashboardDetail";
 import { ChipPickup } from "@/components/ChipPickup";
-import { CursiveLogo } from "@/components/ui/HeaderCover";
+import { ConspirioLogo } from "@/components/ui/HeaderCover";
 import {
   getTopLeaderboardEntries,
   getUserLeaderboardDetails,
@@ -434,7 +434,6 @@ export default function EmbassyCommunityPage({
     );
   }
 
-  // NOTE: Add a Banner about picking up chip -- who to get from? how to register?
   return (
     <>
       <div className="py-3">
@@ -448,7 +447,7 @@ export default function EmbassyCommunityPage({
       !leaderboardOnboardingDetails ||
       !leaderboardOnboardingEntries ? (
         <div className="flex justify-center items-center pt-4">
-          <CursiveLogo isLoading/>
+          <ConspirioLogo isLoading />
         </div>
       ) : (
         <div className="flex flex-col gap-6 pt-2 pb-6">
