@@ -101,6 +101,6 @@ const spicyInterests: string[] = [
 
 export const availableInterests = [...vanillaInterests, ...spicyInterests];
 
-export const interestsSchema = z.array(z.string());
+export const InterestsSchema = z.array(z.string());
 
-export type interests = z.infer<typeof interestsSchema>;
+export type interests = z.infer<typeof InterestsSchema>;

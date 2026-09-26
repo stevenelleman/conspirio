@@ -31,6 +31,7 @@ import {
   SubstackData,
   SubstackDataSchema
 } from "@/lib/storage/types/user/userData/portfolio";
+import { InterestsSchema } from "@/lib/storage/types/user/interests";
 
 export const addUserTap = async (
   tapResponse: ChipTap
@@ -160,7 +161,7 @@ export const addUserTap = async (
       typeof tap.ownerUserData.publicInterests === "object"
     ) {
       try {
-        ownerPublicInterests = tap.ownerUserData.publicInterests;
+        ownerPublicInterests = InterestsSchema.parse(tap.ownerUserData.publicInterests);
       } catch (error) {
         console.error("Error parsing ownerUserData.publicInterests:", error);
       }

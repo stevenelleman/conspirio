@@ -25,7 +25,7 @@ import {
 } from "@/lib/storage/types/user/userData/socials";
 import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/user/userData/portfolio";
 
-import { interestsSchema } from "@/lib/storage/types/user/interests";
+import { InterestsSchema } from "@/lib/storage/types/user/interests";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
@@ -65,8 +65,8 @@ export const UserDataSchema = z.object({
   devcon: nullToUndefined(DevconSchema),
   connectionPSISize: nullToUndefined(ConnectionPSISizeSchema),
   settings: nullToUndefined(UserSettingsSchema),
-  publicInterests: nullToUndefined(interestsSchema),
-  privateInterests: nullToUndefined(interestsSchema),
+  publicInterests: nullToUndefined(InterestsSchema),
+  privateInterests: nullToUndefined(InterestsSchema),
 });
 
 export type UserData = z.infer<typeof UserDataSchema>;
