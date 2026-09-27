@@ -32,10 +32,11 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
         text: "You registered for Conspirio",
         timestamp: activity.timestamp,
       };
-    case "REGISTER_CHIP":
+    case "REGISTER_CHIP": {
       const { chipIssuer } = RegisterChipActivityDataSchema.parse(
         JSON.parse(activity.serializedData)
       );
+
       const chipIssuerMap: Record<ChipIssuer, string> = {
         USER: "user",
         EDGE_CITY_LANNA: "Edge City Lanna",
@@ -48,6 +49,7 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
         text: `You registered a chip for ${chipIssuerMap[chipIssuer]}`,
         timestamp: activity.timestamp,
       };
+    }
     case "TAP":
       const { chipOwnerUsername } = TapActivityDataSchema.parse(
         JSON.parse(activity.serializedData)
@@ -87,12 +89,18 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
         timestamp: activity.timestamp,
       };
     case "LOCATION_TAP":
-      const { locationId, locationName } = LocationTapActivityDataSchema.parse(
+      const LocationTap = LocationTapActivityDataSchema.parse(
         JSON.parse(activity.serializedData)
       );
+
+      let link = '/profile';
+      if (LocationTap.chipIssuer) {
+        link = `/community/${LocationTap.chipIssuer}/location/${LocationTap.locationId}`;
+      }
+
       return {
-        text: `You checked into ${locationName}`,
-        link: `/location/${locationId}`,
+        text: `You checked into ${LocationTap.locationName}`,
+        link: link,
         timestamp: activity.timestamp,
       };
     default:
