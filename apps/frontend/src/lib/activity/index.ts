@@ -102,7 +102,7 @@ export const createTapBackReceivedActivity = (
 
 export const LocationTapActivityDataSchema = z.object({
   // Optional because the value was original schema was also undefined
-  chipIssuer: z.string().optional(), // Optional because
+  chipIssuer: z.string().optional(),
   locationId: z.string(),
   locationName: z.string(),
 });
