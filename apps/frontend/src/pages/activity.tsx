@@ -93,7 +93,7 @@ const parseActivity = (activity: Activity): ActivityDisplayItem => {
         JSON.parse(activity.serializedData)
       );
 
-      let link = '/profile';
+      let link = undefined;
       if (LocationTap.chipIssuer) {
         link = `/community/${LocationTap.chipIssuer}/location/${LocationTap.locationId}`;
       }
