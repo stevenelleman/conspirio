@@ -64,6 +64,7 @@ export const addLocationTap = async (
 
   // Create activity for tapping a location
   const tapActivity = createLocationTapActivity(
+    tapResponse.chipIssuer,
     tap.locationId,
     tap.locationName
   );
