@@ -1,4 +1,3 @@
-import { Banner } from "@/components/cards/Banner";
 import AppLayout from "@/layouts/AppLayout";
 import { storage } from "@/lib/storage";
 import { useRouter } from "next/router";
@@ -125,7 +124,7 @@ export default function NewFeaturesPage() {
             }
             description={
               <div className="text-sm">
-                With a foundation of verifiably true signals, an infinite diversity of high-integrity signals can be created, and with them, new incentive systems and social "games" can be crafted, ultimately to shape individual and collective behaviors to specific ends.
+                {`With a foundation of verifiably true signals, an infinite diversity of high-integrity signals can be created, and with them, new incentive systems and social "games" can be crafted, ultimately to shape individual and collective behaviors to specific ends.`}
               </div>
             }
             textCenter={false}
@@ -142,7 +141,7 @@ export default function NewFeaturesPage() {
             }
             description={
               <div className="text-sm">
-                And built on top of layers of verifiable signals and incentives we can discover "moral algorithms" that ultimately unlock "races to the top", emergent dynamics that produce net positive outcomes and bring out the best in people.
+                {`And built on top of layers of verifiable signals and incentives we can discover "moral algorithms" that ultimately unlock "races to the top", emergent dynamics that produce net positive outcomes and bring out the best in people.`}
               </div>
             }
             textCenter={false}
@@ -180,13 +179,14 @@ export default function NewFeaturesPage() {
             title={
               <div className="!font-normal flex flex-col gap-4">
                 <div className="text-md">
-                  <b>Circumventing the Prisoner's Dilemma</b>
+                  <b>{`Circumventing the Prisoner's Dilemma`}</b>
                 </div>
               </div>
             }
             description={
               <div className="text-sm">
-                The Prisoner's Dilemma assumes an inability to communicate - the simplest way to undermine the Dilemma is to always provide channels to communicate, and therefore coordinate. The norm uses a variety of tactics to divide and conquer and force individuals into a multi-dimensional Prisoner's Dilemma. With our cryptographic vocabulary of connection, perhaps we can transform alienation and races to the bottom to solidarity and races to the top.
+                {`The Prisoner's Dilemma assumes an inability to communicate - the simplest way to undermine the' +
+                  ' Dilemma is to always provide channels to communicate, and therefore coordinate. The norm uses a variety of tactics to divide and conquer and force individuals into a multi-dimensional Prisoner's Dilemma. With our cryptographic vocabulary of connection, perhaps we can transform alienation and races to the bottom to solidarity and races to the top.`}
               </div>
             }
             textCenter={false}
@@ -259,7 +259,7 @@ export default function NewFeaturesPage() {
             }
             description={
               <div className="text-sm">
-                Common knowledge is when "everyone knows that everyone knows". It is critical to create consensus, it provides a collective assurance that everyone is on the same page. In the alienated norm many "emperor wears no clothes" dynamics exist where the superficial appearance of a prevailing consensus shuts down the formation of a better consensus. The same vocabulary of connection can be used to de-risk sharing initially fringe opinions that are in fact becoming the new norm, and accelerating that process.
+                {`Common knowledge is when "everyone knows that everyone knows". It is critical to create consensus, it provides a collective assurance that everyone is on the same page. In the alienated norm many "emperor wears no clothes" dynamics exist where the superficial appearance of a prevailing consensus shuts down the formation of a better consensus. The same vocabulary of connection can be used to de-risk sharing initially fringe opinions that are in fact becoming the new norm, and accelerating that process.`}
               </div>
             }
             textCenter={false}
@@ -310,7 +310,7 @@ export default function NewFeaturesPage() {
             }
             description={
               <div className="text-sm">
-                A whole class of coordination problem is "supply lock-in problems" where there may be latent desire for supply to change hands, but the inability to coordinate leads to stagnation and accidental entrenchment. In theory this class of problem could be solved if cycles could be safely discovered and executed, allowing locked-in supply to re-animate and re-enter circulation.
+                {`A whole class of coordination problem is "supply lock-in problems" where there may be latent desire for supply to change hands, but the inability to coordinate leads to stagnation and accidental entrenchment. In theory this class of problem could be solved if cycles could be safely discovered and executed, allowing locked-in supply to re-animate and re-enter circulation.`}
               </div>
             }
             textCenter={false}
