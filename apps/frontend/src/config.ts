@@ -87,8 +87,8 @@ export const ROUTER_ITEMS: RouterItem[] = [
     iconSize: 20,
   },
   {
-    label: "Digital pheromones",
-    href: "/pheromones",
+    label: "New Features",
+    href: "/new-features",
     icon: Icons.NarrowCast,
     iconSize: 20,
   },
