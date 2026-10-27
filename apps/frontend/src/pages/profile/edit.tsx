@@ -109,7 +109,13 @@ const ProfileEdit = () => {
           ownerPersonalWebsites: personalWebsiteAddresses ?? null,
           ownerSubstack: substackHandle ?? null,
           ownerPronouns: pronouns ?? null,
-          ownerPublicInterests: null,
+
+          // Fill existing values
+          ownerPublicInterests: user?.userData?.publicInterests ?? null,
+          ownerDislikesPublicDefender: user?.userData?.dislikesPublicDefender ?? null,
+          ownerDislikesPetPeeves: user?.userData?.dislikesPetPeeves ?? null,
+          ownerDislikesLoveToHate: user?.userData?.dislikesLoveToHate ?? null,
+          ownerSettings: user?.userData?.settings ?? null,
         });
       }
       toast.success("Chip(s) updated successfully");

@@ -29,6 +29,9 @@ export type Intersection = {
   programmingLangs: string[];
   starredRepos: string[];
   interests: string[];
+  dislikesPublicDefender: string[];
+  dislikesPetPeeves: string[];
+  dislikesLoveToHate: string[];
 }
 
 export const refreshPSI = async (user: User, connection: Connection): Promise<Intersection | null> => {
@@ -88,6 +91,7 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
       );
     }
 
+    // Github
     let languageNames: string[] = [];
     let programmingLangHashes: string[] = [];
     if (user.userData?.github?.programmingLanguages?.value) {
@@ -113,6 +117,7 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
       );
     }
 
+    // Interests
     let combinedInterests: string[] = [];
     if (user.userData?.publicInterests) {
       combinedInterests = combinedInterests.concat(user.userData?.publicInterests);
@@ -131,6 +136,43 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         user.encryptionPrivateKey,
         connection.user.encryptionPublicKey,
         dedupedInterests
+      );
+    }
+
+    // Dislikes
+    let dislikesPublicDefender: string[] = [];
+    let dislikesPublicDefenderHashes: string[] = [];
+    if (user.userData?.dislikesPublicDefender) {
+      dislikesPublicDefender = user.userData?.dislikesPublicDefender
+
+      dislikesPublicDefenderHashes = await hashCommit(
+        user.encryptionPrivateKey,
+        connection.user.encryptionPublicKey,
+        dislikesPublicDefender
+      );
+    }
+
+    let dislikesPetPeeves: string[] = [];
+    let dislikesPetPeevesHashes: string[] = [];
+    if (user.userData?.dislikesPetPeeves) {
+      dislikesPetPeeves = user.userData?.dislikesPetPeeves
+
+      dislikesPetPeevesHashes = await hashCommit(
+        user.encryptionPrivateKey,
+        connection.user.encryptionPublicKey,
+        dislikesPetPeeves
+      );
+    }
+
+    let dislikesLoveToHate: string[] = [];
+    let dislikesLoveToHateHashes: string[] = [];
+    if (user.userData?.dislikesLoveToHate) {
+      dislikesLoveToHate = user.userData?.dislikesLoveToHate
+
+      dislikesLoveToHateHashes = await hashCommit(
+        user.encryptionPrivateKey,
+        connection.user.encryptionPublicKey,
+        dislikesLoveToHate
       );
     }
 
@@ -158,6 +200,9 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
             programmingLangs: programmingLangHashes,
             starredRepos: starredReposHashes,
             interests: interestHashes,
+            dislikesPublicDefender: dislikesPublicDefenderHashes,
+            dislikesPetPeeves: dislikesPetPeevesHashes,
+            dislikesLoveToHate: dislikesLoveToHateHashes,
           },
         }),
       }
@@ -215,6 +260,35 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         }
       }
 
+      const translatedDislikesPublicDefender = [];
+      for (const hashDislike of data.verifiedIntersectionState.dislikesPublicDefender) {
+        const index = dislikesPublicDefenderHashes.findIndex((dislike) => dislike === hashDislike
+        );
+        if (index !== -1) {
+          console.log(dislikesPublicDefender[index])
+          translatedDislikesPublicDefender.push(dislikesPublicDefender[index]);
+        }
+      }
+
+      const translatedDislikesPetPeeves = [];
+      for (const hashDislike of data.verifiedIntersectionState.dislikesPetPeeves) {
+        const index = dislikesPetPeevesHashes.findIndex((dislike) => dislike === hashDislike
+        );
+        if (index !== -1) {
+          translatedDislikesPetPeeves.push(dislikesPetPeeves[index]);
+        }
+      }
+
+      const translatedDislikesLoveToHate = [];
+      for (const hashDislike of data.verifiedIntersectionState.dislikesLoveToHate) {
+        const index = dislikesLoveToHateHashes.findIndex((dislike) => dislike === hashDislike
+        );
+        if (index !== -1) {
+          translatedDislikesLoveToHate.push(dislikesLoveToHate[index]);
+        }
+      }
+
+
       // If intersections are ever added to user state + backups that would happen here
 
       return {
@@ -225,6 +299,9 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         programmingLangs: translatedLangs,
         starredRepos: translatedRepos,
         interests: translatedInterests,
+        dislikesPublicDefender: translatedDislikesPublicDefender,
+        dislikesPetPeeves: translatedDislikesPetPeeves,
+        dislikesLoveToHate: translatedDislikesLoveToHate,
       }
     }
     return null;

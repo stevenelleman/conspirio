@@ -31,7 +31,6 @@ export default function VanillaSpicyPage() {
     const fetchUser = async () => {
       const { user, session } = await storage.getUserAndSession();
       if (user && session && new Date() < session.authTokenExpiresAt) {
-        console.log("Interests", user.userData?.publicInterests, user.userData?.privateInterests)
         reset({
           vanillaInterests: user.userData?.publicInterests || [],
           spicyInterests: user.userData?.privateInterests || [],
@@ -106,6 +105,12 @@ export default function VanillaSpicyPage() {
               ownerPersonalWebsites: user.userData.personalWebsites?.websites ?? null,
               ownerSubstack: user.userData.substack?.handle ?? null,
               ownerPronouns: user.userData.pronouns ?? null,
+              ownerDislikesPublicDefender: user.userData.dislikesPublicDefender ?? null,
+              ownerDislikesPetPeeves: user.userData.dislikesPetPeeves ?? null,
+              ownerDislikesLoveToHate: user.userData.dislikesLoveToHate ?? null,
+              ownerSettings: {
+                ...user.userData?.settings,
+              },
             });
           }
 

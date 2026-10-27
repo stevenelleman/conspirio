@@ -8,6 +8,7 @@ import {
   ReactNode,
   TextareaHTMLAttributes,
   forwardRef,
+  useEffect,
   useId,
   useImperativeHandle,
   useMemo,
@@ -111,12 +112,16 @@ interface TagsInputProps
   onChange?: (event: TagsInputEvent) => unknown;
   onBlur?: (event: TagsInputEvent) => unknown;
   /**
-   * When provided, suggestions are shown while typing and only values
-   * from `options` can be added.
+   * When provided, the dropdown is shown while the field is focused and
+   * only values from `options` can be added. With no text typed, every
+   * option that hasn't been added yet is listed; as you type, the list is
+   * narrowed to the options this function returns. The dropdown always
+   * keeps the order of `options`, so the ranking of the results is ignored.
    */
   fuzzySearch?: FuzzySearchFn;
   /** The allowed values. Only used together with `fuzzySearch`. */
   options?: string[];
+  /** Caps the number of fuzzy-search results. The empty-text list is not capped. */
   maxSuggestions?: number;
   icon?: React.ReactNode;
   labelPosition?: "top" | "left";
@@ -198,14 +203,33 @@ const AppInputsFuzzyMatch = forwardRef<TagsInputHandle, TagsInputProps>(
     );
 
     const suggestions = useMemo(() => {
-      const query = draft.trim();
-      if (!fuzzySearch || !query) return [];
+      if (!fuzzySearch) return [];
       const available = options.filter((option) => !tags.includes(option));
-      return fuzzySearch(query, available).slice(0, maxSuggestions);
+      const query = draft.trim();
+      // Nothing typed yet: show every option that hasn't been added.
+      if (!query) return available;
+      // Use the fuzzy search only to decide which options match, then list
+      // them in the order they were provided rather than by match rank.
+      const matches = new Set(fuzzySearch(query, available));
+      return available
+        .filter((option) => matches.has(option))
+        .slice(0, maxSuggestions);
     }, [fuzzySearch, draft, options, tags, maxSuggestions]);
 
     const listOpen = isRestricted && isOpen && suggestions.length > 0;
-    const activeIndex = Math.min(highlight, suggestions.length - 1);
+    const activeIndex = Math.max(
+      0,
+      Math.min(highlight, suggestions.length - 1)
+    );
+
+    // Keep the highlighted option visible when navigating a long list
+    // with the arrow keys.
+    useEffect(() => {
+      if (!listOpen) return;
+      document
+        .getElementById(`${listboxId}-${activeIndex}`)
+        ?.scrollIntoView({ block: "nearest" });
+    }, [listOpen, activeIndex, listboxId]);
 
     /** Returns the value to store, or null if it isn't allowed. */
     const resolve = (raw: string): string | null => {
@@ -257,7 +281,9 @@ const AppInputsFuzzyMatch = forwardRef<TagsInputHandle, TagsInputProps>(
       addTags([option]);
       setDraft("");
       setRejected([]);
-      setIsOpen(false);
+      setHighlight(0);
+      // Stay open so several options can be picked in a row.
+      setIsOpen(true);
       textareaRef.current?.focus();
     };
 
@@ -286,6 +312,18 @@ const AppInputsFuzzyMatch = forwardRef<TagsInputHandle, TagsInputProps>(
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
       onKeyDown?.(e);
       if (e.defaultPrevented) return;
+
+      // Reopen a dismissed list with the arrow keys.
+      if (
+        isRestricted &&
+        !listOpen &&
+        suggestions.length > 0 &&
+        (e.key === "ArrowDown" || e.key === "ArrowUp")
+      ) {
+        e.preventDefault();
+        setIsOpen(true);
+        return;
+      }
 
       if (listOpen && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
         e.preventDefault();
@@ -323,6 +361,11 @@ const AppInputsFuzzyMatch = forwardRef<TagsInputHandle, TagsInputProps>(
       setIsOpen(true);
     };
 
+    // Clicking the already-focused field reopens a list closed with Escape.
+    const handleClick = () => {
+      setIsOpen(true);
+    };
+
     // Commit whatever is left so a final value isn't lost on submit.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleBlur = (_e: FocusEvent<HTMLTextAreaElement>) => {
@@ -353,6 +396,7 @@ const AppInputsFuzzyMatch = forwardRef<TagsInputHandle, TagsInputProps>(
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     onFocus={handleFocus}
+                    onClick={handleClick}
                     onBlur={handleBlur}
                     placeholder={placeholder}
                     darkMode={darkTheme}

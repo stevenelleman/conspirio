@@ -16,7 +16,7 @@ import {
   InstagramDataSchema,
   FarcasterData,
   FarcasterDataSchema,
-  Connection,
+  Connection, UserSettingsSchema, UserSettings,
 } from "@/lib/storage/types";
 import { createTapActivity } from "@/lib/activity";
 import { saveBackupAndUpdateStorage } from "../../utils";
@@ -32,6 +32,7 @@ import {
   SubstackDataSchema
 } from "@/lib/storage/types/user/userData/portfolio";
 import { InterestsSchema } from "@/lib/storage/types/user/interests";
+import { DislikesSchema } from "@/lib/storage/types/user/dislikes";
 
 export const addUserTap = async (
   tapResponse: ChipTap
@@ -71,6 +72,10 @@ export const addUserTap = async (
   let ownerPersonWebsites: PersonalWebsites | undefined;
   let ownerPronouns: string | undefined;
   let ownerPublicInterests: string[] | undefined;
+  let ownerDislikesPublicDefender: string[] | undefined;
+  let ownerDislikesPetPeeves: string[] | undefined;
+  let ownerDislikesLoveToHate: string[] | undefined;
+  let ownerSettings: UserSettings | undefined;
   if (
     tap.ownerUserData &&
     typeof tap.ownerUserData === "object" &&
@@ -166,6 +171,46 @@ export const addUserTap = async (
         console.error("Error parsing ownerUserData.publicInterests:", error);
       }
     }
+    if (
+      "dislikesPublicDefender" in tap.ownerUserData &&
+      typeof tap.ownerUserData.dislikesPublicDefender === "object"
+    ) {
+      try {
+        ownerDislikesPublicDefender = DislikesSchema.parse(tap.ownerUserData.dislikesPublicDefender);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.dislikesPublicDefender:", error);
+      }
+    }
+    if (
+      "dislikesPetPeeves" in tap.ownerUserData &&
+      typeof tap.ownerUserData.dislikesPetPeeves === "object"
+    ) {
+      try {
+        ownerDislikesPetPeeves = DislikesSchema.parse(tap.ownerUserData.dislikesPetPeeves);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.dislikesPetPeeves:", error);
+      }
+    }
+    if (
+      "dislikesLoveToHate" in tap.ownerUserData &&
+      typeof tap.ownerUserData.dislikesLoveToHate === "object"
+    ) {
+      try {
+        ownerDislikesLoveToHate = DislikesSchema.parse(tap.ownerUserData.dislikesLoveToHate);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.dislikesLoveToHate:", error);
+      }
+    }
+    if (
+      "settings" in tap.ownerUserData &&
+      typeof tap.ownerUserData.settings === "object"
+    ) {
+      try {
+        ownerSettings = UserSettingsSchema.parse(tap.ownerUserData.settings);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.settings:", error);
+      }
+    }
   }
 
   // NOTE: For now, tapping a connection's chip will overwrite the existing connection data
@@ -187,6 +232,10 @@ export const addUserTap = async (
     personalWebsites: ownerPersonWebsites,
     pronouns: ownerPronouns,
     publicInterests: ownerPublicInterests,
+    dislikesPublicDefender: ownerSettings?.discloseDislikesPublicDefender ? ownerDislikesPublicDefender : undefined,
+    dislikesPetPeeves: ownerSettings?.discloseDislikesPetPeeves ? ownerDislikesPetPeeves : undefined,
+    dislikesLoveToHate: ownerSettings?.discloseDislikesLoveToHate ? ownerDislikesLoveToHate : undefined,
+    settings: ownerSettings,
   };
 
   // Taps will be appended to the existing taps

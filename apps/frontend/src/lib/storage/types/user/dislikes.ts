@@ -1,3 +1,4 @@
+import { z } from "zod";
 
 export const socialIssues: string[] = [
   // Left / progressive
@@ -8,6 +9,9 @@ export const socialIssues: string[] = [
   "Mass incarceration",
   "Union busting",
   "Underfunded schools",
+  "Militarized police",
+  "Zionism",
+  "Genocide in Gaza",
 
   // Right / conservative
   "Illegal immigration",
@@ -59,6 +63,7 @@ export const socialIssues: string[] = [
   "Worker exploitation",
   "Profit-driven housing and healthcare",
   "Imperialism",
+  "Colonialism",
   "Extreme inequality",
 
   // Social democrats
@@ -240,3 +245,7 @@ export const loveToHate: string[] = [
   "Weekend Caltrain",
   "\"Just moved here for work\" dating",
 ];
+
+export const DislikesSchema = z.array(z.string());
+
+export type dislikes = z.infer<typeof DislikesSchema>;

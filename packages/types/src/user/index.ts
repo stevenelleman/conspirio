@@ -223,7 +223,10 @@ export const IntersectionStateSchema = z.record(
       devconEvents: z.array(z.string()),
       programmingLangs: z.array(z.string()),
       starredRepos: z.array(z.string()),
-      interests: z.array(z.string())
+      interests: z.array(z.string()),
+      dislikesPublicDefender: z.array(z.string()),
+      dislikesPetPeeves: z.array(z.string()),
+      dislikesLoveToHate: z.array(z.string()),
     })
   )
 );
@@ -242,6 +245,9 @@ export const RefreshIntersectionRequestSchema = z.object({
     programmingLangs: z.array(z.string()),
     starredRepos: z.array(z.string()),
     interests: z.array(z.string()),
+    dislikesPublicDefender: z.array(z.string()),
+    dislikesPetPeeves: z.array(z.string()),
+    dislikesLoveToHate: z.array(z.string()),
   }),
 });
 
@@ -259,6 +265,9 @@ export const RefreshIntersectionResponseSchema = z.object({
     programmingLangs: z.array(z.string()),
     starredRepos: z.array(z.string()),
     interests: z.array(z.string()),
+    dislikesPublicDefender: z.array(z.string()),
+    dislikesPetPeeves: z.array(z.string()),
+    dislikesLoveToHate: z.array(z.string()),
   }),
 });
 

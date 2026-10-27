@@ -26,9 +26,14 @@ import {
 import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/user/userData/portfolio";
 
 import { InterestsSchema } from "@/lib/storage/types/user/interests";
+import { DislikesSchema } from "@/lib/storage/types/user/dislikes";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
+
+  discloseDislikesPublicDefender: nullToUndefined(z.boolean().nullable()),
+  discloseDislikesPetPeeves: nullToUndefined(z.boolean().nullable()),
+  discloseDislikesLoveToHate: nullToUndefined(z.boolean().nullable()),
 
   // NOTE: In a future PR swap tapGraphEnabled to live in settings
   // tapGraphEnabled: nullToUndefined(z.boolean().nullable()),
@@ -65,8 +70,15 @@ export const UserDataSchema = z.object({
   devcon: nullToUndefined(DevconSchema),
   connectionPSISize: nullToUndefined(ConnectionPSISizeSchema),
   settings: nullToUndefined(UserSettingsSchema),
+
+  // Vanilla & Spicy
   publicInterests: nullToUndefined(InterestsSchema),
   privateInterests: nullToUndefined(InterestsSchema),
+
+  // Lets Shit Talk
+  dislikesPublicDefender: nullToUndefined(DislikesSchema),
+  dislikesPetPeeves: nullToUndefined(DislikesSchema),
+  dislikesLoveToHate: nullToUndefined(DislikesSchema),
 });
 
 export type UserData = z.infer<typeof UserDataSchema>;

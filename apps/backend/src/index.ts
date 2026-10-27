@@ -32,7 +32,10 @@ const corsOptions = {
   origin: `${FRONTEND_URL}`,
 };
 app.use(cors(corsOptions));
-app.use(express.json());
+
+// Extend max size of body to deal with HTTP 413 Payload Too Large error. By default the limit is low, like 100kb.
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // Routes
 app.use("/api/user", userRoutes);

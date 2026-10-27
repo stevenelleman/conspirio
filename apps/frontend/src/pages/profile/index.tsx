@@ -247,10 +247,34 @@ const ProfilePage: React.FC = () => {
                           🍦 Vanilla & Spicy 🌶️
                         </span>
                       </div>
-                      <Icons.Plus className="text-icon-primary" />
+                      <Icons.Clip className="text-icon-primary" />
                     </div>
                     <span className="text-xs font-medium text-label-tertiary">
                       Who shares the vanilla and spice in your life?
+                    </span>
+                  </div>
+                </Card.Base>
+
+
+                <Card.Base
+                  variant="gray"
+                  className="p-4 !rounded-lg !border !border-white"
+                  onClick={() => {
+                    logClientEvent("start_vanilla_spicy", {});
+                    router.push("/templates/lets-shit-talk");
+                  }}
+                >
+                  <div className="flex flex-col gap-[10px]">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-label-primary font-medium">
+                          Lets Shit Talk 💩
+                        </span>
+                      </div>
+                      <Icons.Clip className="text-icon-primary" />
+                    </div>
+                    <span className="text-xs font-medium text-label-tertiary">
+                      Connect on what you jointly despise!
                     </span>
                   </div>
                 </Card.Base>
@@ -268,17 +292,15 @@ const ProfilePage: React.FC = () => {
                     <div className="flex flex-col gap-[10px]">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1">
-                          {/*<Icons.Clip className="text-icon-primary" />*/}
                           <span className="text-sm text-label-primary font-medium">
-                            Tensions 🪢
+                            Value Tensions 🪢
                           </span>
                         </div>
-                        <Icons.Plus className="text-icon-primary" />
+                        <Icons.Clip className="text-icon-primary" />
                       </div>
                       <span className="text-xs font-medium text-label-tertiary">
-                        Play the Tensions game from Summer of Protocols to
-                        practice your decision making skills. Upon tap, discover
-                        where you disagree to learn new perspectives.
+                        Play the Value Tensions game from Summer of Protocols to
+                        compare values with others and learn new perspectives.
                       </span>
                     </div>
                   </Card.Base>
@@ -300,7 +322,8 @@ const ProfilePage: React.FC = () => {
                             Ethereum Hot Takes 🔥
                           </span>
                         </div>
-                        <Icons.Plus className="text-icon-primary" />
+                        {/*<Icons.Plus className="text-icon-primary" />*/}
+                        <Icons.Clip className="text-icon-primary" />
                       </div>
                       <span className="text-xs font-medium text-label-tertiary">
                         Weigh in on the *most important* topics in the
