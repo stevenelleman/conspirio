@@ -525,7 +525,6 @@ const UserProfilePage: React.FC = () => {
     }
   }
 
-
   return (
     <>
       {showCommentModal && !isUnregistered && (
@@ -754,19 +753,44 @@ const UserProfilePage: React.FC = () => {
               Public Disclosures
             </span>
               <div className="flex flex-col gap-4">
-                {!connection?.user?.publicInterests && (
+                {!(connection?.user?.publicInterests ||
+                  connection?.user?.dislikesPublicDefender ||
+                  connection?.user?.dislikesPetPeeves ||
+                  connection?.user?.dislikesLoveToHate) && (
                   <span className="text-sm text-label-secondary font-sans font-normal">
                   No templates completed.
                 </span>
                 )}
                 {connection?.user?.publicInterests && (
                   <AppTagList
-                    label="Vanilla Interests"
+                    label="🍦 Vanilla Interests"
                     values={connection?.user?.publicInterests || []}
                     maxVisible={5}
                   />
                 )}
+                {connection?.user?.dislikesPublicDefender && (
+                  <AppTagList
+                    label="️🛡️ Public Defender"
+                    values={connection?.user?.dislikesPublicDefender || []}
+                    maxVisible={5}
+                  />
+                )}
+                {connection?.user?.dislikesPetPeeves  && (
+                  <AppTagList
+                    label="😤 Pet Peeves"
+                    values={connection?.user?.dislikesPetPeeves || []}
+                    maxVisible={5}
+                  />
+                )}
+                {connection?.user?.dislikesLoveToHate && (
+                  <AppTagList
+                    label="😈 Love to Hate"
+                    values={connection?.user?.dislikesLoveToHate || []}
+                    maxVisible={5}
+                  />
+                )}
               </div>
+
             </div>
           </div>
 
@@ -824,8 +848,41 @@ const UserProfilePage: React.FC = () => {
                     </div>
                   ) : (
                     <div className="flex flex-col gap-4">
-                      <AppTagList label="Their Vanilla" maxVisible={5} values={theirVanilla}/>
-                      <AppTagList label="Their Spicy" tagClassName="bg-tag-active" maxVisible={5} values={theirSpicy}/>
+                      <AppTagList label="Joint Vanilla" maxVisible={5} values={theirVanilla}/>
+                      <AppTagList label="Joint Spicy" tagClassName="bg-tag-active" maxVisible={5} values={theirSpicy}/>
+                    </div>
+                  )}
+                </IntersectionAccordion>
+
+                <IntersectionAccordion
+                  label="Anything you jointly despise? 😈"
+                >
+                  {!(verifiedIntersection.dislikesPublicDefender || verifiedIntersection.dislikesPetPeeves || verifiedIntersection.dislikesLoveToHate) ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/templates/lets-shit-talk"}>Submit your dislikes</a> and refresh to see results!
+                    </div>
+                  ) : (verifiedIntersection.dislikesPublicDefender.length + verifiedIntersection.dislikesPetPeeves.length + verifiedIntersection.dislikesLoveToHate.length === 0) ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      No dislikes in common! Nothing to shit talk about, I guess 😅
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-4">
+                      {
+                        <AppTagList label="Joint Public Defender" tagClassName={connection?.user?.settings?.discloseDislikesPublicDefender ? "" : "bg-tag-active"} maxVisible={5} values={verifiedIntersection.dislikesPublicDefender}
+                        emptyState={<div className="text-sm text-label-primary font-sans font-normal">
+                          No common enemies! Nothing to team up against, I guess 😅
+                        </div>}/>
+                      }
+                      {
+                        <AppTagList label="Joint Pet Peeves" tagClassName={connection?.user?.settings?.discloseDislikesPetPeeves ? "" : "bg-tag-active"} maxVisible={5} values={verifiedIntersection.dislikesPetPeeves} emptyState={<div className="text-sm text-label-primary font-sans font-normal">
+                          No common pet peeves! Nothing to complain about, I guess 😅
+                        </div>}/>
+                      }
+                      {
+                        <AppTagList label="Jointly Love to Hate" tagClassName={connection?.user?.settings?.discloseDislikesLoveToHate ? "" : "bg-tag-active"} maxVisible={5} values={verifiedIntersection.dislikesLoveToHate} emptyState={<div className="text-sm text-label-primary font-sans font-normal">
+                            Nothing yall both love to hate! No cathartic ranting, bummer. 😞
+                          </div>}/>
+                      }
                     </div>
                   )}
                 </IntersectionAccordion>

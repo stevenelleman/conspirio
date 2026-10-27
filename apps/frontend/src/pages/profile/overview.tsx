@@ -178,9 +178,19 @@ export default function ProfileOverview() {
           </div>
         </div>
         <div className="flex flex-col gap-2 p-4">
+          <hr/>
+          <a href={"/templates/vanilla-spicy"}>
+            <div className="flex items-center gap-1">
+                <Icons.Clip className="text-icon-primary" />
+                <span className="text-sm font-semibold text-label-primary font-sans">
+                  Interests
+                </span>
+            </div>
+          </a>
           <div className="flex flex-col gap-2">
+            <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.1)' }} />
             <AppTagList
-              label="Vanilla Interests"
+              label="🍦 Vanilla"
               values={user?.userData?.publicInterests || []}
               maxVisible={5}
               emptyState="Add your public interests by editing your profile!" //TODO: link to vanilla-spicy
@@ -188,12 +198,47 @@ export default function ProfileOverview() {
             <br/>
             {/* TODO: should it be included in the overview? Should only public info live there? */}
             <AppTagList
-              label="Spicy Interests"
+              label="🌶️ Spicy"
               values={user?.userData?.privateInterests || []}
               maxVisible={5}
               emptyState="Add your private interests by editing your profile! 😏 🤫"
             />
           </div>
+        </div>
+        <div className="flex flex-col gap-2 p-4">
+        <hr/>
+          <a href={"/templates/lets-shit-talk"}>
+            <div className="flex items-center gap-1">
+              <Icons.Clip className="text-icon-primary" />
+              <span className="text-sm font-semibold text-label-primary font-sans">
+                Dislikes
+              </span>
+            </div>
+          </a>
+          <div className="flex flex-col gap-2">
+            <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.1)' }} />
+            <AppTagList
+              label="🛡️ Public Defender"
+              values={user?.userData?.dislikesPublicDefender || []}
+              maxVisible={5}
+              emptyState="Add issues you stand against by editing your profile!" //TODO: link to lets-shit-talk
+            />
+            <br/>
+            <AppTagList
+              label="😤 Pet Peeves"
+              values={user?.userData?.dislikesPetPeeves || []}
+              maxVisible={5}
+              emptyState="Add your pet peeves by editing your profile!" //TODO: link to lets-shit-talk
+            />
+            <br/>
+            <AppTagList
+              label="😈 Love to Hate"
+              values={user?.userData?.dislikesLoveToHate || []}
+              maxVisible={5}
+              emptyState="Add what you love to hate by editing your profile!" //TODO: link to lets-shit-talk
+            />
+          </div>
+          <hr/>
         </div>
         {user?.userData.bio !== "" && (
           <div className="flex flex-col gap-2 p-4">

@@ -62,6 +62,30 @@ export default function NewFeaturesPage() {
 
           <ToggleableBanner
             italic={false}
+            buttonHref={`${SUPPORT_CONTACT}?text=Lets talk about privacy and social friction reduction.`}
+            title={
+              <div className="!font-normal flex flex-col gap-4">
+                <div className="text-md">
+                  <b>Privacy and Social Friction Reduction</b>
+                </div>
+              </div>
+            }
+            description={
+            <>
+              <div className="text-sm">
+                {`By and large, people do not care about privacy for its own sake. The sudden, enormous cost of nation states or corporations ruining your life from shared information are few and far between, and only the principled and paranoid factor it in. In contrast, privacy matters insofar as it reduces social friction. Privacy by default is a requirement of meaningful control of information, and control enables reduction of social friction.`}
+              </div>
+              <br/>
+              <div className="text-sm">
+                {`The day the parents join whatever social media "new hotness" their kids are using is the day their kids leave and it becomes "old and busted". Kids exit because they lack the control needed to prevent social friction with their parents. We are very carefully considering privacy applied to social friction, including meaningful ways it can address in-person frictions. For example, in-person rejection and bragging come with social friction, whereas selective information sharing can facilitate tasteful and relevant rejection and bragging. With this consideration in mind, reduction of social friction becomes a meaningful short-term incentive for durable long-term privacy.`}
+              </div>
+            </>
+            }
+            textCenter={false}
+          />
+
+          <ToggleableBanner
+            italic={false}
             buttonHref={`${SUPPORT_CONTACT}?text=Lets talk about novel cryptographic primitives.`}
             title={
               <div className="!font-normal flex flex-col gap-4">
@@ -142,6 +166,23 @@ export default function NewFeaturesPage() {
             description={
               <div className="text-sm">
                 {`And built on top of layers of verifiable signals and incentives we can discover "moral algorithms" that ultimately unlock "races to the top", emergent dynamics that produce net positive outcomes and bring out the best in people.`}
+              </div>
+            }
+            textCenter={false}
+          />
+          <ToggleableBanner
+            italic={false}
+            buttonHref={`${SUPPORT_CONTACT}?text=Lets talk about community and the long game.`}
+            title={
+              <div className="!font-normal flex flex-col gap-4">
+                <div className="text-md">
+                  <b>Turning Finite Games to Infinite Games</b>
+                </div>
+              </div>
+            }
+            description={
+              <div className="text-sm">
+                {`In anonymity there often is no cost to being an asshole; just think about drivers on the highway, they're menaces. In game theory there is a concept of "finite" and "infinite" games. In a "finite" game the players know that they will only play each other once, whereas in an "infinite" game they may continue to play each other. These two scenarios motivate completely distinct strategies. In a "finite" game, greedy, malicious behaviors oriented towards short-term benefits are encouraged, whereas in an "infinite" game malicious actors quickly are identified and punished for their behaviors, either overtly or through exclusion. One of the objectives of a vocabulary of connection is to enable actors to discover alignment of interests and degree of "embeddedness" in similar social networks. In effect, this turns an anonymous "finite" game into an embedded "infinite" game, and in doing so, helps promote prosocial behaviors, including (but not limited to) playing more long games with others.`}
               </div>
             }
             textCenter={false}
@@ -310,7 +351,7 @@ export default function NewFeaturesPage() {
             }
             description={
               <div className="text-sm">
-                {`A whole class of coordination problem is "supply lock-in problems" where there may be latent desire for supply to change hands, but the inability to coordinate leads to stagnation and accidental entrenchment. In theory this class of problem could be solved if cycles could be safely discovered and executed, allowing locked-in supply to re-animate and re-enter circulation.`}
+                {`A whole class of coordination problem is "supply lock-in problems" where there may be latent desire for supply to change hands, but the inability to coordinate leads to stagnation and accidental entrenchment. In theory this class of problem could be solved if exchange could be safely discovered and executed, allowing locked-in supply to "re-animate" and re-enter circulation.`}
               </div>
             }
             textCenter={false}

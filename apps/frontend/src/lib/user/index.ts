@@ -8,7 +8,27 @@ import { Json } from "@types";
 // To prevent accidental sharing, default ensure shareable data needs to be added to this method
 // TODO: offer a more expressive way to define / set shareable data based on community / persona
 export const getUserShareableData = (userData: UserData): UserData => {
-  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, substack, personalWebsites, pronouns, publicInterests} = UserDataSchema.parse(userData);
+  const {
+    username,
+    displayName,
+    bio,
+    signaturePublicKey,
+    encryptionPublicKey,
+    psiPublicKeyLink,
+    twitter,
+    telegram,
+    signal,
+    instagram,
+    farcaster,
+    substack,
+    personalWebsites,
+    pronouns,
+    publicInterests,
+    dislikesPublicDefender,
+    dislikesPetPeeves,
+    dislikesLoveToHate,
+    settings,
+  } = UserDataSchema.parse(userData);
 
   return {
     username,
@@ -27,11 +47,45 @@ export const getUserShareableData = (userData: UserData): UserData => {
     pronouns,
     publicInterests,
     // Specifically do not include privateInterests
+    dislikesPublicDefender: settings?.discloseDislikesPublicDefender ? dislikesPublicDefender : undefined,
+    dislikesPetPeeves: settings?.discloseDislikesPetPeeves ? dislikesPetPeeves : undefined,
+    dislikesLoveToHate: settings?.discloseDislikesLoveToHate ? dislikesLoveToHate : undefined,
+    settings: {
+      discloseDislikesPublicDefender: settings?.discloseDislikesPublicDefender,
+      discloseDislikesPetPeeves: settings?.discloseDislikesPetPeeves,
+      discloseDislikesLoveToHate: settings?.discloseDislikesLoveToHate,
+    }
   };
 };
 
 export const shareableUserDataToJson = (userData: UserData): Json => {
-  const { username, displayName, bio, signaturePublicKey, encryptionPublicKey, psiPublicKeyLink, twitter, telegram, signal, instagram, farcaster, whatsapp, email, sms, substack, personalWebsites, pronouns, publicInterests} = UserDataSchema.parse(userData);
+  const { username,
+    displayName,
+    bio,
+    signaturePublicKey,
+    encryptionPublicKey,
+    psiPublicKeyLink,
+    twitter,
+    telegram,
+    signal,
+    instagram,
+    farcaster,
+    whatsapp,
+    email,
+    sms,
+    substack,
+    personalWebsites,
+    pronouns,
+    publicInterests,
+    dislikesPublicDefender,
+    dislikesPetPeeves,
+    dislikesLoveToHate,
+    settings,
+  } = UserDataSchema.parse(userData);
+
+  const nullableDislikesPublicDefender = !!dislikesPublicDefender ? dislikesPublicDefender : null;
+  const nullableDislikesPetPeeves = !!dislikesPetPeeves ? dislikesPetPeeves : null;
+  const nullableDislikesLoveToHate = !!dislikesLoveToHate ? dislikesLoveToHate : null;
 
   return {
     username: username || null,
@@ -53,6 +107,16 @@ export const shareableUserDataToJson = (userData: UserData): Json => {
     pronouns: pronouns || null,
     publicInterests: publicInterests || null,
     // Specifically do not include privateInterests
+
+    dislikesPublicDefender: settings?.discloseDislikesPublicDefender ? nullableDislikesPublicDefender : null,
+    dislikesPetPeeves: settings?.discloseDislikesPetPeeves ? nullableDislikesPetPeeves : null,
+    dislikesLoveToHate: settings?.discloseDislikesLoveToHate ? nullableDislikesLoveToHate : null,
+
+    settings: {
+      discloseDislikesPublicDefender: settings?.discloseDislikesPublicDefender || null,
+      discloseDislikesPetPeeves: settings?.discloseDislikesPetPeeves || null,
+      discloseDislikesLoveToHate: settings?.discloseDislikesLoveToHate || null,
+    }
   };
 };
 

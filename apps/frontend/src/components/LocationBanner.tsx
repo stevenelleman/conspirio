@@ -12,7 +12,6 @@ export const LocationBanner = ({ community }: {community: string}) => {
     toast.error("Error getting community.");
     router.push("/community");
   }
-  console.log("Community", community)
   const lower = community.toString().toLowerCase();
   return (
     <Link href={`/community/${lower}/location`}>

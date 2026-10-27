@@ -2,6 +2,7 @@ import { BASE_API_URL } from "@/config";
 import { ChipIssuer, errorToString, GetChipIdResponse, GetChipIdResponseSchema, Json, UpdateChipRequest } from "@types";
 import { storage } from "../storage";
 import { validateEmail, validateHttpsDomain } from "@/lib/frontend/util";
+import { UserSettings } from "@/lib/storage/types";
 
 interface UpdateChipArgs {
   authToken: string;
@@ -21,6 +22,10 @@ interface UpdateChipArgs {
   ownerSubstack: string | null;
   ownerPronouns: string | null;
   ownerPublicInterests: string[] | null;
+  ownerDislikesPublicDefender: string[] | null;
+  ownerDislikesPetPeeves: string[] | null;
+  ownerDislikesLoveToHate: string[] | null;
+  ownerSettings: UserSettings | null;
 }
 
 export async function updateChip(args: UpdateChipArgs): Promise<void> {
@@ -103,6 +108,18 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
   if (args.ownerPublicInterests) {
     ownerUserData.publicInterests = args.ownerPublicInterests;
   }
+  if (args.ownerDislikesPublicDefender) {
+    ownerUserData.dislikesPublicDefender = args.ownerDislikesPublicDefender;
+  }
+  if (args.ownerDislikesPetPeeves) {
+    ownerUserData.dislikesPetPeeves = args.ownerDislikesPetPeeves;
+  }
+  if (args.ownerDislikesLoveToHate) {
+    ownerUserData.dislikesLoveToHate = args.ownerDislikesLoveToHate;
+  }
+  if (args.ownerSettings) {
+    ownerUserData.settings = args.ownerSettings;
+  }
 
   const request: UpdateChipRequest = {
     authToken: args.authToken,
@@ -169,6 +186,10 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       },
       pronouns: args.ownerPronouns ?? undefined,
       publicInterests: args.ownerPublicInterests ?? undefined,
+      dislikesPublicDefender: args.ownerDislikesPublicDefender ?? undefined,
+      dislikesPetPeeves: args.ownerDislikesPetPeeves ?? undefined,
+      dislikesLoveToHate: args.ownerDislikesLoveToHate ?? undefined,
+      settings: args.ownerSettings ?? undefined,
     });
   } catch (error) {
     console.error("Error updating chip:", errorToString(error));

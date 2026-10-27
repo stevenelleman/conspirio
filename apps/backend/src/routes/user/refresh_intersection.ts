@@ -32,6 +32,9 @@ router.post(
         programmingLangs: programmingLangs0,
         starredRepos: starredRepos0,
         interests: interests0,
+        dislikesPublicDefender: publicDefender0,
+        dislikesPetPeeves: petPeeves0,
+        dislikesLoveToHate: loveToHate0,
       } = intersectionState;
 
       if (req.app.locals.intersectionState[secretHash][1 - index]) {
@@ -43,6 +46,9 @@ router.post(
           programmingLangs: programmingLangs1,
           starredRepos: starredRepos1,
           interests: interests1,
+          dislikesPublicDefender: publicDefender1,
+          dislikesPetPeeves: petPeeves1,
+          dislikesLoveToHate: loveToHate1,
         } =
           req.app.locals.intersectionState[secretHash][1 - index];
 
@@ -53,6 +59,9 @@ router.post(
         const newProgrammingLangs: string[] = [];
         const newStarredRepos: string[] = [];
         const newInterests: string[] = [];
+        const newPublicDefender: string[] = [];
+        const newPetPeeves: string[] = [];
+        const newLoveToHate: string[] = [];
 
         if (
           tensions0.length !== 0 &&
@@ -136,6 +145,36 @@ router.post(
           }
         }
 
+        // Create a Set for efficient lookup
+        const publicDefenderSet = new Set(publicDefender0);
+
+        // Find intersection
+        for (const dislike of publicDefender1) {
+          if (publicDefenderSet.has(dislike)) {
+            newPublicDefender.push(dislike);
+          }
+        }
+
+        // Create a Set for efficient lookup
+        const petPeevesSet = new Set(petPeeves0);
+
+        // Find intersection
+        for (const dislike of petPeeves1) {
+          if (petPeevesSet.has(dislike)) {
+            newPetPeeves.push(dislike);
+          }
+        }
+
+        // Create a Set for efficient lookup
+        const loveToHateSet = new Set(loveToHate0);
+
+        // Find intersection
+        for (const dislike of loveToHate1) {
+          if (loveToHateSet.has(dislike)) {
+            newLoveToHate.push(dislike);
+          }
+        }
+
         return res.status(200).json({
           success: true,
           verifiedIntersectionState: {
@@ -146,6 +185,9 @@ router.post(
             programmingLangs: newProgrammingLangs,
             starredRepos: newStarredRepos,
             interests: newInterests,
+            dislikesPublicDefender: newPublicDefender,
+            dislikesPetPeeves: newPetPeeves,
+            dislikesLoveToHate: newLoveToHate,
           },
         });
       }
@@ -160,6 +202,9 @@ router.post(
           programmingLangs: [],
           starredRepos: [],
           interests: [],
+          dislikesPublicDefender: [],
+          dislikesPetPeeves: [],
+          dislikesLoveToHate: []
         },
       });
     } catch (error) {
