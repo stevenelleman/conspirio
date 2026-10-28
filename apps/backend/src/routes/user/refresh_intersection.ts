@@ -35,6 +35,8 @@ router.post(
         dislikesPublicDefender: publicDefender0,
         dislikesPetPeeves: petPeeves0,
         dislikesLoveToHate: loveToHate0,
+        careOfferings: careOfferings0,
+        careAsks: careAsks0,
       } = intersectionState;
 
       if (req.app.locals.intersectionState[secretHash][1 - index]) {
@@ -49,6 +51,8 @@ router.post(
           dislikesPublicDefender: publicDefender1,
           dislikesPetPeeves: petPeeves1,
           dislikesLoveToHate: loveToHate1,
+          careOfferings: careOfferings1,
+          careAsks: careAsks1,
         } =
           req.app.locals.intersectionState[secretHash][1 - index];
 
@@ -62,6 +66,8 @@ router.post(
         const newPublicDefender: string[] = [];
         const newPetPeeves: string[] = [];
         const newLoveToHate: string[] = [];
+        const newCareOfferings: string[] = [];
+        const newCareAsks: string[] = [];
 
         if (
           tensions0.length !== 0 &&
@@ -175,6 +181,26 @@ router.post(
           }
         }
 
+        // Care is complementary: match the requester's offerings against the other user's asks
+        const careAsksSet1 = new Set(careAsks1);
+
+        // Find intersection
+        for (const care of careOfferings0) {
+          if (careAsksSet1.has(care)) {
+            newCareOfferings.push(care);
+          }
+        }
+
+        // And the requester's asks against the other user's offerings
+        const careOfferingsSet1 = new Set(careOfferings1);
+
+        // Find intersection
+        for (const care of careAsks0) {
+          if (careOfferingsSet1.has(care)) {
+            newCareAsks.push(care);
+          }
+        }
+
         return res.status(200).json({
           success: true,
           verifiedIntersectionState: {
@@ -188,6 +214,8 @@ router.post(
             dislikesPublicDefender: newPublicDefender,
             dislikesPetPeeves: newPetPeeves,
             dislikesLoveToHate: newLoveToHate,
+            careOfferings: newCareOfferings,
+            careAsks: newCareAsks,
           },
         });
       }
@@ -204,7 +232,9 @@ router.post(
           interests: [],
           dislikesPublicDefender: [],
           dislikesPetPeeves: [],
-          dislikesLoveToHate: []
+          dislikesLoveToHate: [],
+          careOfferings: [],
+          careAsks: [],
         },
       });
     } catch (error) {

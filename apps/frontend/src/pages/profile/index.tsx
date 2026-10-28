@@ -114,6 +114,12 @@ const ProfilePage: React.FC = () => {
     user.userData.devcon ||
     user.userData.hotTakesRating;
 
+  const web3Interests: string[] = ['dweb', 'web3', 'programmable cryptography'];
+  const interests: string[] = [...user.userData.publicInterests || [], ...user.userData.privateInterests || []];
+
+  const showWeb3Template: boolean = interests.some(item => web3Interests.includes(item));
+
+
   return (
     <>
       <NextSeo title="Profile" />
@@ -279,6 +285,29 @@ const ProfilePage: React.FC = () => {
                   </div>
                 </Card.Base>
 
+                <Card.Base
+                  variant="gray"
+                  className="p-4 !rounded-lg !border !border-white"
+                  onClick={() => {
+                    logClientEvent("start_complementary_care", {});
+                    router.push("/templates/complementary-care");
+                  }}
+                >
+                  <div className="flex flex-col gap-[10px]">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-label-primary font-medium">
+                          🫶 Complementary Care 🥰
+                        </span>
+                      </div>
+                      <Icons.Clip className="text-icon-primary" />
+                    </div>
+                    <span className="text-xs font-medium text-label-tertiary">
+                      What kinds of complementary and circular care exists around you?
+                    </span>
+                  </div>
+                </Card.Base>
+
 
                 {!user.userData.tensionsRating && (
                   <Card.Base
@@ -306,9 +335,9 @@ const ProfilePage: React.FC = () => {
                   </Card.Base>
                 )}
 
-                {!user.userData.hotTakesRating && (
+                {!user.userData.hotTakesRating && showWeb3Template && (
                   <Card.Base
-                    variant="gray"
+                    variant="pink"
                     className="p-4 !rounded-lg !border !border-white"
                     onClick={() => {
                       logClientEvent("start_hot_takes", {});
@@ -470,7 +499,7 @@ const ProfilePage: React.FC = () => {
             <div className="">
               <AppButton
                 onClick={handleExportConnectionsToCSV}
-                variant="primary"
+                variant="outline"
               >
                 Export your connections
               </AppButton>

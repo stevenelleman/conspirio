@@ -32,6 +32,10 @@ export type Intersection = {
   dislikesPublicDefender: string[];
   dislikesPetPeeves: string[];
   dislikesLoveToHate: string[];
+  // Your offerings that they ask for
+  careOfferings: string[];
+  // Your asks that they offer
+  careAsks: string[];
 }
 
 export const refreshPSI = async (user: User, connection: Connection): Promise<Intersection | null> => {
@@ -176,6 +180,35 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
       );
     }
 
+    // Cares, combine public and private
+    const careOfferings: string[] = Array.from(new Set<string>([
+      ...(user.userData?.publicCareOfferings || []),
+      ...(user.userData?.privateCareOfferings || []),
+    ]));
+
+    let careOfferingsHashes: string[] = [];
+    if (careOfferings.length > 0) {
+      careOfferingsHashes = await hashCommit(
+        user.encryptionPrivateKey,
+        connection.user.encryptionPublicKey,
+        careOfferings
+      );
+    }
+
+    const careAsks: string[] = Array.from(new Set<string>([
+      ...(user.userData?.publicCareAsks || []),
+      ...(user.userData?.privateCareAsks || []),
+    ]));
+
+    let careAsksHashes: string[] = [];
+    if (careAsks.length > 0) {
+      careAsksHashes = await hashCommit(
+        user.encryptionPrivateKey,
+        connection.user.encryptionPublicKey,
+        careAsks
+      );
+    }
+
     const [secretHash] = await hashCommit(
       user.encryptionPrivateKey,
       connection.user.encryptionPublicKey,
@@ -203,6 +236,8 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
             dislikesPublicDefender: dislikesPublicDefenderHashes,
             dislikesPetPeeves: dislikesPetPeevesHashes,
             dislikesLoveToHate: dislikesLoveToHateHashes,
+            careOfferings: careOfferingsHashes,
+            careAsks: careAsksHashes,
           },
         }),
       }
@@ -288,6 +323,21 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         }
       }
 
+      const translatedCareOfferings = [];
+      for (const hashCare of data.verifiedIntersectionState.careOfferings) {
+        const index = careOfferingsHashes.findIndex((care) => care === hashCare);
+        if (index !== -1) {
+          translatedCareOfferings.push(careOfferings[index]);
+        }
+      }
+
+      const translatedCareAsks = [];
+      for (const hashCare of data.verifiedIntersectionState.careAsks) {
+        const index = careAsksHashes.findIndex((care) => care === hashCare);
+        if (index !== -1) {
+          translatedCareAsks.push(careAsks[index]);
+        }
+      }
 
       // If intersections are ever added to user state + backups that would happen here
 
@@ -302,6 +352,8 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         dislikesPublicDefender: translatedDislikesPublicDefender,
         dislikesPetPeeves: translatedDislikesPetPeeves,
         dislikesLoveToHate: translatedDislikesLoveToHate,
+        careOfferings: translatedCareOfferings,
+        careAsks: translatedCareAsks,
       }
     }
     return null;

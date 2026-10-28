@@ -33,6 +33,7 @@ import {
 } from "@/lib/storage/types/user/userData/portfolio";
 import { InterestsSchema } from "@/lib/storage/types/user/interests";
 import { DislikesSchema } from "@/lib/storage/types/user/dislikes";
+import { CaresSchema } from "@/lib/storage/types/user/cares";
 
 export const addUserTap = async (
   tapResponse: ChipTap
@@ -75,6 +76,8 @@ export const addUserTap = async (
   let ownerDislikesPublicDefender: string[] | undefined;
   let ownerDislikesPetPeeves: string[] | undefined;
   let ownerDislikesLoveToHate: string[] | undefined;
+  let ownerPublicCareOfferings: string[] | undefined;
+  let ownerPublicCareAsks: string[] | undefined;
   let ownerSettings: UserSettings | undefined;
   if (
     tap.ownerUserData &&
@@ -202,6 +205,26 @@ export const addUserTap = async (
       }
     }
     if (
+      "publicCareOfferings" in tap.ownerUserData &&
+      typeof tap.ownerUserData.publicCareOfferings === "object"
+    ) {
+      try {
+        ownerPublicCareOfferings = CaresSchema.parse(tap.ownerUserData.publicCareOfferings);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.publicCareOfferings:", error);
+      }
+    }
+    if (
+      "publicCareAsks" in tap.ownerUserData &&
+      typeof tap.ownerUserData.publicCareAsks === "object"
+    ) {
+      try {
+        ownerPublicCareAsks = CaresSchema.parse(tap.ownerUserData.publicCareAsks);
+      } catch (error) {
+        console.error("Error parsing ownerUserData.publicCareAsks:", error);
+      }
+    }
+    if (
       "settings" in tap.ownerUserData &&
       typeof tap.ownerUserData.settings === "object"
     ) {
@@ -235,6 +258,8 @@ export const addUserTap = async (
     dislikesPublicDefender: ownerSettings?.discloseDislikesPublicDefender ? ownerDislikesPublicDefender : undefined,
     dislikesPetPeeves: ownerSettings?.discloseDislikesPetPeeves ? ownerDislikesPetPeeves : undefined,
     dislikesLoveToHate: ownerSettings?.discloseDislikesLoveToHate ? ownerDislikesLoveToHate : undefined,
+    publicCareOfferings: ownerPublicCareOfferings,
+    publicCareAsks: ownerPublicCareAsks,
     settings: ownerSettings,
   };
 

@@ -756,7 +756,9 @@ const UserProfilePage: React.FC = () => {
                 {!(connection?.user?.publicInterests ||
                   connection?.user?.dislikesPublicDefender ||
                   connection?.user?.dislikesPetPeeves ||
-                  connection?.user?.dislikesLoveToHate) && (
+                  connection?.user?.dislikesLoveToHate ||
+                  connection?.user?.publicCareOfferings ||
+                  connection?.user?.publicCareAsks) && (
                   <span className="text-sm text-label-secondary font-sans font-normal">
                   No templates completed.
                 </span>
@@ -786,6 +788,20 @@ const UserProfilePage: React.FC = () => {
                   <AppTagList
                     label="😈 Love to Hate"
                     values={connection?.user?.dislikesLoveToHate || []}
+                    maxVisible={5}
+                  />
+                )}
+                {connection?.user?.publicCareOfferings && (
+                  <AppTagList
+                    label="🫶 Care Offerings"
+                    values={connection?.user?.publicCareOfferings || []}
+                    maxVisible={5}
+                  />
+                )}
+                {connection?.user?.publicCareAsks && (
+                  <AppTagList
+                    label="🥰 Care Asks"
+                    values={connection?.user?.publicCareAsks || []}
                     maxVisible={5}
                   />
                 )}
@@ -883,6 +899,31 @@ const UserProfilePage: React.FC = () => {
                             Nothing yall both love to hate! No cathartic ranting, bummer. 😞
                           </div>}/>
                       }
+                    </div>
+                  )}
+                </IntersectionAccordion>
+
+                <IntersectionAccordion
+                  label="🫶 Where does your care meet? 🥰"
+                >
+                  {!(verifiedIntersection.careOfferings || verifiedIntersection.careAsks) ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/templates/complementary-care"}>Submit your cares</a> and refresh to see results!
+                    </div>
+                  ) : (verifiedIntersection.careOfferings.length + verifiedIntersection.careAsks.length === 0) ? (
+                    <div className="text-sm text-label-primary font-sans font-normal">
+                      No complementary care yet! Try adding more offerings and asks. 🌱
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-4">
+                      <AppTagList label="You offer, they ask" maxVisible={5} values={verifiedIntersection.careOfferings}
+                        emptyState={<div className="text-sm text-label-primary font-sans font-normal">
+                          Nothing they ask for that you offer.
+                        </div>}/>
+                      <AppTagList label="They offer, you ask" maxVisible={5} values={verifiedIntersection.careAsks}
+                        emptyState={<div className="text-sm text-label-primary font-sans font-normal">
+                          Nothing you ask for that they offer.
+                        </div>}/>
                     </div>
                   )}
                 </IntersectionAccordion>

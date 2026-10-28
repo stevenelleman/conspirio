@@ -226,8 +226,7 @@ export default function NewFeaturesPage() {
             }
             description={
               <div className="text-sm">
-                {`The Prisoner's Dilemma assumes an inability to communicate - the simplest way to undermine the' +
-                  ' Dilemma is to always provide channels to communicate, and therefore coordinate. The norm uses a variety of tactics to divide and conquer and force individuals into a multi-dimensional Prisoner's Dilemma. With our cryptographic vocabulary of connection, perhaps we can transform alienation and races to the bottom to solidarity and races to the top.`}
+                {`The Prisoner's Dilemma assumes an inability to communicate - the simplest way to undermine the Dilemma is to always provide channels to communicate, and therefore coordinate. The norm uses a variety of tactics to divide and conquer and force individuals into a multi-dimensional Prisoner's Dilemma. With our cryptographic vocabulary of connection, perhaps we can transform alienation and races to the bottom to solidarity and races to the top.`}
               </div>
             }
             textCenter={false}

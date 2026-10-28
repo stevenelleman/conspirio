@@ -27,6 +27,8 @@ export const getUserShareableData = (userData: UserData): UserData => {
     dislikesPublicDefender,
     dislikesPetPeeves,
     dislikesLoveToHate,
+    publicCareOfferings,
+    publicCareAsks,
     settings,
   } = UserDataSchema.parse(userData);
 
@@ -50,6 +52,9 @@ export const getUserShareableData = (userData: UserData): UserData => {
     dislikesPublicDefender: settings?.discloseDislikesPublicDefender ? dislikesPublicDefender : undefined,
     dislikesPetPeeves: settings?.discloseDislikesPetPeeves ? dislikesPetPeeves : undefined,
     dislikesLoveToHate: settings?.discloseDislikesLoveToHate ? dislikesLoveToHate : undefined,
+    publicCareOfferings,
+    publicCareAsks,
+    // Specifically do not include private care offerings or asks
     settings: {
       discloseDislikesPublicDefender: settings?.discloseDislikesPublicDefender,
       discloseDislikesPetPeeves: settings?.discloseDislikesPetPeeves,
@@ -80,6 +85,8 @@ export const shareableUserDataToJson = (userData: UserData): Json => {
     dislikesPublicDefender,
     dislikesPetPeeves,
     dislikesLoveToHate,
+    publicCareOfferings,
+    publicCareAsks,
     settings,
   } = UserDataSchema.parse(userData);
 
@@ -111,6 +118,10 @@ export const shareableUserDataToJson = (userData: UserData): Json => {
     dislikesPublicDefender: settings?.discloseDislikesPublicDefender ? nullableDislikesPublicDefender : null,
     dislikesPetPeeves: settings?.discloseDislikesPetPeeves ? nullableDislikesPetPeeves : null,
     dislikesLoveToHate: settings?.discloseDislikesLoveToHate ? nullableDislikesLoveToHate : null,
+
+    publicCareOfferings: publicCareOfferings || null,
+    publicCareAsks: publicCareAsks || null,
+    // Specifically do not include private care offerings or asks
 
     settings: {
       discloseDislikesPublicDefender: settings?.discloseDislikesPublicDefender || null,

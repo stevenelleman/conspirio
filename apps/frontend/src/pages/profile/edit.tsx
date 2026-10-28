@@ -115,6 +115,8 @@ const ProfileEdit = () => {
           ownerDislikesPublicDefender: user?.userData?.dislikesPublicDefender ?? null,
           ownerDislikesPetPeeves: user?.userData?.dislikesPetPeeves ?? null,
           ownerDislikesLoveToHate: user?.userData?.dislikesLoveToHate ?? null,
+          ownerPublicCareOfferings: user?.userData?.publicCareOfferings ?? null,
+          ownerPublicCareAsks: user?.userData?.publicCareAsks ?? null,
           ownerSettings: user?.userData?.settings ?? null,
         });
       }

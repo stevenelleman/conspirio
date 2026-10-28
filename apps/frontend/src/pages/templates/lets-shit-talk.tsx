@@ -126,6 +126,8 @@ export default function LetsShitTalkPage() {
             ownerPronouns: user.userData.pronouns ?? null,
             ownerPublicInterests: user.userData.publicInterests ?? null,
 
+            ownerPublicCareOfferings: user.userData.publicCareOfferings ?? null,
+            ownerPublicCareAsks: user.userData.publicCareAsks ?? null,
             ownerSettings: {
               ...user.userData?.settings,
               discloseDislikesPublicDefender: disclosedAndNonEmptyPublicDefender,

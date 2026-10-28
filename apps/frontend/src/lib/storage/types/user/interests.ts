@@ -83,7 +83,7 @@ const spicyInterests: string[] = [
   ' texture)', 'collar & protocol relationship structures', 'burlesque / fetish performance art', 'shibari',
 
   // Drugs & psychedelia
-  'underground rave / drug culture anthropology', 'psychedelic-assisted therapy advocacy', 'microdosing discourse', 'cannabis cultivation as a hobby', 'entheogen & shamanic tradition research', 'psychedelic art & visionary painting', 'festival / burner culture involvement', 'legalization & drug policy activism', 'home cultivation of psilocybin mushrooms (where legal)', 'kratom & nootropics enthusiast culture', 'ayahuasca retreat tourism', 'collecting vintage drug paraphernalia', 'djing / production for psytrance scenes', 'psychodelics', 'ritual psychodelics',
+  'underground rave / drug culture anthropology', 'psychedelic-assisted therapy advocacy', 'microdosing discourse', 'cannabis cultivation as a hobby', 'entheogen & shamanic tradition research', 'psychedelic art & visionary painting', 'festival / burner culture involvement', 'legalization & drug policy activism', 'home cultivation of psilocybin mushrooms (where legal)', 'kratom & nootropics enthusiast culture', 'ayahuasca retreat tourism', 'collecting vintage drug paraphernalia', 'djing / production for psytrance scenes', 'psychedelics', 'ritual psychedelics',
 
   // Body & aesthetic extremes
   'body modification (extreme piercings, tattoos, scarification)', 'extreme fasting / competitive dieting culture', 'suspension (body hook suspension art)', 'corseting / extreme waist training', 'competitive bodybuilding (steroid discourse included)', 'tongue splitting & subdermal implants', 'extreme cosmetic surgery fandom', 'furry fandom (fursuiting)',

@@ -25,6 +25,8 @@ interface UpdateChipArgs {
   ownerDislikesPublicDefender: string[] | null;
   ownerDislikesPetPeeves: string[] | null;
   ownerDislikesLoveToHate: string[] | null;
+  ownerPublicCareOfferings: string[] | null;
+  ownerPublicCareAsks: string[] | null;
   ownerSettings: UserSettings | null;
 }
 
@@ -117,6 +119,12 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
   if (args.ownerDislikesLoveToHate) {
     ownerUserData.dislikesLoveToHate = args.ownerDislikesLoveToHate;
   }
+  if (args.ownerPublicCareOfferings) {
+    ownerUserData.publicCareOfferings = args.ownerPublicCareOfferings;
+  }
+  if (args.ownerPublicCareAsks) {
+    ownerUserData.publicCareAsks = args.ownerPublicCareAsks;
+  }
   if (args.ownerSettings) {
     ownerUserData.settings = args.ownerSettings;
   }
@@ -189,6 +197,8 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       dislikesPublicDefender: args.ownerDislikesPublicDefender ?? undefined,
       dislikesPetPeeves: args.ownerDislikesPetPeeves ?? undefined,
       dislikesLoveToHate: args.ownerDislikesLoveToHate ?? undefined,
+      publicCareOfferings: args.ownerPublicCareOfferings ?? undefined,
+      publicCareAsks: args.ownerPublicCareAsks ?? undefined,
       settings: args.ownerSettings ?? undefined,
     });
   } catch (error) {

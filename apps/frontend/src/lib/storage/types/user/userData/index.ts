@@ -27,6 +27,7 @@ import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/
 
 import { InterestsSchema } from "@/lib/storage/types/user/interests";
 import { DislikesSchema } from "@/lib/storage/types/user/dislikes";
+import { CaresSchema } from "@/lib/storage/types/user/cares";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
@@ -79,6 +80,12 @@ export const UserDataSchema = z.object({
   dislikesPublicDefender: nullToUndefined(DislikesSchema),
   dislikesPetPeeves: nullToUndefined(DislikesSchema),
   dislikesLoveToHate: nullToUndefined(DislikesSchema),
+
+  // Complementary Care
+  publicCareOfferings: nullToUndefined(CaresSchema),
+  privateCareOfferings: nullToUndefined(CaresSchema),
+  publicCareAsks: nullToUndefined(CaresSchema),
+  privateCareAsks: nullToUndefined(CaresSchema),
 });
 
 export type UserData = z.infer<typeof UserDataSchema>;

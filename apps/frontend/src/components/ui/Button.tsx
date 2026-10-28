@@ -25,6 +25,7 @@ const ButtonComponent = classed.button(
         subtle:
           "bg-button-subtle hover:bg-button-subtle-hover text-button-subtle-label",
         link: "bg-button-link hover:bg-button-link-hover text-button-link-label hover:text-button-link-label-hover hover:underline",
+        warning: "bg-button-warning hover:bg-button-warning-hover text-button-warning-label",
       },
       rounded: {
         true: "rounded-[7px]",

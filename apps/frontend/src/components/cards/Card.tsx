@@ -8,6 +8,7 @@ const CardBase = classed.div("relative rounded overflow-hidden ", {
       secondary: "bg-card-secondary-bg border border-secondary-border",
       tertiary: "bg-card-tertiary-bg border border-secondary-border",
       gray: "bg-card-gray",
+      pink: "bg-[#FF9DF8]", // Used for private info
     },
   },
   defaultVariants: {
