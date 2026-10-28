@@ -1,5 +1,5 @@
 import { DisplayedDashboard } from "@/components/cards/CommunityCard";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Served from apps/frontend/public/graph
 const PERSON_ICON_URL = "/graph/icon-person.obj";
@@ -68,6 +68,21 @@ export default function GlobalPage({}: {
   setDisplayedDashboard: (dashboard: DisplayedDashboard) => void;
 }) {
   const wandererRef = useRef<WanderedElement>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [graphTop, setGraphTop] = useState(0);
+
+  // Keep the graph pinned just below the nav bar, whose height can change on resize
+  useEffect(() => {
+    const updateGraphTop = () => {
+      if (anchorRef.current) {
+        setGraphTop(anchorRef.current.getBoundingClientRect().top);
+      }
+    };
+
+    updateGraphTop();
+    window.addEventListener("resize", updateGraphTop);
+    return () => window.removeEventListener("resize", updateGraphTop);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -80,9 +95,8 @@ export default function GlobalPage({}: {
 
     const loadWebscapeWanderer = async () => {
       // webscape-wanderer touches browser globals, so it can only be imported client-side
-      const { startWebscapeWanderer, dataFromGraph } = await import(
-        "webscape-wanderer"
-      );
+      const { startWebscapeWanderer, dataFromGraph } =
+        await import("webscape-wanderer");
       if (cancelled) return;
 
       const prepareGraphData = (edgeList: Edge[]) => {
@@ -112,7 +126,6 @@ export default function GlobalPage({}: {
 
       const updateGraphIfChanged = async () => {
         const edgeList = await fetchEdgeList();
-        console.log("Edgelist", edgeList)
         const w = wandererRef.current;
         if (!w || cancelled) return;
         if (edgeList.length === w.graphData?.links.length) {
@@ -144,34 +157,43 @@ export default function GlobalPage({}: {
   }, []);
 
   return (
-    <div
-      className="w-full h-[calc(100vh-200px)] overflow-hidden"
-      style={{ backgroundColor: "hsl(244 61% 15% / 1)", touchAction: "none" }}
-    >
-      <webscape-wanderer
-        ref={wandererRef}
-        style={
-          {
-            "--selected-color": "cyan",
-            display: "block",
-            width: "100%",
-            height: "100%",
-            touchAction: "none",
-          } as React.CSSProperties
-        }
-        edge-scale="1"
-        edge-scale-emphasized="0.5"
-        node-scale="0.7"
-        edge-alpha-non-emphasized="0.05"
-        edge-wave-intensity="0.1"
-        edge-alpha-emphasized="0.1"
-        edge-wave-intensity-emphasized="10"
-        edge-pulse-intensity="2"
-        edge-wave-speed="5"
-        edge-wave-speed-emphasized="5"
-        edge-frequency="1"
-        edge-frequency-emphasized="1"
-      />
-    </div>
+    <>
+      {/* Marks where the community nav bar ends */}
+      <div ref={anchorRef} />
+      {/* Fill the full width and remaining height of the screen below the nav bar */}
+      <div
+        className="fixed left-0 right-0 bottom-0 overflow-hidden"
+        style={{
+          top: graphTop,
+          backgroundColor: "hsl(244 61% 15% / 1)",
+          touchAction: "none",
+        }}
+      >
+        <webscape-wanderer
+          ref={wandererRef}
+          style={
+            {
+              "--selected-color": "cyan",
+              display: "block",
+              width: "100%",
+              height: "100%",
+              touchAction: "none",
+            } as React.CSSProperties
+          }
+          edge-scale="1"
+          edge-scale-emphasized="0.5"
+          node-scale="0.7"
+          edge-alpha-non-emphasized="0.05"
+          edge-wave-intensity="0.1"
+          edge-alpha-emphasized="0.1"
+          edge-wave-intensity-emphasized="10"
+          edge-pulse-intensity="2"
+          edge-wave-speed="5"
+          edge-wave-speed-emphasized="5"
+          edge-frequency="1"
+          edge-frequency-emphasized="1"
+        />
+      </div>
+    </>
   );
 }
