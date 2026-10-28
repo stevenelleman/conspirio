@@ -10,7 +10,7 @@ const vanillaInterests: string[] = [
   // TODO: add more instrument options
 
   // Sports & Fitness
-  'aerobics', 'badminton', 'baseball/softball', 'basketball', 'bike riding', 'body building', 'bouldering', 'bowls', 'boxing', 'bungee jumping', 'clay pigeon shooting', 'climbing', 'cricket', 'curling', 'cycling', 'diving', 'fencing', 'fitness/ gym', 'football', 'frisbee', 'golfing', 'hang gliding', 'hockey', 'horse riding', 'hula hooping', 'ice-skating', 'jogging/ running', 'martial arts', 'mountain biking', 'mountain climbing', 'paintballing', 'para-gliding', 'parachuting', 'polo', 'rock climbing', 'roller skating', 'rowing', 'rugby', 'scuba diving', 'shooting', 'skateboarding', 'skating', 'skiing', 'skydiving', 'snorkelling', 'snowboarding', 'soccer', 'sports & outdoors hobbies', 'surfing', 'swimming', 'sword fighting', 'table tennis', 'ten pin bowling', 'tennis', 'trampolining', 'volleyball', 'water aerobics', 'weight lifting', 'windsurfing', 'road-biking', 'trail-running',
+  'aerobics', 'badminton', 'baseball / softball', 'basketball', 'bike riding', 'body building', 'bouldering', 'bowls', 'boxing', 'bungee jumping', 'clay pigeon shooting', 'climbing', 'cricket', 'curling', 'cycling', 'diving', 'fencing', 'fitness / gym', 'football', 'frisbee', 'golfing', 'hang gliding', 'hockey', 'horse riding', 'hula hooping', 'ice-skating', 'jogging / running', 'martial arts', 'mountain biking', 'mountain climbing', 'paintballing', 'para-gliding', 'parachuting', 'polo', 'rock climbing', 'roller skating', 'rowing', 'rugby', 'scuba diving', 'shooting', 'skateboarding', 'skating', 'skiing', 'skydiving', 'snorkelling', 'snowboarding', 'soccer', 'sports & outdoors hobbies', 'surfing', 'swimming', 'sword fighting', 'table tennis', 'ten pin bowling', 'tennis', 'trampolining', 'volleyball', 'water aerobics', 'weight lifting', 'windsurfing', 'road-biking', 'trail-running',
 
   // Outdoor & Nature
   'backpacking', 'beekeeping', 'bird watching (ornithology)', 'bonsai', 'cacti', 'camping', 'canoeing', 'caravanning', 'caving', 'fishing', 'fly fishing', 'flying kites', 'foraging', 'gardening and plants hobbies', 'geocaching', 'hiking', 'hot air ballooning', 'hothouse gardening', 'house plants', 'hunting', 'hydroponics', 'kayaking', 'kite flying', 'nature walking', 'orchid raising', 'organic gardening', 'orienteering', 'rafting/canoeing', 'sailing', 'spelunking', 'stargazing', 'terrariums', 'train spotting', 'urban exploration', 'walking and hiking',
@@ -98,6 +98,8 @@ const spicyInterests: string[] = [
   // Whimsy and weird
   `taking over the world`, 'death doula', 'hospice care'
 ];
+
+// const conspirioInterests = ["programmable cryptography", "fashion", "fashion consulting"]
 
 export const availableInterests = [...vanillaInterests, ...spicyInterests];
 

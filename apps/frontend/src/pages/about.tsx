@@ -3,6 +3,7 @@ import React from "react";
 import { StoreBanner } from "@/components/StoreBanner";
 import { BlogBanner } from "@/components/BlogBanner";
 
+// Probleming: defeating the prisoner's dilemmas
 export default function AboutPage() {
   return (
     <AppLayout className="flex flex-col gap-6 pt-8 px-4">
@@ -18,7 +19,7 @@ export default function AboutPage() {
           <span className="text-label-tertiary font-sans text-base font-medium">
             <i>Conspirio</i> is an experimental social app using{" "}
             <b>multi-party computation (MPC)</b> to enable safer and more
-            efficient human connection.It features first-of-its-kind consumer
+            efficient human connection. It features first-of-its-kind consumer
             experiments with coSNARKs, private set intersections, and digital
             pheromones.
             {/* Break the ice by discovering shared

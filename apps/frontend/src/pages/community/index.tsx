@@ -14,6 +14,7 @@ import { DisplayedDashboard } from "@/components/cards/CommunityCard";
 import { NavTab } from "@/components/ui/NavTab";
 import EthIndiaCommunityPage from "@/features/community/EthIndiaCommunityPage";
 import EmbassyCommunityPage from "@/features/community/EmbassyCommunityPage";
+import GraphPage from "@/features/community/GraphPage";
 
 export const metadata: Metadata = {
   title: "Community",
@@ -25,6 +26,7 @@ enum ActiveTab {
   LANNA,
   EMBASSY,
   NONE,
+  GRAPH,
 }
 
 const CommunityPage = () => {
@@ -116,6 +118,14 @@ const CommunityPage = () => {
                 ></div>
               </div>
                 <div className="py-3 flex gap-6">
+                    <NavTab
+                      active={activeTab === ActiveTab.GRAPH}
+                      onClick={() => {
+                        setActiveTab(ActiveTab.GRAPH);
+                      }}
+                    >
+                      Graph
+                    </NavTab>
                   {userChips &&
                    userChips.includes(ChipIssuer.EMBASSY) && (
                      <NavTab
@@ -164,6 +174,12 @@ const CommunityPage = () => {
         }
         withContainer={displayedDashboard === DisplayedDashboard.NONE}
       >
+        {activeTab === ActiveTab.GRAPH && (
+          <GraphPage
+            displayedDashboard={displayedDashboard}
+            setDisplayedDashboard={setDisplayedDashboard}
+          />
+        )}
         {activeTab === ActiveTab.LANNA && (
           <LannaCommunityPage
             displayedDashboard={displayedDashboard}
