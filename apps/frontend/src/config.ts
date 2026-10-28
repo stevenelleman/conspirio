@@ -12,13 +12,13 @@ import { SUPPORT_EMAIL } from "@/constants";
 export const fontBase = Inter({ subsets: ["latin"], variable: "--font-base" });
 
 export const FRONTEND_URL =
-  process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_FRONTEND_URL || "http://127.0.0.1:3000";
 
 export const BASE_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8080/api";
 
 export const BASE_API_WS =
-  process.env.NEXT_PUBLIC_API_WS || "ws://localhost:8080";
+  process.env.NEXT_PUBLIC_API_WS || "ws://127.0.0.1:8080";
 
 export const GITHUB_IMPORT_URL = `https://www.github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_OAUTH_GITHUB_CLIENT_ID}&state=github&response_type=code&redirect_uri=${FRONTEND_URL}/oauth/exchange_token&approval_prompt=force&scope=read`
 

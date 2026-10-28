@@ -12,7 +12,7 @@ Frontend:
 
 - `cd apps/frontend`
 - Copy over .env.example into .env and update vars
-  - Set `NEXT_PUBLIC_API_URL` to point to the backend, defaults to `http://localhost:8080/api`
+  - Set `NEXT_PUBLIC_API_URL` to point to the backend, defaults to `http://127.0.0.1:8080/api`
 - `source .env`
 - `pnpm run dev`
 
@@ -20,7 +20,7 @@ Backend:
 
 - In a separate terminal, `cd apps/backend`
 - Copy over .env.example into .env and update vars
-  - Set `FRONTEND_URL` to point to the frontend (for cors), defaults to `http://localhost:3000`
+  - Set `FRONTEND_URL` to point to the frontend (for cors), defaults to `http://127.0.0.1:3000`
   - Set `DATABASE_URL` to point to the database, for local dev this defaults to `postgresql://postgres:postgres@localhost:5432/connections_test?schema=public`
   - Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_SES_SENDER_EMAIL` to correspond to IAM credentials for AWS Simple Email Service
 - `source .env`
@@ -38,14 +38,14 @@ Telegram:
 
 Testing:
 
-- This is meant to be a mobile browser app. You can either test this on mobile browser by connecting it to localhost or using ngrok/similar service, or test from a desktop web browser using mobile view
+- This is meant to be a mobile browser app. You can either test this on mobile browser by connecting it to 127.0.0.1 or using ngrok/similar service, or test from a desktop web browser using mobile view
 - This app does not work in incognito mode
 - Make sure you've seeded database with testing UserChip values: `pnpm run seed`
-  - To register, visit: http://localhost:3000/tap?chipId=TEST001 and go through registration flow. `TEST002`- `TEST005` are also available for testing.
+  - To register, visit: http://127.0.0.1:3000/tap?chipId=TEST001 and go through registration flow. `TEST002`- `TEST005` are also available for testing.
 - Once logged in, to tap another account there are two steps:
-  - Create new account, visit http://localhost:3000/tap?chipId=TEST002 in a different browser
-  - To tap a connection, visit http://localhost:3000/tap?chipId=TEST002 from your first browser, where the chipId corresponds to the other existing account
-- After a full deletion sometimes old local storage values will still be populating site, visit http://localhost:3000/logout to logout or delete the local storage corresponding to localhost:3000.
+  - Create new account, visit http://127.0.0.1:3000/tap?chipId=TEST002 in a different browser
+  - To tap a connection, visit http://127.0.0.1:3000/tap?chipId=TEST002 from your first browser, where the chipId corresponds to the other existing account
+- After a full deletion sometimes old local storage values will still be populating site, visit http://127.0.0.1:3000/logout to logout or delete the local storage corresponding to localhost:3000.
 - To clear the database, run `pnpm prisma migrate reset` from apps/backend. NOTE THIS WILL WIPE YOUR POSTGRES
 - To add fake leaderboard entries, in `apps/backend` run `ts-node -r tsconfig-paths/register prisma/testing/leaderboardEntries.ts`.
 
@@ -54,7 +54,7 @@ Testing Secret Values:
 - For the email service, `AWS_SES_SENDER_EMAIL`, `AWS_ACCESS_KEY_ID`, `AWS_REGION`, and `AWS_SECRET_ACCESS_KEY` must be set with target email and key info.
 
 To test the chip registration flow:
-- `localhost:3000/tap?chipId=TESTEMBASSY001`
+- `127.0.0.1:3000/tap?chipId=TESTEMBASSY001`
 
 Manually registering community-issued NFC chip: 
 

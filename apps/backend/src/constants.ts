@@ -1,6 +1,6 @@
 import { OAuthAppDetails } from "@types";
 
-export const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+export const FRONTEND_URL = process.env.FRONTEND_URL || "http://127.0.0.1:3000";
 
 export const TG_SUPPORT_ACCOUNT = "damazene";
 
