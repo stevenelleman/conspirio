@@ -81,6 +81,9 @@ export function getUserDataUpdatedAt(
     case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
       lastImportedAt = userData?.github?.programmingLanguages?.lastUpdated;
       break;
+    case ImportDataType.GOOGLE_CALENDAR_UPCOMING_BUSY:
+      lastImportedAt = userData?.googleCalendar?.upcomingBusy?.lastUpdated;
+      break;
     default:
       console.error("Import type not recognized.");
       throw new Error("Import type not recognized.");
@@ -192,8 +195,11 @@ export async function refreshData(): Promise<void> {
         // Assume expires at is in milliseconds
         let expiresAt: Date = new Date(accessToken.expires_at);
 
-        // Strava's expiration is seconds rather than milliseconds
-        if (app === DataImportSource.STRAVA) {
+        // Strava and Google Calendar expiration is seconds rather than milliseconds
+        if (
+          app === DataImportSource.STRAVA ||
+          app === DataImportSource.GOOGLE_CALENDAR
+        ) {
           expiresAt = new Date(accessToken.expires_at * 1000);
         }
 

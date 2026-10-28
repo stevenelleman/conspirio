@@ -27,6 +27,8 @@ export const OAuthAppSchema = z.object({
         return DataImportSource.GITHUB
       case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
         return DataImportSource.GITHUB
+      case ImportDataType.GOOGLE_CALENDAR_UPCOMING_BUSY:
+        return DataImportSource.GOOGLE_CALENDAR
       default:
     }
     return DataImportSourceSchema.parse(val);

@@ -25,4 +25,14 @@ export const OAUTH_APP_DETAILS: Record<string, OAuthAppDetails> = {
     secret: process.env.OAUTH_GITHUB_CLIENT_SECRET || "",
     data_options: [],
   },
+  google_calendar: {
+    client_side_fetching: false,
+    can_import: true,
+    token_url: "https://oauth2.googleapis.com/token",
+    // Google requires an exact match with the authorize request's redirect_uri
+    redirect_uri: `${FRONTEND_URL}/oauth/exchange_token`,
+    id: process.env.OAUTH_GOOGLE_CLIENT_ID || "",
+    secret: process.env.OAUTH_GOOGLE_CLIENT_SECRET || "",
+    data_options: [],
+  },
 };

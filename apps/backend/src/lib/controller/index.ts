@@ -355,6 +355,14 @@ export class Controller {
     return this.oauthClient.MintOAuthToken(app, code);
   }
 
+  RefreshOAuthToken(
+    app: DataImportSource,
+    refreshToken: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<any | null> {
+    return this.oauthClient.RefreshOAuthToken(app, refreshToken);
+  }
+
   // Enclave
   GetAttestationDoc(): Promise<string> {
     return this.enclaveClient.GetAttestationDoc();

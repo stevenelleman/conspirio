@@ -8,6 +8,7 @@ import {
 } from "./lannaData";
 import { StravaDataSchema } from "./stravaData";
 import { GithubDataSchema } from "./githubData";
+import { GoogleCalendarDataSchema } from "./googleCalendarData";
 import { LannaHalloweenDataSchema } from "./lannaHalloweenData";
 import { DevconSchema } from "./devconData";
 import {
@@ -66,6 +67,7 @@ export const UserDataSchema = z.object({
   hotTakesRating: nullToUndefined(HotTakesRatingSchema),
   strava: nullToUndefined(StravaDataSchema),
   github: nullToUndefined(GithubDataSchema),
+  googleCalendar: nullToUndefined(GoogleCalendarDataSchema),
   lannaHalloween: nullToUndefined(LannaHalloweenDataSchema),
   devcon: nullToUndefined(DevconSchema),
   connectionPSISize: nullToUndefined(ConnectionPSISizeSchema),
@@ -129,3 +131,7 @@ export {
 } from "./lannaData";
 export { type GithubData, GithubDataSchema } from "./githubData";
 export { type StravaData, StravaDataSchema } from "./stravaData";
+export {
+  type GoogleCalendarData,
+  GoogleCalendarDataSchema,
+} from "./googleCalendarData";

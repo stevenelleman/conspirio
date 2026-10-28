@@ -64,6 +64,23 @@ async function stravaRefreshToken(
   });
 }
 
+// Google refresh requires the client secret, so it is proxied through the server
+async function serverRefreshToken(
+  app: DataImportSource,
+  refreshToken: string
+): Promise<Response> {
+  return fetch(`${BASE_API_URL}/oauth/refresh_token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      state: app,
+      refresh_token: refreshToken,
+    }),
+  });
+}
+
 export async function refreshToken(
   app: DataImportSource,
   mapping: OAuthAppDetails,
@@ -72,6 +89,8 @@ export async function refreshToken(
   switch (app) {
     case DataImportSource.STRAVA:
       return await stravaRefreshToken(mapping, refreshToken);
+    case DataImportSource.GOOGLE_CALENDAR:
+      return await serverRefreshToken(app, refreshToken);
     default:
       return null;
   }
@@ -207,7 +226,7 @@ export async function getOAuthAccessToken(
     }
 
     if (token.expires_at && token.expires_at * 1000 > Date.now()) {
-      // Strava expires_at is in seconds. Data.now() is in milliseconds.
+      // Strava and Google Calendar expires_at is in seconds. Data.now() is in milliseconds.
       return token;
     }
     // NOTE: Add refresh_token support

@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { StravaBearerTokenSchema, GithubBearerTokenSchema,  } from "../imports";
+import {
+  StravaBearerTokenSchema,
+  GithubBearerTokenSchema,
+  GoogleCalendarBearerTokenSchema,
+} from "../imports";
 
 import { DataImportSource, DataImportSourceSchema } from "../imports";
 
@@ -21,6 +25,15 @@ export const OAuthExchangeTokensRequestSchema = z.object({
 
 export type OAuthExchangeTokensRequest = z.infer<
   typeof OAuthExchangeTokensRequestSchema
+>;
+
+export const OAuthRefreshTokenRequestSchema = z.object({
+  refresh_token: z.string(),
+  state: DataImportSourceSchema,
+});
+
+export type OAuthRefreshTokenRequest = z.infer<
+  typeof OAuthRefreshTokenRequestSchema
 >;
 
 // Mapping access token types
@@ -74,6 +87,33 @@ export async function githubMapResponseToAccessToken(
   };
 }
 
+export async function googleCalendarMapResponseToAccessToken(
+  data: any,
+  oldAccessToken: AccessToken | null,
+): Promise<AccessToken> {
+  const parsedData = GoogleCalendarBearerTokenSchema.parse(data);
+  const { access_token, expires_in, scope, token_type } = parsedData;
+
+  // Refresh responses omit refresh_token, in which case the existing one stays valid
+  const refresh_token = parsedData.refresh_token || oldAccessToken?.refresh_token;
+  if (!refresh_token) {
+    throw new Error("Required refresh token is missing, consider checking access_type=offline.")
+  }
+
+  return {
+    access_token,
+    refresh_token,
+    scope,
+    token_type,
+
+    // Stored in seconds to match Strava
+    expires_at: Math.floor(Date.now() / 1000) + expires_in,
+
+    // Unused for now
+    user_id: 0,
+  };
+}
+
 export async function mapResponseToAccessToken(
   app: DataImportSource,
   oldAccessToken: AccessToken | null, // Used in refresh case
@@ -84,6 +124,8 @@ export async function mapResponseToAccessToken(
       return await stravaMapResponseToAccessToken(data, oldAccessToken);
     case DataImportSource.GITHUB:
       return await githubMapResponseToAccessToken(data);
+    case DataImportSource.GOOGLE_CALENDAR:
+      return await googleCalendarMapResponseToAccessToken(data, oldAccessToken);
     default:
       return null;
   }

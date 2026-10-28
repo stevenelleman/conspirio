@@ -2,11 +2,13 @@ import { z } from "zod";
 
 export * from "./strava";
 export * from "./github";
+export * from "./googleCalendar";
 export * from "./devcon";
 
 export enum DataImportSource {
   STRAVA = "strava",
   GITHUB = "github",
+  GOOGLE_CALENDAR = "google_calendar",
 }
 
 export const DataImportSourceSchema = z.nativeEnum(DataImportSource)
@@ -17,6 +19,7 @@ export enum ImportDataType {
   GITHUB_CONTRIBUTIONS_LAST_YEAR = "GITHUB_CONTRIBUTIONS_LAST_YEAR",
   GITHUB_STARRED_REPOS = "GITHUB_STARRED_REPOS",
   GITHUB_PROGRAMMING_LANGUAGES = "GITHUB_PROGRAMMING_LANGUAGES",
+  GOOGLE_CALENDAR_UPCOMING_BUSY = "GOOGLE_CALENDAR_UPCOMING_BUSY",
 }
 
 export const ImportDataTypeSchema = z.nativeEnum(ImportDataType);

@@ -9,6 +9,7 @@ import {
   ghFetchRepos,
   ghFetchStarredRepos,
 } from "@/lib/imports/integrations/github";
+import { googleCalendarFetchUpcomingBusy } from "@/lib/imports/integrations/googleCalendar";
 
 export async function fetchImportedData(
   token: AccessToken | null,
@@ -53,6 +54,11 @@ export async function fetchImportedData(
         return null;
       }
       return await ghFetchRepos(token);
+    case ImportDataType.GOOGLE_CALENDAR_UPCOMING_BUSY:
+      if (!token) {
+        throw new Error("Missing oauth token")
+      }
+      return await googleCalendarFetchUpcomingBusy(token);
     default:
       return null;
   }

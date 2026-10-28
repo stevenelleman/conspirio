@@ -19,6 +19,7 @@ import { logClientEvent } from "@/lib/frontend/metrics";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
 import ImportDevconButton from "@/features/oauth/ImportDevconButton";
 import ImportStravaButton from "@/features/oauth/ImportStravaButton";
+import ImportGoogleCalendarButton from "@/features/oauth/ImportGoogleCalendarButton";
 import ToggleSwitch from "@/components/ui/Switch";
 import useSettings from "@/hooks/useSettings";
 import { storeAddChipRequest } from "@/lib/chip/addChip";
@@ -103,9 +104,13 @@ const ProfilePage: React.FC = () => {
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.GITHUB);
   const hasStravaToAdd =
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.STRAVA);
+  const hasGoogleCalendarToAdd =
+    !user.oauth ||
+    !Object.keys(user.oauth).includes(DataImportSource.GOOGLE_CALENDAR);
   const hasDevconToAdd = !Object.keys(user.userData).includes("devcon");
 
-  const hasOauthToAdd = hasGithubToAdd || hasStravaToAdd || hasDevconToAdd;
+  const hasOauthToAdd =
+    hasGithubToAdd || hasStravaToAdd || hasGoogleCalendarToAdd || hasDevconToAdd;
   const hasDataToAdd = hasOauthToAdd || !user.userData.tensionsRating;
 
   const hasVaultData =
@@ -224,6 +229,18 @@ const ProfilePage: React.FC = () => {
                           }
                         >
                           <ImportStravaButton />
+                        </div>
+                      )}
+                      {hasGoogleCalendarToAdd && (
+                        <div
+                          onClick={() =>
+                            logClientEvent(
+                              "user-profile-google-calendar-clicked",
+                              {}
+                            )
+                          }
+                        >
+                          <ImportGoogleCalendarButton />
                         </div>
                       )}
                       {hasDevconToAdd && <ImportDevconButton />}
@@ -356,6 +373,11 @@ const ProfilePage: React.FC = () => {
                       ) && (
                         <div>
                           <ImportGithubButton addElement={false} />
+                        </div>
+                      )}
+                      {!hasGoogleCalendarToAdd && (
+                        <div>
+                          <ImportGoogleCalendarButton addElement={false} />
                         </div>
                       )}
                       {!hasDevconToAdd && (

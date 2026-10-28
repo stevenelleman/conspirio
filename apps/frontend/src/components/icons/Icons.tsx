@@ -380,6 +380,24 @@ export const Icons: Record<string, any> = {
     </svg>
   ),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  GoogleCalendar: ({ size = 16, ...props }: any) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <rect x="1.5" y="2.5" width="13" height="12" rx="1.5" fill="white" stroke="#4285F4" />
+      <path d="M1 4C1 2.89543 1.89543 2 3 2H13C14.1046 2 15 2.89543 15 4V6H1V4Z" fill="#4285F4" />
+      <path d="M11 15H13C14.1046 15 15 14.1046 15 13V11L11 15Z" fill="#EA4335" />
+      <rect x="4" y="0.5" width="1.5" height="3" rx="0.75" fill="#1967D2" />
+      <rect x="10.5" y="0.5" width="1.5" height="3" rx="0.75" fill="#1967D2" />
+      <text x="8" y="12.75" textAnchor="middle" fontSize="6" fontWeight="700" fontFamily="sans-serif" fill="#4285F4">31</text>
+    </svg>
+  ),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   GitHub: ({ size = 16, ...props }: any) => (
     <svg
       width={size}

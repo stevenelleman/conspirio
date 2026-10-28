@@ -74,6 +74,21 @@ export const updateUserDataFromImportData = async (
           },
         },
       };
+    case ImportDataType.GOOGLE_CALENDAR_UPCOMING_BUSY:
+      let value6: string[] = data;
+      if (!value6) {
+        value6 = [];
+      }
+      return {
+        ...userData,
+        googleCalendar: {
+          ...userData.googleCalendar,
+          upcomingBusy: {
+            value: value6,
+            lastUpdated: new Date()
+          },
+        },
+      };
     default:
       return userData;
   }

@@ -3,6 +3,8 @@ import {
   ErrorResponse,
   errorToString,
   OAuthExchangeTokensRequestSchema,
+  OAuthRefreshTokenRequest,
+  OAuthRefreshTokenRequestSchema,
 } from "@types";
 import express, {Request, Response} from "express";
 import {Controller} from "@/lib/controller";
@@ -28,6 +30,31 @@ router.get(
       return res.status(200).json(accessToken);
     } catch (error) {
       console.error("Error in oauth/exchange_token route:", error);
+      return res.status(400).json({ error: errorToString(error) });
+    }
+  }
+);
+
+// Proxies refresh for apps whose refresh requires the client secret. Refresh token is sent in the body to keep it out of request logs.
+router.post(
+  "/refresh_token",
+  async (
+    req: Request<{}, {}, OAuthRefreshTokenRequest>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res: Response<any | ErrorResponse>
+  ) => {
+    try {
+      const validatedData = OAuthRefreshTokenRequestSchema.parse(req.body);
+      const { refresh_token, state } = validatedData;
+
+      const data = await controller.RefreshOAuthToken(state, refresh_token);
+      if (!data) {
+        throw new Error("OAuth refresh response is null")
+      }
+
+      return res.status(200).json(data);
+    } catch (error) {
+      console.error("Error in oauth/refresh_token route:", error);
       return res.status(400).json({ error: errorToString(error) });
     }
   }

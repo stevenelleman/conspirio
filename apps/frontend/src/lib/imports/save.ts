@@ -14,6 +14,9 @@ import {
 import {
   MapGithubCommitContributionsToLeaderboardEntry,
 } from "./integrations/github";
+import {
+  MapGoogleCalendarFreeBusyToIntervals,
+} from "./integrations/googleCalendar";
 import { updateUserDataFromImportData } from "@/lib/imports/update";
 import { storage } from "@/lib/storage";
 import { User, UserData } from "@/lib/storage/types";
@@ -138,6 +141,10 @@ export async function saveImportedData(authToken: string, user: User, option: Da
           languages[lang].push(repo.full_name);
         }
         await updateUserData(user.userData, option.type, languages);
+        return;
+      case ImportDataType.GOOGLE_CALENDAR_UPCOMING_BUSY:
+        const busyIntervals: string[] = MapGoogleCalendarFreeBusyToIntervals(data);
+        await updateUserData(user.userData, option.type, busyIntervals);
         return;
       default:
         return;

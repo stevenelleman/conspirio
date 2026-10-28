@@ -22,6 +22,20 @@ export const BASE_API_WS =
 
 export const GITHUB_IMPORT_URL = `https://www.github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_OAUTH_GITHUB_CLIENT_ID}&state=github&response_type=code&redirect_uri=${FRONTEND_URL}/oauth/exchange_token&approval_prompt=force&scope=read`
 
+// Free/busy scope only exposes busy intervals, not event titles, attendees, or locations
+const GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.freebusy";
+
+// access_type=offline and prompt=consent ensure Google returns a refresh token on every grant
+export const GOOGLE_CALENDAR_IMPORT_URL = `https://accounts.google.com/o/oauth2/v2/auth?${new URLSearchParams({
+  client_id: process.env.NEXT_PUBLIC_OAUTH_GOOGLE_CLIENT_ID || "",
+  state: DataImportSource.GOOGLE_CALENDAR,
+  response_type: "code",
+  redirect_uri: `${FRONTEND_URL}/oauth/exchange_token`,
+  scope: GOOGLE_CALENDAR_SCOPE,
+  access_type: "offline",
+  prompt: "consent",
+}).toString()}`;
+
 export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
   strava: {
     client_side_fetching: true,
@@ -65,6 +79,21 @@ export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
         type: ImportDataType.GITHUB_PROGRAMMING_LANGUAGES,
         scope: "read",
         refreshRate: RefreshRateType.WEEKLY,
+      },
+    ],
+  },
+  google_calendar: {
+    client_side_fetching: false,
+    can_import: true,
+    token_url: "https://oauth2.googleapis.com/token",
+    redirect_uri: `${FRONTEND_URL}/oauth/exchange_token`,
+    id: process.env.NEXT_PUBLIC_OAUTH_GOOGLE_CLIENT_ID || "",
+    secret: "",
+    data_options: [
+      {
+        type: ImportDataType.GOOGLE_CALENDAR_UPCOMING_BUSY,
+        scope: GOOGLE_CALENDAR_SCOPE,
+        refreshRate: RefreshRateType.DAILY,
       },
     ],
   },
