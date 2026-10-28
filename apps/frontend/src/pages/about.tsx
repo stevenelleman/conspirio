@@ -3,7 +3,6 @@ import React from "react";
 import { StoreBanner } from "@/components/StoreBanner";
 import { BlogBanner } from "@/components/BlogBanner";
 
-// Probleming: defeating the prisoner's dilemmas
 export default function AboutPage() {
   return (
     <AppLayout className="flex flex-col gap-6 pt-8 px-4">

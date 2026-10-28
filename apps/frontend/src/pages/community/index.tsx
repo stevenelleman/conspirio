@@ -14,7 +14,7 @@ import { DisplayedDashboard } from "@/components/cards/CommunityCard";
 import { NavTab } from "@/components/ui/NavTab";
 import EthIndiaCommunityPage from "@/features/community/EthIndiaCommunityPage";
 import EmbassyCommunityPage from "@/features/community/EmbassyCommunityPage";
-import GraphPage from "@/features/community/GraphPage";
+import GlobalPage from "@/features/community/GlobalPage";
 
 export const metadata: Metadata = {
   title: "Community",
@@ -124,7 +124,7 @@ const CommunityPage = () => {
                         setActiveTab(ActiveTab.GRAPH);
                       }}
                     >
-                      Graph
+                      Global
                     </NavTab>
                   {userChips &&
                    userChips.includes(ChipIssuer.EMBASSY) && (
@@ -175,7 +175,7 @@ const CommunityPage = () => {
         withContainer={displayedDashboard === DisplayedDashboard.NONE}
       >
         {activeTab === ActiveTab.GRAPH && (
-          <GraphPage
+          <GlobalPage
             displayedDashboard={displayedDashboard}
             setDisplayedDashboard={setDisplayedDashboard}
           />

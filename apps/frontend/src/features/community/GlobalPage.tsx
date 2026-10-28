@@ -63,7 +63,7 @@ async function fetchEdgeList(): Promise<Edge[]> {
   return fetchMockEdgeList();
 }
 
-export default function GraphPage({}: {
+export default function GlobalPage({}: {
   displayedDashboard: DisplayedDashboard;
   setDisplayedDashboard: (dashboard: DisplayedDashboard) => void;
 }) {
@@ -112,6 +112,7 @@ export default function GraphPage({}: {
 
       const updateGraphIfChanged = async () => {
         const edgeList = await fetchEdgeList();
+        console.log("Edgelist", edgeList)
         const w = wandererRef.current;
         if (!w || cancelled) return;
         if (edgeList.length === w.graphData?.links.length) {
@@ -158,13 +159,13 @@ export default function GraphPage({}: {
             touchAction: "none",
           } as React.CSSProperties
         }
-        edge-scale="5"
+        edge-scale="1"
         edge-scale-emphasized="0.5"
-        node-scale="0.5"
+        node-scale="0.7"
         edge-alpha-non-emphasized="0.05"
-        edge-wave-intensity="1"
-        edge-alpha-emphasized="1"
-        edge-wave-intensity-emphasized="0.5"
+        edge-wave-intensity="0.1"
+        edge-alpha-emphasized="0.1"
+        edge-wave-intensity-emphasized="10"
         edge-pulse-intensity="2"
         edge-wave-speed="5"
         edge-wave-speed-emphasized="5"
