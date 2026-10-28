@@ -22,6 +22,9 @@ export const BASE_API_WS =
 
 export const GITHUB_IMPORT_URL = `https://www.github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_OAUTH_GITHUB_CLIENT_ID}&state=github&response_type=code&redirect_uri=${FRONTEND_URL}/oauth/exchange_token&approval_prompt=force&scope=read`
 
+// Spotify uses PKCE, so the authorize URL is built at click time, see `getSpotifyAuthorizeUrl`
+export const SPOTIFY_AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
+
 export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
   strava: {
     client_side_fetching: true,
@@ -64,6 +67,23 @@ export const OAUTH_APP_DETAILS: Record<DataImportSource, OAuthAppDetails> = {
       {
         type: ImportDataType.GITHUB_PROGRAMMING_LANGUAGES,
         scope: "read",
+        refreshRate: RefreshRateType.WEEKLY,
+      },
+    ],
+  },
+  spotify: {
+    // PKCE flow, no client secret required
+    client_side_fetching: true,
+    can_import: true,
+    token_url: "https://accounts.spotify.com/api/token",
+    // Spotify requires an exact match with the registered redirect URI
+    redirect_uri: `${FRONTEND_URL}/oauth/exchange_token`,
+    id: process.env.NEXT_PUBLIC_OAUTH_SPOTIFY_CLIENT_ID || "",
+    secret: "",
+    data_options: [
+      {
+        type: ImportDataType.SPOTIFY_TOP_ARTISTS,
+        scope: "user-top-read",
         refreshRate: RefreshRateType.WEEKLY,
       },
     ],

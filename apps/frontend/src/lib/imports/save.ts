@@ -7,6 +7,8 @@ import {
   GithubReposResponseSchema,
   GithubReposResponse,
   LeaderboardEntryType,
+  SpotifyTopArtistsResponse,
+  SpotifyTopArtistsResponseSchema,
 } from "@types";
 import {
   MapStravaActivityStatsToLeaderboardEntryRequest,
@@ -138,6 +140,11 @@ export async function saveImportedData(authToken: string, user: User, option: Da
           languages[lang].push(repo.full_name);
         }
         await updateUserData(user.userData, option.type, languages);
+        return;
+      case ImportDataType.SPOTIFY_TOP_ARTISTS:
+        const topArtists: SpotifyTopArtistsResponse = SpotifyTopArtistsResponseSchema.parse(data);
+        const artists: string[] = topArtists.items.map((artist) => artist.name);
+        await updateUserData(user.userData, option.type, artists);
         return;
       default:
         return;

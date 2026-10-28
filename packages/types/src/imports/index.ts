@@ -3,10 +3,12 @@ import { z } from "zod";
 export * from "./strava";
 export * from "./github";
 export * from "./devcon";
+export * from "./spotify";
 
 export enum DataImportSource {
   STRAVA = "strava",
   GITHUB = "github",
+  SPOTIFY = "spotify",
 }
 
 export const DataImportSourceSchema = z.nativeEnum(DataImportSource)
@@ -17,6 +19,7 @@ export enum ImportDataType {
   GITHUB_CONTRIBUTIONS_LAST_YEAR = "GITHUB_CONTRIBUTIONS_LAST_YEAR",
   GITHUB_STARRED_REPOS = "GITHUB_STARRED_REPOS",
   GITHUB_PROGRAMMING_LANGUAGES = "GITHUB_PROGRAMMING_LANGUAGES",
+  SPOTIFY_TOP_ARTISTS = "SPOTIFY_TOP_ARTISTS",
 }
 
 export const ImportDataTypeSchema = z.nativeEnum(ImportDataType);

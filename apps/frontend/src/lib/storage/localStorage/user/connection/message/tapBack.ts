@@ -36,6 +36,8 @@ export const createTapBackMessage = async (
     tapBackChipPublicKey = chip.publicKey;
   }
 
+  // HERE: check tap back works too
+  // current issue is that tap isn't including userDta
   const { serializedMessage, messageTimestamp } =
     await generateSerializedTapBackMessage({
       user: getUserShareableData(user.userData),

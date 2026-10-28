@@ -265,6 +265,8 @@ export const appendBackupData = async ({
     body: JSON.stringify(request),
   });
 
+  // TODO: running into limits of backups -- will have to shorten somehow
+
   // Throw an error if the request failed
   if (!response.ok) {
     throw new Error(`Failed to append backup data: ${response.statusText}`);

@@ -9,6 +9,7 @@ import {
   ghFetchRepos,
   ghFetchStarredRepos,
 } from "@/lib/imports/integrations/github";
+import { spotifyFetchTopArtists } from "@/lib/imports/integrations/spotify";
 
 export async function fetchImportedData(
   token: AccessToken | null,
@@ -53,6 +54,12 @@ export async function fetchImportedData(
         return null;
       }
       return await ghFetchRepos(token);
+    case ImportDataType.SPOTIFY_TOP_ARTISTS:
+      if (!token) {
+        throw new Error("Missing oauth token")
+        return null;
+      }
+      return await spotifyFetchTopArtists(token);
     default:
       return null;
   }

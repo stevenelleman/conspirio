@@ -9,6 +9,33 @@ import {
 import { BASE_API_URL, OAUTH_APP_DETAILS } from "@/config";
 import { storage } from "@/lib/storage";
 import { toast } from "sonner";
+import { consumePKCEVerifier } from "@/lib/oauth/pkce";
+
+async function spotifyFetchToken(
+  mapping: OAuthAppDetails,
+  code: string
+): Promise<Response> {
+  const { id, token_url, redirect_uri } = mapping;
+
+  const verifier = consumePKCEVerifier(DataImportSource.SPOTIFY);
+  if (!verifier) {
+    throw new Error("Missing PKCE code verifier, restart the Spotify connection flow");
+  }
+
+  return fetch(token_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_id: id,
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: redirect_uri,
+      code_verifier: verifier,
+    }),
+  });
+}
 
 async function stravaFetchToken(
   mapping: OAuthAppDetails,
@@ -39,9 +66,30 @@ async function fetchToken(
   switch (app) {
     case DataImportSource.STRAVA:
       return await stravaFetchToken(mapping, code);
+    case DataImportSource.SPOTIFY:
+      return await spotifyFetchToken(mapping, code);
     default:
       return null;
   }
+}
+
+async function spotifyRefreshToken(
+  mapping: OAuthAppDetails,
+  refreshToken: string
+): Promise<Response> {
+  const { id, token_url } = mapping;
+
+  return fetch(token_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_id: id,
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    }),
+  });
 }
 
 async function stravaRefreshToken(
@@ -72,6 +120,8 @@ export async function refreshToken(
   switch (app) {
     case DataImportSource.STRAVA:
       return await stravaRefreshToken(mapping, refreshToken);
+    case DataImportSource.SPOTIFY:
+      return await spotifyRefreshToken(mapping, refreshToken);
     default:
       return null;
   }
@@ -207,7 +257,7 @@ export async function getOAuthAccessToken(
     }
 
     if (token.expires_at && token.expires_at * 1000 > Date.now()) {
-      // Strava expires_at is in seconds. Data.now() is in milliseconds.
+      // Strava and Spotify expires_at is in seconds. Data.now() is in milliseconds.
       return token;
     }
     // NOTE: Add refresh_token support

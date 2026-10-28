@@ -28,6 +28,7 @@ import AddNotificationButton from "@/features/notification/AddNotificationButton
 import { exportConnectionsToCSV } from "@/lib/exports";
 // import { toggleGraphConsent } from "@/lib/storage/localStorage/graph";
 import { toggleAutomaticPSISetting } from "@/lib/storage/localStorage/settings";
+import ImportSpotifyButton from "@/features/oauth/ImportSpotifyButton";
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
@@ -103,9 +104,12 @@ const ProfilePage: React.FC = () => {
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.GITHUB);
   const hasStravaToAdd =
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.STRAVA);
+  const hasSpotifyToAdd =
+    !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.SPOTIFY);
   const hasDevconToAdd = !Object.keys(user.userData).includes("devcon");
 
-  const hasOauthToAdd = hasGithubToAdd || hasStravaToAdd || hasDevconToAdd;
+  const hasOauthToAdd =
+    hasGithubToAdd || hasStravaToAdd || hasSpotifyToAdd || hasDevconToAdd;
   const hasDataToAdd = hasOauthToAdd || !user.userData.tensionsRating;
 
   const hasVaultData =
@@ -208,13 +212,13 @@ const ProfilePage: React.FC = () => {
                 {hasOauthToAdd && (
                   <div className="py-2">
                     <div className="w-full flex gap-2 overflow-x-auto">
-                      {hasGithubToAdd && (
+                      {hasSpotifyToAdd && (
                         <div
                           onClick={() =>
-                            logClientEvent("user-profile-github-clicked", {})
+                            logClientEvent("user-profile-spotify-clicked", {})
                           }
                         >
-                          <ImportGithubButton />
+                          <ImportSpotifyButton />
                         </div>
                       )}
                       {hasStravaToAdd && (
@@ -224,6 +228,15 @@ const ProfilePage: React.FC = () => {
                           }
                         >
                           <ImportStravaButton />
+                        </div>
+                      )}
+                      {hasGithubToAdd && (
+                        <div
+                          onClick={() =>
+                            logClientEvent("user-profile-github-clicked", {})
+                          }
+                        >
+                          <ImportGithubButton />
                         </div>
                       )}
                       {hasDevconToAdd && <ImportDevconButton />}
@@ -356,6 +369,13 @@ const ProfilePage: React.FC = () => {
                       ) && (
                         <div>
                           <ImportGithubButton addElement={false} />
+                        </div>
+                      )}
+                      {Object.keys(user.oauth || {}).includes(
+                        DataImportSource.SPOTIFY
+                      ) && (
+                        <div>
+                          <ImportSpotifyButton addElement={false} />
                         </div>
                       )}
                       {!hasDevconToAdd && (

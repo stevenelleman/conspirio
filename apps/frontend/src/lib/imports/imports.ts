@@ -81,6 +81,9 @@ export function getUserDataUpdatedAt(
     case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
       lastImportedAt = userData?.github?.programmingLanguages?.lastUpdated;
       break;
+    case ImportDataType.SPOTIFY_TOP_ARTISTS:
+      lastImportedAt = userData?.spotify?.topArtists?.lastUpdated;
+      break;
     default:
       console.error("Import type not recognized.");
       throw new Error("Import type not recognized.");
@@ -192,8 +195,8 @@ export async function refreshData(): Promise<void> {
         // Assume expires at is in milliseconds
         let expiresAt: Date = new Date(accessToken.expires_at);
 
-        // Strava's expiration is seconds rather than milliseconds
-        if (app === DataImportSource.STRAVA) {
+        // Strava and Spotify expiration is seconds rather than milliseconds
+        if (app === DataImportSource.STRAVA || app === DataImportSource.SPOTIFY) {
           expiresAt = new Date(accessToken.expires_at * 1000);
         }
 

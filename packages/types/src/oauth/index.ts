@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { StravaBearerTokenSchema, GithubBearerTokenSchema,  } from "../imports";
+import { StravaBearerTokenSchema, GithubBearerTokenSchema, SpotifyBearerTokenSchema } from "../imports";
 
 import { DataImportSource, DataImportSourceSchema } from "../imports";
 
@@ -74,6 +74,33 @@ export async function githubMapResponseToAccessToken(
   };
 }
 
+export async function spotifyMapResponseToAccessToken(
+  data: any,
+  oldAccessToken: AccessToken | null,
+): Promise<AccessToken> {
+  // Convert SpotifyBearerToken into generic AuthToken
+  const parsedData = SpotifyBearerTokenSchema.parse(data);
+  const { access_token, scope, token_type, expires_in } = parsedData;
+
+  // Refresh flow may not rotate the refresh token, if so keep existing value.
+  const refresh_token = parsedData.refresh_token || oldAccessToken?.refresh_token;
+  if (!refresh_token) {
+    throw new Error("Required refresh token output is missing.")
+  }
+
+  return {
+    access_token,
+    refresh_token,
+    scope,
+    token_type,
+    // Store in seconds, matching Strava
+    expires_at: Math.floor(Date.now() / 1000) + expires_in,
+
+    // Spotify user ids are strings and unused for now
+    user_id: 0,
+  };
+}
+
 export async function mapResponseToAccessToken(
   app: DataImportSource,
   oldAccessToken: AccessToken | null, // Used in refresh case
@@ -84,6 +111,8 @@ export async function mapResponseToAccessToken(
       return await stravaMapResponseToAccessToken(data, oldAccessToken);
     case DataImportSource.GITHUB:
       return await githubMapResponseToAccessToken(data);
+    case DataImportSource.SPOTIFY:
+      return await spotifyMapResponseToAccessToken(data, oldAccessToken);
     default:
       return null;
   }

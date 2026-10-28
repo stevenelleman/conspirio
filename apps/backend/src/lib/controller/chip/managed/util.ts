@@ -122,6 +122,7 @@ export const generateTapSignatureFromChip = async (
 ): Promise<ChipTapResponse> => {
   let chip;
   try {
+    // getting tap from chip??
     chip = await getChipFromTapParams(prisma, tapParams, registration);
   } catch (error) {
     // We want to surface tap errors to user

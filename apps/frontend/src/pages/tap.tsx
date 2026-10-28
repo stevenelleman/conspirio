@@ -137,6 +137,7 @@ const TapPage: React.FC = () => {
               );
             }
 
+            // HERE: should this only be set if setting is set to true?
             // Upsert row, returns edge ID
             try {
               // Unregistered users cannot consent to private tap graph so don't keep track of them

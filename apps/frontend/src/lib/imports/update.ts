@@ -74,6 +74,21 @@ export const updateUserDataFromImportData = async (
           },
         },
       };
+    case ImportDataType.SPOTIFY_TOP_ARTISTS:
+      let value6: string[] = data;
+      if (!value6) {
+        value6 = [];
+      }
+      return {
+        ...userData,
+        spotify: {
+          ...userData.spotify,
+          topArtists: {
+            value: value6,
+            lastUpdated: new Date()
+          },
+        },
+      };
     default:
       return userData;
   }
