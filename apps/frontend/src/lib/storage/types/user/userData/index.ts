@@ -36,7 +36,7 @@ export const UserSettingsSchema = z.object({
   discloseDislikesLoveToHate: nullToUndefined(z.boolean().nullable()),
 
   // NOTE: In a future PR swap tapGraphEnabled to live in settings
-  // tapGraphEnabled: nullToUndefined(z.boolean().nullable()),
+  tapGraphEnabled: nullToUndefined(z.boolean().nullable()),
 
   // NOTE: currently dark theme lives in localstorage at `cursive-connections-theme` key -- should it be moved to settings to persist it between sessions?
 });

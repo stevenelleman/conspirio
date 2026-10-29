@@ -129,7 +129,7 @@ const TapPage: React.FC = () => {
             // If tap graph feature enabled, upsert graph edge (upsert so that either user can create the row)
             let tapSenderId: string | null = null;
 
-            const sentHash: boolean = user?.tapGraphEnabled === true;
+            const sentHash: boolean = user?.userData?.settings?.tapGraphEnabled === true;
             if (sentHash && user) {
               // Double hash the signature private key, use as identifier, use single hash version as revocation code
               tapSenderId = sha256(

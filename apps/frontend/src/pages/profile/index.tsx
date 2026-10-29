@@ -453,7 +453,7 @@ const ProfilePage: React.FC = () => {
             <div className="py-0">
               <ToggleSwitch
                 label="Join anonymous global tap graph"
-                checked={!!user?.tapGraphEnabled}
+                checked={!!user?.userData?.settings?.tapGraphEnabled}
                 onChange={() => {
                   toggleGraph();
                 }}

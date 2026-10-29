@@ -163,10 +163,16 @@ export const processUserBackup = ({
         if (!user) {
           throw new Error("TOGGLE_SOCIAL_GRAPH backup entry found before INITIAL");
         }
-        if (user.tapGraphEnabled === undefined) {
-          user.tapGraphEnabled = true;
+        if (user.userData.settings && user.userData.settings.tapGraphEnabled === undefined) {
+          user.userData.settings.tapGraphEnabled = true;
+        } else if (!user.userData.settings) {
+          // TODO: fix this case, settings should exist by now
+          user.userData.settings = {
+            tapGraphEnabled: true,
+            automaticPSIEnabled: true,
+          }
         } else {
-          user.tapGraphEnabled = !user.tapGraphEnabled;
+          user.userData.settings.tapGraphEnabled = !user.userData.settings.tapGraphEnabled;
         }
 
         // When toggled on, we backfill edges. When toggled off, we keep the edges as they are but don't include new

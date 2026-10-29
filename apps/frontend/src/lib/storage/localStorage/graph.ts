@@ -59,7 +59,7 @@ const backfillEdges = async (user: User, session: Session): Promise<string[]> =>
 // For users that enabled the graph feature *before* the backfill there will be nothing that triggers a backfill. In
 // this case we run *1 backfill* automatically
 export const backfillEdgesForUserWithFeatureAlreadyEnabled = async (user: User, session: Session): Promise<void> => {
-  if (user && user.tapGraphEnabled && !user.edgesBackfilledForUsersWithEnabledFeature) {
+  if (user && user.userData?.settings?.tapGraphEnabled && !user.edgesBackfilledForUsersWithEnabledFeature) {
     const sentEdges = await backfillEdges(user, session);
 
     const backup = createEdgeBackfillForEnabledUserBackup({
@@ -82,7 +82,7 @@ const backfillEdgesForTogglingGraphFeature = async (user: User, session: Session
   let sentEdges: string[] = [];
 
   // Only backfill if feature is flipped from "false" -> "true"
-  if (user && user.edges && !user.tapGraphEnabled) {
+  if (user && user.edges && !user.userData?.settings?.tapGraphEnabled) {
     sentEdges = await backfillEdges(user, session);
   }
 

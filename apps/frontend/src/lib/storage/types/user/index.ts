@@ -23,9 +23,7 @@ export const UserSchema = z.object({
   locations: nullToUndefined(z.record(z.string(), LocationTapsSchema)),
   activities: z.array(ActivitySchema),
   oauth: nullToUndefined(z.record(z.string(), AccessTokenSchema)),
-
-  // Tap graph attributes -- NOTE: tapGraphEnabled should be moved to UserSettings at some point
-  tapGraphEnabled: nullToUndefined(z.boolean().nullable()),
+  
   edgesBackfilledForUsersWithEnabledFeature: nullToUndefined(z.boolean().nullable()),
   edges: nullToUndefined(z.array(EdgeBackupSchema)),
 });
