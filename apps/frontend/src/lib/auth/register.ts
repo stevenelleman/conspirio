@@ -111,6 +111,11 @@ export async function registerUser({
       telegram: {
         username: telegramHandle,
       },
+      settings: {
+        // Default to true for automatic PSI and tap graph
+        automaticPSIEnabled: true,
+        tapGraphEnabled: true,
+      }
     },
     chips: [],
     connections: {},
