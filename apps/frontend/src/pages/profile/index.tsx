@@ -26,7 +26,7 @@ import { DataImportSource } from "@types";
 import { deleteImports } from "@/lib/imports/delete";
 import AddNotificationButton from "@/features/notification/AddNotificationButton";
 import { exportConnectionsToCSV } from "@/lib/exports";
-// import { toggleGraphConsent } from "@/lib/storage/localStorage/graph";
+import { toggleGraphConsent } from "@/lib/storage/localStorage/graph";
 import { toggleAutomaticPSISetting } from "@/lib/storage/localStorage/settings";
 
 const ProfilePage: React.FC = () => {
@@ -39,9 +39,9 @@ const ProfilePage: React.FC = () => {
     router.push("/login");
   };
 
-  // const toggleGraph = async () => {
-  //   await toggleGraphConsent();
-  // };
+  const toggleGraph = async () => {
+     await toggleGraphConsent();
+  };
 
   const handleExportConnectionsToCSV = async () => {
     if (window.confirm("Are you sure you want to export your connections?")) {
@@ -450,15 +450,15 @@ const ProfilePage: React.FC = () => {
                 }}
               />
             </div>
-            {/*<div className="py-0">
+            <div className="py-0">
               <ToggleSwitch
-                label="Join anonymous tap graph exhibit"
+                label="Join anonymous global tap graph"
                 checked={!!user?.tapGraphEnabled}
                 onChange={() => {
                   toggleGraph();
                 }}
               />
-            </div> */}
+            </div>
             <div className="">
               <AddNotificationButton buttonText="Add notifications" />
             </div>
