@@ -25,6 +25,7 @@ export const generateSerializedEdgeMessage = async ({ edgeId, senderUsername }: 
   // Return message timestamp to synchronize sent and received timestamps
   const messageTimestamp = new Date();
 
+  // TODO: If a setting is offered to de-anonymize edges, this is where the connectionNodeId could be shared
   return {
     serializedMessage: JSON.stringify(
       EdgeMessageSchema.parse({

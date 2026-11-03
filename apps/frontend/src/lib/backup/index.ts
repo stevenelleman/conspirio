@@ -163,17 +163,6 @@ export const processUserBackup = ({
         if (!user) {
           throw new Error("TOGGLE_SOCIAL_GRAPH backup entry found before INITIAL");
         }
-        if (user.userData.settings && user.userData.settings.tapGraphEnabled === undefined) {
-          user.userData.settings.tapGraphEnabled = true;
-        } else if (!user.userData.settings) {
-          // TODO: fix this case, settings should exist by now
-          user.userData.settings = {
-            tapGraphEnabled: true,
-            automaticPSIEnabled: true,
-          }
-        } else {
-          user.userData.settings.tapGraphEnabled = !user.userData.settings.tapGraphEnabled;
-        }
 
         // When toggled on, we backfill edges. When toggled off, we keep the edges as they are but don't include new
         // ones. In theory we could add edge revocation when toggling off, in practice we have too many other things
@@ -188,6 +177,7 @@ export const processUserBackup = ({
             JSON.parse(decryptedData)
           );
 
+          // Irrespective of the toggled feature, the edges are always populated on the user
           user = updateBackfilledEdgesOnUser(user, updatedEdges);
 
         } catch (error) {
@@ -213,6 +203,8 @@ export const processUserBackup = ({
         if (!user) {
           throw new Error("EDGE backup entry found before INITIAL");
         }
+
+        // TODO: should this be in userData? exactly what should go in UserData?
         user.edgesBackfilledForUsersWithEnabledFeature = true;
 
         try {

@@ -79,6 +79,9 @@ export const UserDataSchema = z.object({
   dislikesPublicDefender: nullToUndefined(DislikesSchema),
   dislikesPetPeeves: nullToUndefined(DislikesSchema),
   dislikesLoveToHate: nullToUndefined(DislikesSchema),
+
+  // Graph node ID
+  graphNodeId: nullToUndefined(z.string()),
 });
 
 export type UserData = z.infer<typeof UserDataSchema>;

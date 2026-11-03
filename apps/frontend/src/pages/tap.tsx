@@ -131,16 +131,25 @@ const TapPage: React.FC = () => {
 
             const sentHash: boolean = user?.userData?.settings?.tapGraphEnabled === true;
             if (sentHash && user) {
+
+              // TODO: make helper method for userNodeId
               // Double hash the signature private key, use as identifier, use single hash version as revocation code
               tapSenderId = sha256(
-                sha256(user.signaturePrivateKey).concat(DEVCON)
+                // sha256(user.signaturePrivateKey).concat(DEVCON)
+                sha256(user.signaturePrivateKey)
               );
             }
 
             // Upsert row, returns edge ID
             try {
               // Unregistered users cannot consent to private tap graph so don't keep track of them
+              //  in theory unregistered hash value wouldn't change after registration
               if (user && session) {
+                // TODO: given the number of edges in the DB, I wonder if the upsert DB method isn't working
+
+                // TODO: considering making a helper method that bundles upserting with messaging sending
+
+                // Q: If the value already exists locally, is it necessary to upsert the edge value?
                 const resp: UpsertSocialGraphEdgeResponse =
                   await upsertSocialGraphEdge(
                     session.authTokenValue,
