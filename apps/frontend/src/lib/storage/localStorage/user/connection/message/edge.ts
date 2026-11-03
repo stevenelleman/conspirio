@@ -18,6 +18,7 @@ export const createEdgeMessageAndHandleBackup = async (
     throw new Error(`Connection not found for username: ${connectionUsername}`);
   }
 
+  // Always generate and send message -- message is lightweight and allows connection to use how they wish
   const { serializedMessage, messageTimestamp } =
     await generateSerializedEdgeMessage({
       // Send both edgeId and sender username to recipient
@@ -42,24 +43,39 @@ export const createEdgeMessageAndHandleBackup = async (
     connection: updatedConnection,
   });
 
-  // Backup for local copy of edge
-  const edgeBackup = createEdgeBackup({
-    email: user.email,
-    password: session.backupMasterPassword,
+  // Check if local edge already exists, if so, skip
+  // NOTE: if / when user
+  let edgeAlreadyExists = false;
+  if (user.edges) {
+    for (const edge of user.edges) {
+      if (edge && edge.edgeId === edgeId) {
+        edgeAlreadyExists = true;
+        break;
+      }
+    }
+  }
 
-    // Backup arguments
-    edgeId,
-    sentHash,
-    connectionUsername,
-    isTapSender: true,
-    timestamp: new Date(),
-  })
+  if (!edgeAlreadyExists) {
+    // Backup for local copy of edge, only if it doesn't exist already locally
+    const edgeBackup = createEdgeBackup({
+      email: user.email,
+      password: session.backupMasterPassword,
 
-  await saveBackupAndUpdateStorage({
-    user,
-    session,
-    newBackupData: [connectionBackup, edgeBackup],
-  });
+      // Backup arguments
+      edgeId,
+      sentHash,
+      connectionUsername,
+      isTapSender: true,
+      timestamp: new Date(),
+    })
+
+    await saveBackupAndUpdateStorage({
+      user,
+      session,
+      newBackupData: [connectionBackup, edgeBackup],
+    });
+
+  }
 
   return createEncryptedMessage({
     receiverSignaturePublicKey: connection.user.signaturePublicKey,

@@ -107,16 +107,18 @@ function handleConnectionTapBacks(session: Session, user: User, lastMessageTimes
 
 async function handleEdges(session: Session, user: User, messages: EdgeMessage[]): Promise<CreateBackupData[]> {
   let tapReceiverId: string | null = null;
-  if (user && user.tapGraphEnabled) {
+  if (user && user.userData?.settings?.tapGraphEnabled) {
+    // TODO: make helper method for userNodeId
     // Double hash the signature private key, use as identifier, use single hash version as revocation code
-    tapReceiverId = sha256(sha256(user.signaturePrivateKey).concat(DEVCON));
+    // tapReceiverId = sha256(sha256(user.signaturePrivateKey).concat(DEVCON)); -- for per-community node
+    tapReceiverId = sha256(sha256(user.signaturePrivateKey));
   }
 
   const newBackupEntries: CreateBackupData[] = [];
 
   for (const message of messages) {
 
-    const sendHash: boolean = user.tapGraphEnabled === true;
+    const sendHash: boolean = user.userData?.settings?.tapGraphEnabled === true;
 
     // Make backup, add edge to user object
     const backup: CreateBackupData = createEdgeBackup({

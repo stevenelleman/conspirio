@@ -55,7 +55,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     const backfillEdgesOnceForEnabledUser = async () => {
       const user = getUser();
       const session = getSession();
-      if (user && session && user.tapGraphEnabled && !user.edgesBackfilledForUsersWithEnabledFeature) {
+      if (user && session && user.userData?.settings?.tapGraphEnabled && !user.edgesBackfilledForUsersWithEnabledFeature) {
         await backfillEdgesForUserWithFeatureAlreadyEnabled(user, session);
       }
     }

@@ -9,5 +9,6 @@ CREATE TABLE "TapGraphEdge" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
+    -- TODO: Add json blob, starting with PSISize, for extent of connection.
     CONSTRAINT "TapGraphEdge_pkey" PRIMARY KEY ("id")
 );

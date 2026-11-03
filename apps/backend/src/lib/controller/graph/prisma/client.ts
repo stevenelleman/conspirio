@@ -16,6 +16,10 @@ export class PrismaGraphClient implements iGraphClient {
     this.prismaClient = new PrismaClient();
   };
 
+  // Q1: In case where user turns off graph setting, upsert should remove their value from all edges. Does this
+  // currently happen?
+  // Q2: In case where user node id changes, how would upsert handle? user would likely need to delete all
+  // existing edges using old node id
   async UpsertGraphEdge(id: string | null, tapSenderId: string | null, tapReceiverId: string | null): Promise<string | ErrorResponse> {
 
     // Only upsert available values, unfortunately there are four combinations
