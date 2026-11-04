@@ -20,6 +20,9 @@ export enum BackupEntryType {
   TOGGLE_SOCIAL_GRAPH = "TOGGLE_SOCIAL_GRAPH",
   EDGE = "EDGE",
   EDGE_BACKFILL_FOR_ENABLED_USERS = "EDGE_BACKFILL_FOR_ENABLED_USERS",
+
+  // Migrations
+  MIGRATION_MOVE_PSISIZE_TO_CONNECTION = "MIGRATION_MOVE_PSISIZE_TO_CONNECTION"
 }
 
 export const BackupEntryTypeSchema = z.nativeEnum(BackupEntryType);

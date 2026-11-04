@@ -20,6 +20,8 @@ import { storage } from "@/lib/storage";
 import { sendMessages } from "@/lib/message";
 import { Socket } from "socket.io-client";
 import { updateUserData } from "@/lib/storage/localStorage/user/userData";
+import { upsertConnectionBackup } from "@/lib/backup";
+import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
 
 export type Intersection = {
   tensions: string[];
@@ -351,15 +353,32 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
   // set the size of intersection here
   const intersectionSize: number = JSON.stringify(newVerifiedIntersection).length;
 
-  const newUserData: UserData = user.userData;
-  if (!newUserData.connectionPSISize) {
-    newUserData.connectionPSISize = {};
-  }
-
-  newUserData.connectionPSISize[connection.user.username] = intersectionSize;
-
   // Update the size on the user object
   if (user && session) {
-    await updateUserData(newUserData);
+    // WIP: Migration in progress, once backfilled and connection.PSIsize is in use, remove second option
+    const updatedConnection: Connection = connection;
+    if (user.migrations && user.migrations.migrationMovePSISizeToConnections) {
+      updatedConnection.PSISize = intersectionSize;
+
+      const connectionBackup = upsertConnectionBackup({
+        email: user.email,
+        password: session.backupMasterPassword,
+        connection: updatedConnection,
+      });
+
+      await saveBackupAndUpdateStorage({
+        user,
+        session,
+        newBackupData: [connectionBackup],
+      });
+    } else {
+      const newUserData: UserData = user.userData;
+      if (!newUserData.connectionPSISize) {
+        newUserData.connectionPSISize = {};
+      }
+
+      newUserData.connectionPSISize[connection.user.username] = intersectionSize;
+      await updateUserData(newUserData);
+    }
   }
 }

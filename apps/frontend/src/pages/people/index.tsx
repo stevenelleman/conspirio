@@ -105,6 +105,7 @@ const PeoplePage: React.FC = () => {
         return;
       }
 
+      // WIP: Migration in progress, once backfilled, this can be removed
       if (user?.userData?.connectionPSISize) {
         setPSISize(user?.userData?.connectionPSISize);
       }
@@ -145,7 +146,10 @@ const PeoplePage: React.FC = () => {
       <ul className="py-3 grid grid-cols-2 gap-[1px]">
         {Object.values(connections).map((connection) => {
           let flowerStage = "sprout";
-          if (psiSize && psiSize[connection.user.username]) {
+          // WIP: swap to using connection.PSIsize directly
+          if (connection.PSISize) {
+            flowerStage = flowerSize(connection.PSISize);
+          } else if (psiSize && psiSize[connection.user.username]) {
             flowerStage = flowerSize(psiSize[connection.user.username]);
           }
 

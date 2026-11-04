@@ -219,6 +219,36 @@ export const processUserBackup = ({
           console.error(`Error updating backfilled edges on user: ${errorToString(error)}`)
         }
         break;
+      case BackupEntryType.MIGRATION_MOVE_PSISIZE_TO_CONNECTION:
+        if (!user) {
+          throw new Error("MIGRATION_MOVE_PSISIZE_TO_CONNECTION backup entry found before INITIAL");
+        }
+
+        // 1. move user.UserData.ConnectionPSISize over to user.connections.PSISize
+        // 2. set migration to true
+        //
+        // Asides:
+        // - In data migration where the data is already available in the user object, no need for encrypted backup.
+        // - From a backup standpoint, should there be a complete swap between values? ie after this backup, don't
+        // set / get the UserData value? That feels pretty safe in this case.
+
+        if (user.userData?.connectionPSISize) {
+          for (const [key, value] of Object.entries(user.userData.connectionPSISize)) {
+            if (user.connections && user.connections[key]) {
+              user.connections[key].PSISize = value
+            }
+          }
+
+          // Once copied, wipe values
+          user.userData.connectionPSISize = undefined;
+
+          // Given this is the first migration, default to setting the migrations object
+          user.migrations = {
+            migrationMovePSISizeToConnections: true,
+          }
+        }
+
+        break;
       default:
         throw new Error(`Invalid backup entry type: ${data.backupEntryType}`);
     }
@@ -628,6 +658,32 @@ export const createEdgeBackfillForEnabledUserBackup = ({
     iv,
     encryptedData,
     backupEntryType: BackupEntryType.EDGE_BACKFILL_FOR_ENABLED_USERS,
+    clientCreatedAt: new Date(),
+  };
+};
+
+// Migration user backups
+
+export interface CreateMigrationBackfillForConnectionPSISizeUserBackupArgs {
+  email: string;
+  password: string;
+}
+
+export const createMigrationBackfillForConnectionPSISizeUserBackup = ({
+  email,
+  password,
+}: CreateMigrationBackfillForConnectionPSISizeUserBackupArgs): CreateBackupData => {
+  const { authenticationTag, iv, encryptedData } = encryptBackupString({
+    backup: "",
+    email,
+    password,
+  });
+
+  return {
+    authenticationTag,
+    iv,
+    encryptedData,
+    backupEntryType: BackupEntryType.MIGRATION_MOVE_PSISIZE_TO_CONNECTION,
     clientCreatedAt: new Date(),
   };
 };

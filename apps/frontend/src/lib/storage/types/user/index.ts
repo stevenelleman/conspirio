@@ -11,6 +11,12 @@ import {
 import { LocationTapsSchema } from "./location";
 import { EdgeBackupSchema } from "./edge";
 
+export const UserDataMigrationsSchema = z.object({
+  migrationMovePSISizeToConnections: nullToUndefined(z.boolean().nullable()),
+})
+
+export type UserDataMigrations = z.infer<typeof UserDataMigrationsSchema>;
+
 export const UserSchema = z.object({
   email: z.string(), // Email here is actually used as a backup salt for backwards compatibility reasons.
   signaturePrivateKey: z.string(),
@@ -26,8 +32,13 @@ export const UserSchema = z.object({
 
   // Tap graph attributes -- NOTE: tapGraphEnabled should be moved to UserSettings at some point
   tapGraphEnabled: nullToUndefined(z.boolean().nullable()),
+
+  // NOTE: Would love to clean this up -- put into a "features" object?
   edgesBackfilledForUsersWithEnabledFeature: nullToUndefined(z.boolean().nullable()),
   edges: nullToUndefined(z.array(EdgeBackupSchema)),
+
+  // Migrations
+  migrations: nullToUndefined(UserDataMigrationsSchema),
 });
 
 export type User = z.infer<typeof UserSchema>;

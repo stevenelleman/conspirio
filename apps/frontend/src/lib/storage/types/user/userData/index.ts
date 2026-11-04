@@ -43,13 +43,18 @@ export const UserSettingsSchema = z.object({
 
 export type UserSettings = z.infer<typeof UserSettingsSchema>;
 
+// TODO: Consider using zod getter / setter pattern for migrations, and z.output instead of z.infer
 export const UserDataSchema = z.object({
+  // Bio
   username: z.string(),
   displayName: z.string(),
   bio: z.string(),
   signaturePublicKey: z.string(),
   encryptionPublicKey: z.string(),
   psiPublicKeyLink: nullToUndefined(z.string()),
+  pronouns: nullToUndefined(z.string()),
+
+  // Socials
   twitter: nullToUndefined(TwitterDataSchema),
   telegram: nullToUndefined(TelegramDataSchema),
   signal: nullToUndefined(SignalDataSchema),
@@ -58,27 +63,38 @@ export const UserDataSchema = z.object({
   whatsapp: nullToUndefined(WhatsappDataSchema),
   sms: nullToUndefined(SMSDataSchema),
   email: nullToUndefined(EmailDataSchema),
+
+  // Portfolio
   substack: nullToUndefined(SubstackDataSchema),
   personalWebsites: nullToUndefined(PersonalWebsitesSchema),
-  pronouns: nullToUndefined(z.string()),
-  lanna: nullToUndefined(LannaDataSchema),
-  tensionsRating: nullToUndefined(TensionsRatingSchema),
-  hotTakesRating: nullToUndefined(HotTakesRatingSchema),
+
+  // Integrations
   strava: nullToUndefined(StravaDataSchema),
   github: nullToUndefined(GithubDataSchema),
-  lannaHalloween: nullToUndefined(LannaHalloweenDataSchema),
-  devcon: nullToUndefined(DevconSchema),
-  connectionPSISize: nullToUndefined(ConnectionPSISizeSchema),
-  settings: nullToUndefined(UserSettingsSchema),
 
-  // Vanilla & Spicy
+  // Templates
+  tensionsRating: nullToUndefined(TensionsRatingSchema),
+  hotTakesRating: nullToUndefined(HotTakesRatingSchema),
+
+  // -- Vanilla & Spicy
   publicInterests: nullToUndefined(InterestsSchema),
   privateInterests: nullToUndefined(InterestsSchema),
 
-  // Lets Shit Talk
+  // -- Lets Shit Talk
   dislikesPublicDefender: nullToUndefined(DislikesSchema),
   dislikesPetPeeves: nullToUndefined(DislikesSchema),
   dislikesLoveToHate: nullToUndefined(DislikesSchema),
+
+  // Settings
+  settings: nullToUndefined(UserSettingsSchema),
+
+  // WIP: Migration in progress to ConnectionSchema
+  connectionPSISize: nullToUndefined(ConnectionPSISizeSchema),
+
+  // Deprecated
+  lanna: nullToUndefined(LannaDataSchema),
+  lannaHalloween: nullToUndefined(LannaHalloweenDataSchema),
+  devcon: nullToUndefined(DevconSchema),
 });
 
 export type UserData = z.infer<typeof UserDataSchema>;
