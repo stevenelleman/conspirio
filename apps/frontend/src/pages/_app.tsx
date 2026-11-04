@@ -24,7 +24,6 @@ import { backfillEdgesForUserWithFeatureAlreadyEnabled } from "@/lib/storage/loc
 import { logClientEvent } from "@/lib/frontend/metrics";
 import Link from "next/link";
 import { FRONTEND_URL } from "@/config";
-import { createMigrationBackfillForConnectionPSISizeUserBackup } from "@/lib/backup";
 import { migratePSISizeFromUserToConnection } from "@/lib/storage/localStorage/migrations";
 
 const dmSans = DM_Sans({
