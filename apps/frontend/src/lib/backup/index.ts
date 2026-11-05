@@ -84,6 +84,7 @@ export const processUserBackup = ({
           throw new Error("INITIAL backup entry found for existing user");
         }
         user = UserSchema.parse(JSON.parse(decryptedData));
+        user.createdAt = data.clientCreatedAt;
         break;
       case BackupEntryType.USER_DATA:
         if (!user) {

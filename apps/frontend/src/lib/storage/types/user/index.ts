@@ -23,6 +23,10 @@ export const UserSchema = z.object({
   encryptionPrivateKey: z.string(),
   serializedPsiPrivateKey: nullToUndefined(z.string()),
   lastMessageFetchedAt: z.coerce.date(),
+
+  // what does coerce do?
+  createdAt: nullToUndefined(z.date()),
+
   userData: UserDataSchema,
   chips: z.array(ChipSchema),
   connections: z.record(z.string(), ConnectionSchema),

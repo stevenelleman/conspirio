@@ -61,6 +61,7 @@ export const BackupDataSchema = z.object({
     }
     throw new Error("Invalid backup entry type");
   }),
+  // NOTE: the "createdAt" time using the client's clock
   clientCreatedAt: z.coerce.date(),
   submittedAt: z.coerce.date(),
 });
