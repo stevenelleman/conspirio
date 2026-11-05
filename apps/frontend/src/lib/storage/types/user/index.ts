@@ -23,9 +23,7 @@ export const UserSchema = z.object({
   encryptionPrivateKey: z.string(),
   serializedPsiPrivateKey: nullToUndefined(z.string()),
   lastMessageFetchedAt: z.coerce.date(),
-
-  // what does coerce do?
-  createdAt: nullToUndefined(z.date()),
+  createdAt: nullToUndefined(z.coerce.date()),
 
   userData: UserDataSchema,
   chips: z.array(ChipSchema),
@@ -43,7 +41,13 @@ export const UserSchema = z.object({
 
   // Migrations
   migrations: nullToUndefined(UserDataMigrationsSchema),
-});
+}).transform((obj) => ({
+  ...obj,
+  // Inline Getter
+  get migratedPSISize() {
+    return (obj.createdAt && obj.createdAt > new Date("2026-11-05")) || (obj.migrations && obj.migrations.migrationMovePSISizeToConnections)
+  }
+}));;
 
 export type User = z.infer<typeof UserSchema>;
 

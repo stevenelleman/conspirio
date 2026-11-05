@@ -357,7 +357,7 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
   if (user && session) {
     // WIP: Migration in progress, once backfilled and connection.PSIsize is in use, remove second option
     const updatedConnection: Connection = connection;
-    if (user.migrations && user.migrations.migrationMovePSISizeToConnections) {
+    if (user.migratedPSISize) {
       updatedConnection.PSISize = intersectionSize;
 
       const connectionBackup = upsertConnectionBackup({

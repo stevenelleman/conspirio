@@ -6,7 +6,7 @@ import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
 
 
 export const migratePSISizeFromUserToConnection = async (user: User, session: Session): Promise<void> => {
-  if (!user.migrations?.migrationMovePSISizeToConnections) {
+  if (!user.migratedPSISize) {
     const backup = createMigrationBackfillForConnectionPSISizeUserBackup({
       email: user.email,
       password: session.backupMasterPassword,

@@ -130,8 +130,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       if (user && session && session.authTokenExpiresAt > new Date()) {
         // Run migrations -- run *only once* to prevent duplicate backups
         // In practice the migrations should be idempotent by construction, so it should still be safe if they are
-        // run multiple times
-        if (!user.migrations?.migrationMovePSISizeToConnections) {
+        // run multiple times. Also only apply to users created *before* migration merged.
+
+        // Using object getter method is best of both worlds, allows user.createdAt to be taken into account such
+        // that there's no need to update the user object.
+        if (!user.migratedPSISize) {
           migratePSISizeFromUserToConnection(user, session);
         }
       }

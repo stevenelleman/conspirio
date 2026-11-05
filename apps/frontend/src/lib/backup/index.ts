@@ -229,6 +229,7 @@ export const processUserBackup = ({
         // 2. set migration to true
         //
         // Asides:
+        // - Migrations should be idempotent
         // - In data migration where the data is already available in the user object, no need for encrypted backup.
         // - From a backup standpoint, should there be a complete swap between values? ie after this backup, don't
         // set / get the UserData value? That feels pretty safe in this case.
@@ -236,17 +237,20 @@ export const processUserBackup = ({
         if (user.userData?.connectionPSISize) {
           for (const [key, value] of Object.entries(user.userData.connectionPSISize)) {
             if (user.connections && user.connections[key]) {
+              console.log("PSISize", key, value)
               user.connections[key].PSISize = value
             }
           }
 
           // Once copied, wipe values
           user.userData.connectionPSISize = undefined;
+        }
 
-          // Given this is the first migration, default to setting the migrations object
-          user.migrations = {
-            migrationMovePSISizeToConnections: true,
-          }
+        // Given this is the first migration, default to setting the migrations object
+        // Run even if connectionPSISize does not exist. This case shouldn't happen, bc users created after
+        // migration should not have the property or apply this backup. But better safe than sorry.
+        user.migrations = {
+          migrationMovePSISizeToConnections: true,
         }
 
         break;
