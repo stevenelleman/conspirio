@@ -24,7 +24,7 @@ import { backfillEdgesForUserWithFeatureAlreadyEnabled } from "@/lib/storage/loc
 import { logClientEvent } from "@/lib/frontend/metrics";
 import Link from "next/link";
 import { FRONTEND_URL } from "@/config";
-import { migratePSISizeFromUserToConnection } from "@/lib/storage/localStorage/migrations";
+import { migratedPSISize, migratePSISizeFromUserToConnection } from "@/lib/storage/localStorage/migrations";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -134,7 +134,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
         // Using object getter method is best of both worlds, allows user.createdAt to be taken into account such
         // that there's no need to update the user object.
-        if (!user.migratedPSISize) {
+        if (!migratedPSISize(user)) {
           migratePSISizeFromUserToConnection(user, session);
         }
       }

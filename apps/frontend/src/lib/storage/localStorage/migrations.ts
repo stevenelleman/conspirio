@@ -4,9 +4,12 @@ import {
 } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
 
+export function migratedPSISize(user: User): boolean {
+  return !!((user.createdAt && user.createdAt > new Date("2026-11-05")) || (user.migrations && user.migrations.migrationMovePSISizeToConnections));
+}
 
 export const migratePSISizeFromUserToConnection = async (user: User, session: Session): Promise<void> => {
-  if (!user.migratedPSISize) {
+  if (!migratedPSISize(user)) {
     const backup = createMigrationBackfillForConnectionPSISizeUserBackup({
       email: user.email,
       password: session.backupMasterPassword,

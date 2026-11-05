@@ -22,6 +22,7 @@ import { Socket } from "socket.io-client";
 import { updateUserData } from "@/lib/storage/localStorage/user/userData";
 import { upsertConnectionBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
+import { migratedPSISize } from "@/lib/storage/localStorage/migrations";
 
 export type Intersection = {
   tensions: string[];
@@ -357,7 +358,7 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
   if (user && session) {
     // WIP: Migration in progress, once backfilled and connection.PSIsize is in use, remove second option
     const updatedConnection: Connection = connection;
-    if (user.migratedPSISize) {
+    if (migratedPSISize(user)) {
       updatedConnection.PSISize = intersectionSize;
 
       const connectionBackup = upsertConnectionBackup({

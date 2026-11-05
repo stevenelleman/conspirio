@@ -41,13 +41,7 @@ export const UserSchema = z.object({
 
   // Migrations
   migrations: nullToUndefined(UserDataMigrationsSchema),
-}).transform((obj) => ({
-  ...obj,
-  // Inline Getter
-  get migratedPSISize() {
-    return (obj.createdAt && obj.createdAt > new Date("2026-11-05")) || (obj.migrations && obj.migrations.migrationMovePSISizeToConnections)
-  }
-}));;
+});
 
 export type User = z.infer<typeof UserSchema>;
 
