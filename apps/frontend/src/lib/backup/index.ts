@@ -84,6 +84,8 @@ export const processUserBackup = ({
           throw new Error("INITIAL backup entry found for existing user");
         }
         user = UserSchema.parse(JSON.parse(decryptedData));
+
+        // Using createdAt from client clock -- wish I could use db clock, but it doesn't appear to be exposed
         user.createdAt = data.clientCreatedAt;
         break;
       case BackupEntryType.USER_DATA:
