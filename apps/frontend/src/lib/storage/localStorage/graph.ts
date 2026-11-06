@@ -5,9 +5,9 @@ import { upsertSocialGraphEdge } from "@/lib/graph";
 import { sha256 } from "js-sha256";
 import { DEVCON } from "@/lib/storage/types";
 import { errorToString } from "@types";
-import { UserType, Session } from "@/lib/storage/types";
+import { User, Session } from "@/lib/storage/types";
 
-export const updateBackfilledEdgesOnUser = (user: UserType, updatedEdgeIds: string[]): UserType => {
+export const updateBackfilledEdgesOnUser = (user: User, updatedEdgeIds: string[]): User => {
   // Update local edges
   if (updatedEdgeIds && updatedEdgeIds.length > 0 && user.edges) {
     // This hurts my soul
@@ -24,7 +24,7 @@ export const updateBackfilledEdgesOnUser = (user: UserType, updatedEdgeIds: stri
 
 // This backfills without consideration of feature enablement. That consideration is within the context of the call
 // site.
-const backfillEdges = async (user: UserType, session: Session): Promise<string[]> => {
+const backfillEdges = async (user: User, session: Session): Promise<string[]> => {
   const sentEdges: string[] = [];
 
   // The value is updated in the backup method, so it should be currently false and will soon be flipped to true
@@ -58,7 +58,7 @@ const backfillEdges = async (user: UserType, session: Session): Promise<string[]
 
 // For users that enabled the graph feature *before* the backfill there will be nothing that triggers a backfill. In
 // this case we run *1 backfill* automatically
-export const backfillEdgesForUserWithFeatureAlreadyEnabled = async (user: UserType, session: Session): Promise<void> => {
+export const backfillEdgesForUserWithFeatureAlreadyEnabled = async (user: User, session: Session): Promise<void> => {
   if (user && user.tapGraphEnabled && !user.edgesBackfilledForUsersWithEnabledFeature) {
     const sentEdges = await backfillEdges(user, session);
 
@@ -78,7 +78,7 @@ export const backfillEdgesForUserWithFeatureAlreadyEnabled = async (user: UserTy
   return;
 }
 
-const backfillEdgesForTogglingGraphFeature = async (user: UserType, session: Session): Promise<void> => {
+const backfillEdgesForTogglingGraphFeature = async (user: User, session: Session): Promise<void> => {
   let sentEdges: string[] = [];
 
   // Only backfill if feature is flipped from "false" -> "true"

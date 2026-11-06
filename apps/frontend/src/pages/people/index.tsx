@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { storage } from "@/lib/storage";
-import { Connection, UserType } from "@/lib/storage/types";
+import { Connection, User } from "@/lib/storage/types";
 import AppLayout from "@/layouts/AppLayout";
 import { MdKeyboardArrowRight as ArrowRight } from "react-icons/md";
 import { ProfileImage } from "@/components/ui/ProfileImage";
@@ -89,7 +89,7 @@ const PeoplePage: React.FC = () => {
     {}
   );
   const [psiSize, setPSISize] = useState<Record<string, number>>({});
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResults | null>(

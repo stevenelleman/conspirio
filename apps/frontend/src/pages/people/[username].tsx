@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
-import { Connection, Session, UserType } from "@/lib/storage/types";
+import { Connection, Session, User } from "@/lib/storage/types";
 import { toast } from "sonner";
 import { ChipIssuer, ChipTapResponse, errorToString, GetChipIdResponse, SocketRequestType, TapParams, } from "@types";
 import { AppButton } from "@/components/ui/Button";
@@ -191,7 +191,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
 const UserProfilePage: React.FC = () => {
   const router = useRouter();
   const { username } = router.query;
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [connection, setConnection] = useState<Connection | null>(null);
   const [tapInfo, setTapInfo] = useState<{

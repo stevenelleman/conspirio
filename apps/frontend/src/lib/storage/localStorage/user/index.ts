@@ -2,17 +2,17 @@ import {
   saveToLocalStorage,
   getFromLocalStorage,
 } from "@/lib/storage/localStorage/utils";
-import { Session, UnregisteredUser, UserType, UnregisteredUserSchema, User } from "@/lib/storage/types";
+import { Session, UnregisteredUser, UnregisteredUserSchema, User } from "@/lib/storage/types";
 import { getSession } from "../session";
 
 const USER_STORAGE_KEY = "user";
 const UNREGISTERED_STORAGE_KEY = "unregistered";
 
-export const saveUser = (user: UserType): void => {
+export const saveUser = (user: User): void => {
   saveToLocalStorage(USER_STORAGE_KEY, JSON.stringify(user));
 };
 
-export const getUser = (): UserType | undefined => {
+export const getUser = (): User | undefined => {
   const userString = getFromLocalStorage(USER_STORAGE_KEY);
   if (!userString) return undefined;
 
@@ -43,7 +43,7 @@ export const deleteUser = (): void => {
 };
 
 export const getUserAndSession = async (): Promise<{
-  user: UserType;
+  user: User;
   session: Session;
 }> => {
   const user = getUser();

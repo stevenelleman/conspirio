@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
-import { UserType, UserData } from "@/lib/storage/types";
+import { User, UserData } from "@/lib/storage/types";
 import { toast } from "sonner";
 import AppLayout from "@/layouts/AppLayout";
 import { AppButton } from "@/components/ui/Button";
@@ -31,7 +31,7 @@ import { toggleAutomaticPSISetting } from "@/lib/storage/localStorage/settings";
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const { toggleTheme, darkTheme } = useSettings();
 
   const handleLogout = async () => {

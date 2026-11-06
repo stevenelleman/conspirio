@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 import locationSuccess from "public/animations/location-success.json";
 import { storage } from "@/lib/storage";
 import { toast } from "sonner";
-import { LocationTaps, UserType } from "@/lib/storage/types";
+import { LocationTaps, User } from "@/lib/storage/types";
 import { TapParams, ChipTapResponse, ChipIssuer, CommunityLocation } from "@types";
 import { devconLocationMapping } from "@/constants";
 import { getCommunityLocation } from "@/lib/chip/location";
@@ -103,7 +103,7 @@ const LocationTapModal: React.FC<LocationTapModalProps> = ({
 export default function LocationPage() {
   const router = useRouter();
 
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [locationTaps, setLocationTaps] = useState<LocationTaps | null>(null);
   const [location, setLocation] = useState<CommunityLocation | null>(null);
   const [tapInfo, setTapInfo] = useState<{

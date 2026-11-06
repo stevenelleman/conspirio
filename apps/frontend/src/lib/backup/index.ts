@@ -15,12 +15,13 @@ import {
   ConnectionSchema,
   LocationTaps,
   LocationTapsSchema,
-  UserType,
   UserData,
   UserDataSchema,
   OAuthAppSchema,
   OAuthApp,
-  EdgeIdsSchema, User,
+  EdgeIdsSchema,
+  User,
+  UserType,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";
@@ -48,14 +49,14 @@ export const processUserBackup = ({
   email: string;
   password: string;
   backupData: BackupData[];
-  existingUser?: UserType;
+  existingUser?: User;
   previousSubmittedAt?: Date;
-}): { user: UserType; submittedAt: Date } => {
+}): { user: User; submittedAt: Date } => {
   if (backupData.length === 0) {
     throw new Error("No backup data found");
   }
 
-  let user: UserType | undefined = existingUser;
+  let user: User | undefined = existingUser;
   let submittedAt = previousSubmittedAt || backupData[0].submittedAt;
 
   if (!user && backupData[0].backupEntryType !== BackupEntryType.INITIAL) {
@@ -272,7 +273,7 @@ export interface AppendBackupDataArgs {
   password: string;
   authToken: string;
   newBackupData: CreateBackupData[];
-  existingUser: UserType;
+  existingUser: User;
   previousSubmittedAt: Date;
 }
 
@@ -284,7 +285,7 @@ export const appendBackupData = async ({
   existingUser,
   previousSubmittedAt,
 }: AppendBackupDataArgs): Promise<{
-  updatedUser: UserType;
+  updatedUser: User;
   updatedSubmittedAt: Date;
 }> => {
   // Append backup data to user

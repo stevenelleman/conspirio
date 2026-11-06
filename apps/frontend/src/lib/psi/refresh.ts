@@ -11,7 +11,7 @@ import {
   SocketRequestType
 } from "@types";
 import {
-  UserType,
+  User,
   Connection,
   UserData,
   Session
@@ -22,7 +22,6 @@ import { Socket } from "socket.io-client";
 import { updateUserData } from "@/lib/storage/localStorage/user/userData";
 import { upsertConnectionBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
-import { migratedPSISize } from "@/lib/storage/localStorage/migrations";
 
 export type Intersection = {
   tensions: string[];
@@ -37,7 +36,7 @@ export type Intersection = {
   dislikesLoveToHate: string[];
 }
 
-export const refreshPSI = async (user: UserType, connection: Connection): Promise<Intersection | null> => {
+export const refreshPSI = async (user: User, connection: Connection): Promise<Intersection | null> => {
   try {
     let tensions: string[] = [];
     if (user.userData.tensionsRating?.revealAnswers) {
@@ -314,7 +313,7 @@ export const refreshPSI = async (user: UserType, connection: Connection): Promis
   }
 }
 
-export const triggerConnectionRefreshPSI = async (socket: Socket, user: UserType, connection: Connection): Promise<void> => {
+export const triggerConnectionRefreshPSI = async (socket: Socket, user: User, connection: Connection): Promise<void> => {
   const session = await storage.getSession();
   if (session) {
     try {
@@ -350,7 +349,7 @@ export const triggerConnectionRefreshPSI = async (socket: Socket, user: UserType
   }
 }
 
-export const updateConnectionPSISize = async (newVerifiedIntersection: Intersection, user: UserType, session: Session, connection: Connection): Promise<void> => {
+export const updateConnectionPSISize = async (newVerifiedIntersection: Intersection, user: User, session: Session, connection: Connection): Promise<void> => {
   // set the size of intersection here
   const intersectionSize: number = JSON.stringify(newVerifiedIntersection).length;
 
@@ -358,7 +357,7 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
   if (user && session) {
     // WIP: Migration in progress, once backfilled and connection.PSIsize is in use, remove second option
     const updatedConnection: Connection = connection;
-    if (migratedPSISize(user)) {
+    if (user.migratedPSISize) {
       updatedConnection.PSISize = intersectionSize;
 
       const connectionBackup = upsertConnectionBackup({

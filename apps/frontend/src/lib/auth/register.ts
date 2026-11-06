@@ -92,6 +92,8 @@ export async function registerUser({
 
   // Add activity for registering
   const registerActivity = createRegisterActivity();
+
+  // NOTE: One of the few cases of UserType bc the User is being set up
   const user: UserType = {
     email,
     signaturePrivateKey,

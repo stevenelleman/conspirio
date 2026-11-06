@@ -5,8 +5,8 @@ import {
   PSIData,
   Session,
   TapInfo,
-  UserType,
   UserData,
+  User,
 } from "./types";
 import { LocalStorage } from "./localStorage/client";
 import {
@@ -19,7 +19,7 @@ import {
 } from "@types";
 
 export interface InitialStorageData {
-  user: UserType;
+  user: User;
   authTokenValue: string;
   authTokenExpiresAt: Date;
   backupMasterPassword: string;
@@ -29,8 +29,8 @@ export interface InitialStorageData {
 export interface ClientStorage {
   loadInitialStorageData(initialStorageData: InitialStorageData): Promise<void>;
   deleteStorageData(): Promise<void>;
-  getUserAndSession(): Promise<{ user: UserType; session: Session }>;
-  getUser(): Promise<UserType | undefined>;
+  getUserAndSession(): Promise<{ user: User; session: Session }>;
+  getUser(): Promise<User | undefined>;
   getSession(): Promise<Session | undefined>;
   deleteSession(): Promise<void>;
   saveOAuthAccessToken(app: DataImportSource, token: AccessToken): Promise<void>;

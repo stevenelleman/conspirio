@@ -21,7 +21,7 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { UserType } from "@/lib/storage/types";
+import { User } from "@/lib/storage/types";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
 
 export default function DevconCommunityPage({
@@ -34,7 +34,7 @@ export default function DevconCommunityPage({
   const router = useRouter();
 
   const [user, setUser] =
-    useState<UserType | undefined>(undefined);
+    useState<User | undefined>(undefined);
 
   const [leaderboardTapDetails, setLeaderboardTapDetails] =
     useState<LeaderboardDetails | null>(null);
@@ -64,7 +64,7 @@ export default function DevconCommunityPage({
 
       const communityIssuer: ChipIssuer = ChipIssuer.DEVCON_2024;
 
-      let fetchedUser: UserType | undefined = undefined;
+      let fetchedUser: User | undefined = undefined;
       let totalTapDetails: LeaderboardDetails | null = null;
       let totalTapEntries: LeaderboardEntries | null = null;
       let githubDetails: LeaderboardDetails | null = null;

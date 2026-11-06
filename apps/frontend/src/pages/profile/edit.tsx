@@ -2,7 +2,7 @@ import { AppInput } from "@/components/ui/AppInput";
 import AppLayout from "@/layouts/AppLayout";
 import { useForm } from "react-hook-form";
 import { storage } from "@/lib/storage";
-import { Session, UserType } from "@/lib/storage/types";
+import { Session, User } from "@/lib/storage/types";
 import { AppTextarea } from "@/components/ui/Textarea";
 import { AppButton } from "@/components/ui/Button";
 import { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ export type ChipEditFormData = {
 const ProfileEdit = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const { register, handleSubmit, reset } = useForm<ChipEditFormData>();
 
