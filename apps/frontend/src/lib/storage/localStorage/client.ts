@@ -21,8 +21,8 @@ import {
   Session,
   TapInfo,
   UnregisteredUser,
-  User,
   UserData,
+  User,
 } from "@/lib/storage/types";
 import { addChip, getChipIssuers } from "@/lib/storage/localStorage/user/chip";
 import { updateUserData } from "@/lib/storage/localStorage/user/userData";

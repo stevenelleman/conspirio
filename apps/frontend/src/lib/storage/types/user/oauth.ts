@@ -28,6 +28,7 @@ export const OAuthAppSchema = z.object({
       case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
         return DataImportSource.GITHUB
       default:
+        // If unlisted, skip
     }
     return DataImportSourceSchema.parse(val);
   })

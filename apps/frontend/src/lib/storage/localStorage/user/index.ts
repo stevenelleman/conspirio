@@ -2,7 +2,7 @@ import {
   saveToLocalStorage,
   getFromLocalStorage,
 } from "@/lib/storage/localStorage/utils";
-import { Session, UnregisteredUser, User, UserSchema, UnregisteredUserSchema } from "@/lib/storage/types";
+import { Session, UnregisteredUser, UnregisteredUserSchema, User } from "@/lib/storage/types";
 import { getSession } from "../session";
 
 const USER_STORAGE_KEY = "user";
@@ -18,7 +18,7 @@ export const getUser = (): User | undefined => {
 
   try {
     const parsedUser = JSON.parse(userString);
-    return UserSchema.parse(parsedUser);
+    return new User(parsedUser);
   } catch (error) {
     console.error("Error parsing user from localStorage:", error);
     return undefined;

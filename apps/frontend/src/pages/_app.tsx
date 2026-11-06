@@ -24,6 +24,7 @@ import { backfillEdgesForUserWithFeatureAlreadyEnabled } from "@/lib/storage/loc
 import { logClientEvent } from "@/lib/frontend/metrics";
 import Link from "next/link";
 import { FRONTEND_URL } from "@/config";
+import { migratePSISizeFromUserToConnection } from "@/lib/storage/localStorage/migrations";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -122,6 +123,28 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
 
   // Note: this is becoming the de facto client event loop
+  useEffect(() => {
+    const runMigrations = async () => {
+      const user = await storage.getUser();
+      const session = await storage.getSession();
+      if (user && session && session.authTokenExpiresAt > new Date()) {
+        // Run migrations -- run *only once* to prevent duplicate backups
+        // In practice the migrations should be idempotent by construction, so it should still be safe if they are
+        // run multiple times. Also only apply to users created *before* migration merged.
+
+        // Using object getter method is best of both worlds, allows user.createdAt to be taken into account such
+        // that there's no need to update the user object.
+        if (!user.migratedPSISize) {
+          migratePSISizeFromUserToConnection(user, session);
+        }
+      }
+    }
+    runMigrations();
+  }, []); // Run with empty array for migrations only to be *run once*, exclusively after the initial component mount
+  // In development Reach.Strict still runs useEffect twice whereas in prod it will only run once.
+  // This can be tested by setting reactStrictMode false in next.config.mjs
+
+
   // Refresh imports when the page is refreshed
   useEffect(() => {
     const refreshImports = async () => {
@@ -147,6 +170,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   // Check if the user is a pre-migration user and logout if so
   useEffect(() => {
     const checkSession = async () => {
+      // TODO: Remove this case
       const MIGRATION_CHECK_STORAGE_KEY = "preMigrationSessionChecked";
       // Check if we've already performed this check
       const hasAlreadyChecked = localStorage.getItem(

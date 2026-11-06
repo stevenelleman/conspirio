@@ -5,8 +5,8 @@ import {
   PSIData,
   Session,
   TapInfo,
-  User,
   UserData,
+  User,
 } from "./types";
 import { LocalStorage } from "./localStorage/client";
 import {

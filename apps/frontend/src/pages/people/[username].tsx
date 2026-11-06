@@ -487,11 +487,16 @@ const UserProfilePage: React.FC = () => {
   );
 
   let flowerStage = "sprout";
-  if (user?.userData?.connectionPSISize) {
-    const psiSize = user.userData.connectionPSISize;
-    const connectionUsername = connection.user.username;
-    if (psiSize[connectionUsername]) {
-      flowerStage = flowerSize(psiSize[connectionUsername]);
+  // WIP: Migration in progress, swap to connection.PSIsize
+  if (connection.PSISize) {
+    flowerStage = flowerSize(connection.PSISize);
+  } else {
+    if (user?.userData?.connectionPSISize) {
+      const psiSize = user.userData.connectionPSISize;
+      const connectionUsername = connection.user.username;
+      if (psiSize[connectionUsername]) {
+        flowerStage = flowerSize(psiSize[connectionUsername]);
+      }
     }
   }
   const flowerImage = `/flowers/flower-${flowerIndex}-${flowerStage}.svg`;

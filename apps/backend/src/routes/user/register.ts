@@ -55,6 +55,7 @@ router.post(
           .json({ error: "User with this username already exists" });
       }
 
+      // NOTE: this newUser has createdAt from db clock
       const newUser = await controller.CreateUser({
         username,
         email,

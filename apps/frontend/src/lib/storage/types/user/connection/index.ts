@@ -13,6 +13,9 @@ export const ConnectionSchema = z.object({
   psi: nullToUndefined(PSIDataSchema),
   sentMessages: nullToUndefined(z.array(SentMessageSchema)).default([]),
   refreshPSI: nullToUndefined(z.boolean()),
+
+  // WIP: Migration in progress from UserSchema here
+  PSISize: nullToUndefined(z.number()),
 });
 
 export type Connection = z.infer<typeof ConnectionSchema>;
