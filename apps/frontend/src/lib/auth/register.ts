@@ -16,7 +16,7 @@ import {
   createInitialBackup,
   processUserBackup
 } from "@/lib/backup";
-import { ActivitySchema, ConnectionSchema, UnregisteredUser, User } from "@/lib/storage/types";
+import { ActivitySchema, ConnectionSchema, UnregisteredUser, UserType } from "@/lib/storage/types";
 import { storage } from "@/lib/storage";
 import { createRegisterActivity } from "../activity";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
@@ -92,7 +92,7 @@ export async function registerUser({
 
   // Add activity for registering
   const registerActivity = createRegisterActivity();
-  const user: User = {
+  const user: UserType = {
     email,
     signaturePrivateKey,
     encryptionPrivateKey,

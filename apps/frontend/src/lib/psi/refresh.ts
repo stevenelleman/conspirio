@@ -11,7 +11,7 @@ import {
   SocketRequestType
 } from "@types";
 import {
-  User,
+  UserType,
   Connection,
   UserData,
   Session
@@ -37,7 +37,7 @@ export type Intersection = {
   dislikesLoveToHate: string[];
 }
 
-export const refreshPSI = async (user: User, connection: Connection): Promise<Intersection | null> => {
+export const refreshPSI = async (user: UserType, connection: Connection): Promise<Intersection | null> => {
   try {
     let tensions: string[] = [];
     if (user.userData.tensionsRating?.revealAnswers) {
@@ -314,7 +314,7 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
   }
 }
 
-export const triggerConnectionRefreshPSI = async (socket: Socket, user: User, connection: Connection): Promise<void> => {
+export const triggerConnectionRefreshPSI = async (socket: Socket, user: UserType, connection: Connection): Promise<void> => {
   const session = await storage.getSession();
   if (session) {
     try {
@@ -350,7 +350,7 @@ export const triggerConnectionRefreshPSI = async (socket: Socket, user: User, co
   }
 }
 
-export const updateConnectionPSISize = async (newVerifiedIntersection: Intersection, user: User, session: Session, connection: Connection): Promise<void> => {
+export const updateConnectionPSISize = async (newVerifiedIntersection: Intersection, user: UserType, session: Session, connection: Connection): Promise<void> => {
   // set the size of intersection here
   const intersectionSize: number = JSON.stringify(newVerifiedIntersection).length;
 

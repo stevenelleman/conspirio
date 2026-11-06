@@ -21,7 +21,7 @@ import {
   Session,
   TapInfo,
   UnregisteredUser,
-  User,
+  UserType,
   UserData,
 } from "@/lib/storage/types";
 import { addChip, getChipIssuers } from "@/lib/storage/localStorage/user/chip";
@@ -81,11 +81,11 @@ export class LocalStorage implements ClientStorage {
     deleteSession();
   }
 
-  async getUserAndSession(): Promise<{ user: User; session: Session }> {
+  async getUserAndSession(): Promise<{ user: UserType; session: Session }> {
     return getUserAndSession();
   }
 
-  async getUser(): Promise<User | undefined> {
+  async getUser(): Promise<UserType | undefined> {
     return getUser();
   }
 

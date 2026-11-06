@@ -16,7 +16,7 @@ import {
 } from "./integrations/github";
 import { updateUserDataFromImportData } from "@/lib/imports/update";
 import { storage } from "@/lib/storage";
-import { User, UserData } from "@/lib/storage/types";
+import { UserType, UserData } from "@/lib/storage/types";
 import { updateLeaderboardEntry } from "@/lib/chip";
 
 
@@ -68,7 +68,7 @@ async function updateUserData(userData: UserData, importType: ImportDataType, da
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function saveLeaderboardEntries(options: DataOption, authToken: string, user: User, chipIssuer: ChipIssuer, data: any): Promise<void> {
+async function saveLeaderboardEntries(options: DataOption, authToken: string, user: UserType, chipIssuer: ChipIssuer, data: any): Promise<void> {
   const leaderboardEntryRequest: UpdateLeaderboardEntryRequest | null = MapResponseToLeaderboardEntryRequest(
     authToken,
     options.type,
@@ -86,7 +86,7 @@ async function saveLeaderboardEntries(options: DataOption, authToken: string, us
   return;
 }
 
-export async function saveImportedData(authToken: string, user: User, option: DataOption, chipIssuers: ChipIssuer[], resp: Response): Promise<void> {
+export async function saveImportedData(authToken: string, user: UserType, option: DataOption, chipIssuers: ChipIssuer[], resp: Response): Promise<void> {
   try {
     const data = await resp.json();
     if (data && data.error) {

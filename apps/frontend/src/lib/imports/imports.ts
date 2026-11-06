@@ -9,7 +9,7 @@ import {
   OAuthAppDetails,
   RefreshRateType,
 } from "@types";
-import { User, UserData } from "@/lib/storage/types";
+import { UserType, UserData } from "@/lib/storage/types";
 import { fetchImportedData } from "./fetch";
 import { saveImportedData } from "./save";
 import { OAUTH_APP_DETAILS } from "@/config";
@@ -21,7 +21,7 @@ import { SUPPORT_CONTACT } from "@/constants";
 
 export async function fetchAndSaveImportedData(
   authToken: string,
-  user: User,
+  user: UserType,
   chipIssuers: ChipIssuer[],
   token: AccessToken | null,
   app: DataImportSource,
@@ -132,7 +132,7 @@ export function isOverdueToReimport(
 }
 
 export function shouldRefreshImport(
-  user: User,
+  user: UserType,
   dataType: ImportDataType,
   refreshRate: RefreshRateType
 ): boolean {

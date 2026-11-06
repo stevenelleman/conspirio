@@ -2,23 +2,23 @@ import {
   saveToLocalStorage,
   getFromLocalStorage,
 } from "@/lib/storage/localStorage/utils";
-import { Session, UnregisteredUser, User, UserSchema, UnregisteredUserSchema } from "@/lib/storage/types";
+import { Session, UnregisteredUser, UserType, UnregisteredUserSchema, User } from "@/lib/storage/types";
 import { getSession } from "../session";
 
 const USER_STORAGE_KEY = "user";
 const UNREGISTERED_STORAGE_KEY = "unregistered";
 
-export const saveUser = (user: User): void => {
+export const saveUser = (user: UserType): void => {
   saveToLocalStorage(USER_STORAGE_KEY, JSON.stringify(user));
 };
 
-export const getUser = (): User | undefined => {
+export const getUser = (): UserType | undefined => {
   const userString = getFromLocalStorage(USER_STORAGE_KEY);
   if (!userString) return undefined;
 
   try {
     const parsedUser = JSON.parse(userString);
-    return UserSchema.parse(parsedUser);
+    return new User(parsedUser);
   } catch (error) {
     console.error("Error parsing user from localStorage:", error);
     return undefined;
@@ -43,7 +43,7 @@ export const deleteUser = (): void => {
 };
 
 export const getUserAndSession = async (): Promise<{
-  user: User;
+  user: UserType;
   session: Session;
 }> => {
   const user = getUser();

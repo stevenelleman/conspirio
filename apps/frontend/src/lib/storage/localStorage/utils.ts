@@ -1,5 +1,5 @@
 import { CreateBackupData } from "@types";
-import { Session, User } from "../types";
+import { Session, UserType } from "../types";
 import { saveSession } from "./session";
 import { saveUser } from "./user";
 import { appendBackupData } from "@/lib/backup";
@@ -17,7 +17,7 @@ export const deleteFromLocalStorage = (key: string): void => {
 };
 
 export interface SaveBackupAndUpdateStorageArgs {
-  user: User;
+  user: UserType;
   session: Session;
   newBackupData: CreateBackupData[];
 }

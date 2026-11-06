@@ -16,7 +16,7 @@ import {
 } from "@/lib/chip";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import { storage } from "@/lib/storage";
-import { User } from "@/lib/storage/types";
+import { UserType } from "@/lib/storage/types";
 import {
   ChipIssuer,
   LeaderboardDetails,
@@ -67,7 +67,7 @@ export default function LannaCommunityPage({
     useState<LeaderboardEntries | null>(null);
 
   const [cardProps, setCardProps] = useState<CommunityCardProps[]>([]);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
 
   useEffect(() => {
     const fetchInfo = async () => {

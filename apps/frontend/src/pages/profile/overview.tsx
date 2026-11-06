@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/ProfileImage";
 import AppLayout from "@/layouts/AppLayout";
 import { storage } from "@/lib/storage";
-import { User, UserData } from "@/lib/storage/types";
+import { UserType, UserData } from "@/lib/storage/types";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ import { LinksCardBox } from "@/components/ui/LinksCardBox";
 import { AppTagList } from "@/components/ui/AppTagList";
 
 export default function ProfileOverview() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -15,13 +15,12 @@ import {
   ConnectionSchema,
   LocationTaps,
   LocationTapsSchema,
-  User,
+  UserType,
   UserData,
   UserDataSchema,
-  UserSchema,
   OAuthAppSchema,
   OAuthApp,
-  EdgeIdsSchema,
+  EdgeIdsSchema, User,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";
@@ -49,14 +48,14 @@ export const processUserBackup = ({
   email: string;
   password: string;
   backupData: BackupData[];
-  existingUser?: User;
+  existingUser?: UserType;
   previousSubmittedAt?: Date;
-}): { user: User; submittedAt: Date } => {
+}): { user: UserType; submittedAt: Date } => {
   if (backupData.length === 0) {
     throw new Error("No backup data found");
   }
 
-  let user: User | undefined = existingUser;
+  let user: UserType | undefined = existingUser;
   let submittedAt = previousSubmittedAt || backupData[0].submittedAt;
 
   if (!user && backupData[0].backupEntryType !== BackupEntryType.INITIAL) {
@@ -83,7 +82,7 @@ export const processUserBackup = ({
         if (user) {
           throw new Error("INITIAL backup entry found for existing user");
         }
-        user = UserSchema.parse(JSON.parse(decryptedData));
+        user = new User(JSON.parse(decryptedData));
 
         // Using createdAt from client clock -- wish I could use db clock, but it doesn't appear to be exposed
         user.createdAt = data.clientCreatedAt;
@@ -273,7 +272,7 @@ export interface AppendBackupDataArgs {
   password: string;
   authToken: string;
   newBackupData: CreateBackupData[];
-  existingUser: User;
+  existingUser: UserType;
   previousSubmittedAt: Date;
 }
 
@@ -285,7 +284,7 @@ export const appendBackupData = async ({
   existingUser,
   previousSubmittedAt,
 }: AppendBackupDataArgs): Promise<{
-  updatedUser: User;
+  updatedUser: UserType;
   updatedSubmittedAt: Date;
 }> => {
   // Append backup data to user
@@ -337,7 +336,7 @@ export const appendBackupData = async ({
 export interface CreateInitialBackupArgs {
   email: string;
   password: string;
-  user: User;
+  user: UserType;
 }
 
 /**

@@ -14,7 +14,7 @@ import {
 } from "@/lib/message";
 import { saveBackupAndUpdateStorage } from "../../../utils";
 import { getUserAndSession } from "../..";
-import { Connection, User, Session } from "@/lib/storage/types";
+import { Connection, UserType, Session } from "@/lib/storage/types";
 import {
   createActivityBackup,
   upsertConnectionBackup,
@@ -27,7 +27,7 @@ import { upsertSocialGraphEdge } from "@/lib/graph";
 import { DEVCON } from "@/lib/storage/types";
 import { upsertConnectionRefreshPSI } from "@/lib/storage/localStorage/user/connection/upsert";
 
-function handleConnectionTapBacks(session: Session, user: User, lastMessageTimestamp: Date, connectionTapBacks: Record<string, TapBackMessage[]>): CreateBackupData[] {
+function handleConnectionTapBacks(session: Session, user: UserType, lastMessageTimestamp: Date, connectionTapBacks: Record<string, TapBackMessage[]>): CreateBackupData[] {
 
   const newBackupEntries: CreateBackupData[] = [];
 
@@ -105,7 +105,7 @@ function handleConnectionTapBacks(session: Session, user: User, lastMessageTimes
   return newBackupEntries;
 }
 
-async function handleEdges(session: Session, user: User, messages: EdgeMessage[]): Promise<CreateBackupData[]> {
+async function handleEdges(session: Session, user: UserType, messages: EdgeMessage[]): Promise<CreateBackupData[]> {
   let tapReceiverId: string | null = null;
   if (user && user.tapGraphEnabled) {
     // Double hash the signature private key, use as identifier, use single hash version as revocation code
@@ -152,7 +152,7 @@ async function handleEdges(session: Session, user: User, messages: EdgeMessage[]
   return newBackupEntries;
 }
 
-async function handleConnectionPSIs(user: User, messages: PSIMessage[]): Promise<void> {
+async function handleConnectionPSIs(user: UserType, messages: PSIMessage[]): Promise<void> {
   if (user.userData?.settings?.automaticPSIEnabled) {
     for (const message of messages) {
       if (message.senderUsername && user.connections && user.connections[message.senderUsername]) {
