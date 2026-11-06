@@ -21,7 +21,6 @@ import {
   OAuthApp,
   EdgeIdsSchema,
   User,
-  UserType,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";

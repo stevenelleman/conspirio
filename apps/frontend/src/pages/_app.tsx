@@ -170,6 +170,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   // Check if the user is a pre-migration user and logout if so
   useEffect(() => {
     const checkSession = async () => {
+      // TODO: Remove this case
       const MIGRATION_CHECK_STORAGE_KEY = "preMigrationSessionChecked";
       // Check if we've already performed this check
       const hasAlreadyChecked = localStorage.getItem(
