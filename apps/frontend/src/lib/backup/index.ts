@@ -337,7 +337,7 @@ export const appendBackupData = async ({
 export interface CreateInitialBackupArgs {
   email: string;
   password: string;
-  user: UserType;
+  user: User;
 }
 
 /**
