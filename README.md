@@ -11,7 +11,7 @@ From root:
 Frontend:
 
 - `cd apps/frontend`
-- Copy over .env.example into .env and update vars
+- Copy over .env.example into .env, update vars, and apply `source .env`
   - Set `NEXT_PUBLIC_API_URL` to point to the backend, defaults to `http://localhost:8080/api`
 - `source .env`
 - `pnpm run dev`
@@ -19,7 +19,7 @@ Frontend:
 Backend:
 
 - In a separate terminal, `cd apps/backend`
-- Copy over .env.example into .env and update vars
+- Copy over .env.example into .env, update vars, and apply `source .env`
   - Set `FRONTEND_URL` to point to the frontend (for cors), defaults to `http://localhost:3000`
   - Set `DATABASE_URL` to point to the database, for local dev this defaults to `postgresql://postgres:postgres@localhost:5432/connections_test?schema=public`
   - Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_SES_SENDER_EMAIL` to correspond to IAM credentials for AWS Simple Email Service

@@ -35,6 +35,7 @@ export const saveBackupAndUpdateStorage = async ({
     previousSubmittedAt: session.lastBackupFetchedAt,
   });
 
+  // One of two places where user is stored locally
   saveUser(updatedUser);
   saveSession({
     ...session,

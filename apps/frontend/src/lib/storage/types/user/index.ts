@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UnregisteredUserDataSchema, UserDataType, UserDataSchema } from "./userData";
+import { UnregisteredUserDataSchema, UserDataSchema, UserData } from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
 import { ActivitySchema, Activity } from "./activity";
@@ -26,6 +26,7 @@ export const UserSchema = z.object({
   lastMessageFetchedAt: z.coerce.date(),
   createdAt: nullToUndefined(z.coerce.date()),
 
+  // NOTE: The UserSchema uses UserDataSchema
   userData: UserDataSchema,
   chips: z.array(ChipSchema),
   connections: z.record(z.string(), ConnectionSchema),
@@ -55,7 +56,8 @@ export class User implements UserType {
   lastMessageFetchedAt: Date;
   createdAt: Date | undefined;
 
-  userData: UserDataType;
+  // NOTE: The User class also uses the UserData class
+  userData: UserData;
   chips: Chip[];
   connections: Record<string, Connection>;
   locations: Record<string, LocationTaps> | undefined;
@@ -83,7 +85,7 @@ export class User implements UserType {
     this.lastMessageFetchedAt = validated.lastMessageFetchedAt;
     this.createdAt = validated.createdAt;
 
-    this.userData = validated.userData;
+    this.userData = new UserData(validated.userData);
     this.chips = validated.chips;
     this.connections = validated.connections;
     this.locations = validated.locations;

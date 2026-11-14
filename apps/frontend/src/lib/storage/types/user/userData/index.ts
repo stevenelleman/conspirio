@@ -35,7 +35,6 @@ import {
 
 import { interests, InterestsSchema } from "@/lib/storage/types/user/interests";
 import { dislikes, DislikesSchema } from "@/lib/storage/types/user/dislikes";
-import { UserSchema, UserType } from "@/lib/storage/types";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
@@ -107,6 +106,11 @@ export const UserDataSchema = z.object({
 });
 
 export type UserDataType = z.infer<typeof UserDataSchema>;
+
+// NOTE: Runtime Serialization. Calling JSON.stringify(instance) converts the object's enumerable properties into
+// a raw JSON text string. Functions, methods, and private fields are stripped out during this process. "implements"
+// should ensure UserData properties are kept in line with UserDataType, which is the UserData object stored in
+// local storage.
 
 export class UserData implements UserDataType {
   // Bio

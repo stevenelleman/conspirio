@@ -16,11 +16,11 @@ import {
   LocationTaps,
   LocationTapsSchema,
   UserDataType,
-  UserDataSchema,
   OAuthAppSchema,
   OAuthApp,
   EdgeIdsSchema,
   User,
+  UserData,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";
@@ -91,7 +91,7 @@ export const processUserBackup = ({
         if (!user) {
           throw new Error("USER_DATA backup entry found before INITIAL");
         }
-        user.userData = UserDataSchema.parse(JSON.parse(decryptedData));
+        user.userData = new UserData(JSON.parse(decryptedData));
         break;
       case BackupEntryType.CHIP:
         if (!user) {
