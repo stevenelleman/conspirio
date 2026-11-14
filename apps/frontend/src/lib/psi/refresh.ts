@@ -13,7 +13,7 @@ import {
 import {
   User,
   Connection,
-  UserData,
+  UserDataType,
   Session
 } from "@/lib/storage/types";
 import { storage } from "@/lib/storage";
@@ -347,7 +347,7 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
         newBackupData: [connectionBackup],
       });
     } else {
-      const newUserData: UserData = user.userData;
+      const newUserData: UserDataType = user.userData;
       if (!newUserData.connectionPSISize) {
         newUserData.connectionPSISize = {};
       }

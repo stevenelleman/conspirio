@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UnregisteredUserDataSchema, UserData, UserDataSchema } from "./userData";
+import { UnregisteredUserDataSchema, UserDataType, UserDataSchema } from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
 import { ActivitySchema, Activity } from "./activity";
@@ -55,7 +55,7 @@ export class User implements UserType {
   lastMessageFetchedAt: Date;
   createdAt: Date | undefined;
 
-  userData: UserData;
+  userData: UserDataType;
   chips: Chip[];
   connections: Record<string, Connection>;
   locations: Record<string, LocationTaps> | undefined;
@@ -72,7 +72,7 @@ export class User implements UserType {
   migrations: UserDataMigrations | undefined;
 
   constructor(data: unknown) {
-    // 4. Validate incoming data at runtime during instantiation
+    // Validate incoming data at runtime during instantiation
     const validated = UserSchema.parse(data);
 
     this.email = validated.email;

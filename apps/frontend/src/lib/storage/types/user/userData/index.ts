@@ -2,15 +2,17 @@ import { z } from "zod";
 import { nullToUndefined } from "@types";
 
 import {
-  HotTakesRatingSchema,
-  LannaDataSchema,
+  HotTakesRating,
+  HotTakesRatingSchema, LannaData,
+  LannaDataSchema, TensionsRating,
   TensionsRatingSchema
 } from "./lannaData";
-import { StravaDataSchema } from "./stravaData";
-import { GithubDataSchema } from "./githubData";
-import { LannaHalloweenDataSchema } from "./lannaHalloweenData";
-import { DevconSchema } from "./devconData";
+import { StravaData, StravaDataSchema } from "./stravaData";
+import { GithubData, GithubDataSchema } from "./githubData";
+import { LannaHalloweenData, LannaHalloweenDataSchema } from "./lannaHalloweenData";
+import { DevconData, DevconSchema } from "./devconData";
 import {
+  ConnectionPSISize,
   ConnectionPSISizeSchema,
 } from "@/lib/storage/types/user/userData/psiSizeData";
 import {
@@ -21,12 +23,19 @@ import {
   TelegramDataSchema,
   SignalDataSchema,
   InstagramDataSchema,
-  FarcasterDataSchema
+  FarcasterDataSchema, TwitterData, TelegramData, SignalData, InstagramData, FarcasterData, WhatsappData, SMSData,
+  EmailData
 } from "@/lib/storage/types/user/userData/socials";
-import { PersonalWebsitesSchema, SubstackDataSchema } from "@/lib/storage/types/user/userData/portfolio";
+import {
+  PersonalWebsites,
+  PersonalWebsitesSchema,
+  SubstackData,
+  SubstackDataSchema
+} from "@/lib/storage/types/user/userData/portfolio";
 
-import { InterestsSchema } from "@/lib/storage/types/user/interests";
-import { DislikesSchema } from "@/lib/storage/types/user/dislikes";
+import { interests, InterestsSchema } from "@/lib/storage/types/user/interests";
+import { dislikes, DislikesSchema } from "@/lib/storage/types/user/dislikes";
+import { UserSchema, UserType } from "@/lib/storage/types";
 
 export const UserSettingsSchema = z.object({
   automaticPSIEnabled: nullToUndefined(z.boolean().nullable()),
@@ -97,7 +106,116 @@ export const UserDataSchema = z.object({
   devcon: nullToUndefined(DevconSchema),
 });
 
-export type UserData = z.infer<typeof UserDataSchema>;
+export type UserDataType = z.infer<typeof UserDataSchema>;
+
+export class UserData implements UserDataType {
+  // Bio
+  username: string;
+  displayName: string;
+  bio: string;
+  signaturePublicKey: string;
+  encryptionPublicKey: string;
+  psiPublicKeyLink: string | undefined;
+  pronouns: string | undefined;
+
+  // Socials
+  twitter: TwitterData | undefined;
+  telegram: TelegramData | undefined;
+  signal: SignalData | undefined;
+  instagram: InstagramData | undefined;
+  farcaster: FarcasterData | undefined;
+  whatsapp: WhatsappData | undefined;
+  sms: SMSData | undefined;
+  email: EmailData | undefined;
+
+  // Portfolio
+  substack: SubstackData | undefined;
+  personalWebsites: PersonalWebsites | undefined;
+
+  // Integrations
+  strava: StravaData | undefined;
+  github: GithubData | undefined;
+
+  // Templates
+  tensionsRating: TensionsRating | undefined;
+  hotTakesRating: HotTakesRating | undefined;
+
+  // -- Vanilla & Spicy
+  publicInterests: interests | undefined;
+  privateInterests: interests | undefined;
+
+  // -- Lets Shit Talk
+  dislikesPublicDefender: dislikes | undefined;
+  dislikesPetPeeves: dislikes | undefined;
+  dislikesLoveToHate: dislikes | undefined;
+
+  // Settings
+  settings: UserSettings | undefined;
+
+  // WIP: Migration in progress to ConnectionSchema
+  connectionPSISize: ConnectionPSISize | undefined;
+
+  // Deprecated
+  lanna: LannaData | undefined;
+  lannaHalloween: LannaHalloweenData | undefined;
+  devcon: DevconData | undefined;
+
+  constructor(data: unknown) {
+    // Validate incoming data at runtime during instantiation
+    const validated = UserDataSchema.parse(data);
+
+    // Bio
+    this.username = validated.username;
+    this.displayName = validated.displayName;
+    this.bio = validated.bio;
+    this.signaturePublicKey = validated.signaturePublicKey;
+    this.encryptionPublicKey = validated.encryptionPublicKey;
+    this.psiPublicKeyLink = validated.psiPublicKeyLink;
+    this.pronouns = validated.pronouns;
+
+    // Socials
+    this.twitter = validated.twitter;
+    this.telegram = validated.telegram;
+    this.signal = validated.signal;
+    this.instagram = validated.instagram;
+    this.farcaster = validated.farcaster;
+    this.whatsapp = validated.whatsapp;
+    this.sms = validated.sms;
+    this.email = validated.email;
+
+    // Portfolio
+    this.substack = validated.substack;
+    this.personalWebsites = validated.personalWebsites;
+
+    // Integrations
+    this.strava = validated.strava;
+    this.github = validated.github;
+
+    // Templates
+    this.tensionsRating = validated.tensionsRating;
+    this.hotTakesRating = validated.hotTakesRating;
+
+    // -- Vanilla & Spicy
+    this.publicInterests = validated.publicInterests;
+    this.privateInterests = validated.privateInterests;
+
+    // -- Lets Shit Talk
+    this.dislikesPublicDefender = validated.dislikesPublicDefender;
+    this.dislikesPetPeeves = validated.dislikesPetPeeves;
+    this.dislikesLoveToHate = validated.dislikesLoveToHate;
+
+    // Settings
+    this.settings = validated.settings;
+
+    // WIP: Migration in progress to ConnectionSchema
+    this.connectionPSISize = validated.connectionPSISize;
+
+    // Deprecated
+    this.lanna = validated.lanna;
+    this.lannaHalloween = validated.lannaHalloween;
+    this.devcon = validated.devcon;
+  }
+}
 
 export const UnregisteredUserDataSchema = z.object({
   signaturePublicKey: z.string(),

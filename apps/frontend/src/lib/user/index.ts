@@ -1,5 +1,5 @@
 import {
-  UserData,
+  UserDataType,
   UserDataSchema,
   User
 } from "@/lib/storage/types";
@@ -7,7 +7,7 @@ import { Json } from "@types";
 
 // To prevent accidental sharing, default ensure shareable data needs to be added to this method
 // TODO: offer a more expressive way to define / set shareable data based on community / persona
-export const getUserShareableData = (userData: UserData): UserData => {
+export const getUserShareableData = (userData: UserDataType): UserDataType => {
   const {
     username,
     displayName,
@@ -58,7 +58,7 @@ export const getUserShareableData = (userData: UserData): UserData => {
   };
 };
 
-export const shareableUserDataToJson = (userData: UserData): Json => {
+export const shareableUserDataToJson = (userData: UserDataType): Json => {
   const { username,
     displayName,
     bio,

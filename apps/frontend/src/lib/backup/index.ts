@@ -15,7 +15,7 @@ import {
   ConnectionSchema,
   LocationTaps,
   LocationTapsSchema,
-  UserData,
+  UserDataType,
   UserDataSchema,
   OAuthAppSchema,
   OAuthApp,
@@ -369,7 +369,7 @@ export const createInitialBackup = ({
 export interface CreateUserDataBackupArgs {
   email: string;
   password: string;
-  userData: UserData;
+  userData: UserDataType;
 }
 
 export const createUserDataBackup = ({

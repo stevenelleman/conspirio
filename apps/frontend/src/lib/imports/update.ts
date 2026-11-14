@@ -1,13 +1,13 @@
 import { ImportDataType } from "@types";
-import { UserData } from "@/lib/storage/types";
+import { UserDataType } from "@/lib/storage/types";
 
 // Add import types to UserData, backup is already provided for any UserData changes
 export const updateUserDataFromImportData = async (
-  userData: UserData,
+  userData: UserDataType,
   type: ImportDataType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
-): Promise<UserData> => {
+): Promise<UserDataType> => {
   switch (type) {
     case ImportDataType.STRAVA_PREVIOUS_MONTH_RUN_DISTANCE:
       const value1: number = data;

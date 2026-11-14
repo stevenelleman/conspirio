@@ -36,17 +36,17 @@ export const WhatsappDataSchema = z.object({
   number: nullToUndefined(z.string()),
 });
 
-export type WhatsappData = z.infer<typeof TelegramDataSchema>;
+export type WhatsappData = z.infer<typeof WhatsappDataSchema>;
 
 export const SMSDataSchema = z.object({
   number: nullToUndefined(z.string()),
 });
 
-export type SMSData = z.infer<typeof TelegramDataSchema>;
+export type SMSData = z.infer<typeof SMSDataSchema>;
 
 export const EmailDataSchema = z.object({
   address: nullToUndefined(z.string()),
 });
 
-export type EmailData = z.infer<typeof TelegramDataSchema>;
+export type EmailData = z.infer<typeof EmailDataSchema>;
 
