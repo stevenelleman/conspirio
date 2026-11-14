@@ -134,6 +134,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
         // Using object getter method is best of both worlds, allows user.createdAt to be taken into account such
         // that there's no need to update the user object.
+
+        // migrations will be applied in order, which could matter if one migration is dependent on another
         if (!user.migratedPSISize) {
           migratePSISizeFromUserToConnection(user, session);
         }

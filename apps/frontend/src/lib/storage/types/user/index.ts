@@ -11,6 +11,7 @@ import {
 } from "@types";
 import { LocationTaps, LocationTapsSchema } from "./location";
 import { EdgeBackup, EdgeBackupSchema } from "./edge";
+import { interests } from "@/lib/storage/types/user/interests";
 
 export const UserDataMigrationsSchema = z.object({
   migrationMovePSISizeToConnections: nullToUndefined(z.boolean().nullable()),
@@ -104,6 +105,11 @@ export class User implements UserType {
 
   get migratedPSISize(): boolean {
     return !!((this.createdAt && this.createdAt > new Date("2026-11-05")) || (this.migrations && this.migrations.migrationMovePSISizeToConnections));
+  }
+
+  // getters for UserData values
+  get getTemplatePublicInterests(): interests | undefined {
+    return this.userData.getPublicInterests;
   }
 }
 

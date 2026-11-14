@@ -219,6 +219,10 @@ export class UserData implements UserDataType {
     this.lannaHalloween = validated.lannaHalloween;
     this.devcon = validated.devcon;
   }
+
+  get getPublicInterests(): interests | undefined {
+    return this.publicInterests;
+  }
 }
 
 export const UnregisteredUserDataSchema = z.object({
