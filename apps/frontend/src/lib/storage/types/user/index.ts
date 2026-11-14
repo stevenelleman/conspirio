@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UnregisteredUserDataSchema, UserDataSchema, UserData } from "./userData";
+import { UnregisteredUserDataSchema, UserData, UserDataSchema } from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
 import { ActivitySchema, Activity } from "./activity";
