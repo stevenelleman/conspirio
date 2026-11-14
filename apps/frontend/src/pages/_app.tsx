@@ -188,7 +188,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       if (
         user &&
         preMigrationSignaturePublicKeys?.includes(
-          user.userData.signaturePublicKey
+          user.getBioSignaturePublicKey
         )
       ) {
         await logoutUser();

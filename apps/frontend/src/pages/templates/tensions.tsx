@@ -30,14 +30,14 @@ export default function TensionsPage() {
         return;
       }
 
-      if (user.userData.tensionsRating) {
+      if (user.getTemplateTensionsRating) {
         setSliderValues(
-          user.userData.tensionsRating.tensionRating ??
+          user.getTemplateTensionsRating.tensionRating ??
             tensionPairs.map(() => 50)
         );
-        setRevealAnswers(user.userData.tensionsRating.revealAnswers ?? false);
+        setRevealAnswers(user.getTemplateTensionsRating.revealAnswers ?? false);
         setContributeAnonymously(
-          user.userData.tensionsRating.contributeAnonymously ?? false
+          user.getTemplateTensionsRating.contributeAnonymously ?? false
         );
       }
     };

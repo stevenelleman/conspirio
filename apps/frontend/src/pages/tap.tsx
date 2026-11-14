@@ -110,7 +110,7 @@ const TapPage: React.FC = () => {
 
             if (
               user &&
-              user.userData.username === response.userTap.ownerUsername
+              user.getBioUsername === response.userTap.ownerUsername
             ) {
               logClientEvent("tap-chip-same-user", {});
               router.push("/community");
@@ -154,7 +154,7 @@ const TapPage: React.FC = () => {
                   response.userTap.ownerUsername,
                   resp.id,
                   sentHash,
-                  user.userData.username
+                  user.getBioUsername
                 );
                 await sendMessages({
                   authToken: session.authTokenValue,
@@ -219,12 +219,12 @@ const TapPage: React.FC = () => {
             await registerChip({
               authToken: session.authTokenValue,
               tapParams: tapParams,
-              ownerUsername: user.userData.username,
-              ownerDisplayName: user.userData.displayName,
-              ownerBio: user.userData.bio,
-              ownerSignaturePublicKey: user.userData.signaturePublicKey,
-              ownerEncryptionPublicKey: user.userData.encryptionPublicKey,
-              ownerPsiPublicKeyLink: user.userData.psiPublicKeyLink,
+              ownerUsername: user.getBioUsername,
+              ownerDisplayName: user.getBioDisplayName,
+              ownerBio: user.getBio,
+              ownerSignaturePublicKey: user.getBioSignaturePublicKey,
+              ownerEncryptionPublicKey: user.getBioEncryptionPublicKey,
+              ownerPsiPublicKeyLink: user.getBioPsiPublicKeyLink,
               ownerUserData: shareableUserData,
             });
 

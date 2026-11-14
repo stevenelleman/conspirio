@@ -69,14 +69,14 @@ export default function ProfileOverview() {
       <div className="flex flex-col gap-3 mt-[46px]">
         <div className="flex flex-col px-4">
           <span className="text-[30px] font-semibold tracking-[-0.22px] font-sans text-label-primary">
-            {user?.userData.displayName}
+            {user?.getBioDisplayName}
           </span>
           <span className="text-[14px] font-medium font-sans text-label-tertiary">
-            {`@${user?.userData.username}`}
+            {`@${user?.getBioUsername}`}
           </span>
-          {user?.userData?.pronouns && (
+          {user?.getBioPronouns && (
             <span className="text-[14px] font-medium font-sans text-label-tertiary">
-              {user?.userData.pronouns}
+              {user?.getBioPronouns}
             </span>
           )}
         </div>
@@ -85,67 +85,67 @@ export default function ProfileOverview() {
             Socials
           </span>
           <div className="flex flex-col gap-2">
-            {!user?.userData?.telegram?.username &&
-              !user?.userData?.twitter?.username &&
-              !user?.userData?.signal?.username && (
+            {!user?.getSocialTelegram?.username &&
+              !user?.getSocialTwitter?.username &&
+              !user?.getSocialSignal?.username && (
                 <span className="text-sm text-label-secondary font-sans font-normal">
                   Add socials by editing your chip details!
                 </span>
               )}
-            {user?.userData?.email?.address && (
+            {user?.getSocialEmail?.address && (
               <LinkCardBox
                 label="Email"
-                value={`${user.userData.email.address}`}
-                href={`mailto:${user.userData.email.address}`}
+                value={`${user.getSocialEmail.address}`}
+                href={`mailto:${user.getSocialEmail.address}`}
               />
             )}
-            {user?.userData?.sms?.number && (
+            {user?.getSocialSms?.number && (
               <LinkCardBox
                 label="SMS"
-                value={`${user.userData.sms.number}`}
-                href={`sms:+${user.userData.sms.number}`}
+                value={`${user.getSocialSms.number}`}
+                href={`sms:+${user.getSocialSms.number}`}
               />
             )}
-            {user?.userData?.whatsapp?.number && (
+            {user?.getSocialWhatsapp?.number && (
               <LinkCardBox
                 label="Whatsapp"
-                value={`${user.userData.whatsapp.number}`}
-                href={`https://wa.me/${user.userData.whatsapp.number}`}
+                value={`${user.getSocialWhatsapp.number}`}
+                href={`https://wa.me/${user.getSocialWhatsapp.number}`}
               />
             )}
-            {user?.userData?.telegram?.username && (
+            {user?.getSocialTelegram?.username && (
               <LinkCardBox
                 label="Telegram"
-                value={`@${user.userData.telegram.username}`}
-                href={`https://t.me/${user.userData.telegram.username}`}
+                value={`@${user.getSocialTelegram.username}`}
+                href={`https://t.me/${user.getSocialTelegram.username}`}
               />
             )}
-            {user?.userData?.twitter?.username && (
+            {user?.getSocialTwitter?.username && (
               <LinkCardBox
                 label="X"
-                value={`@${user.userData.twitter.username}`}
-                href={`https://x.com/${user.userData.twitter.username}`}
+                value={`@${user.getSocialTwitter.username}`}
+                href={`https://x.com/${user.getSocialTwitter.username}`}
               />
             )}
-            {user?.userData?.signal?.username && (
+            {user?.getSocialSignal?.username && (
               <LinkCardBox
                 label="Signal"
-                value={`@${user.userData.signal.username}`}
-                href={`sgnl://signal.me/#u/${user?.userData.signal.username}`}
+                value={`@${user.getSocialSignal.username}`}
+                href={`sgnl://signal.me/#u/${user?.getSocialSignal.username}`}
               />
             )}
-            {user?.userData?.instagram?.username && (
+            {user?.getSocialInstagram?.username && (
               <LinkCardBox
                 label="Instagram"
-                value={`@${user.userData.instagram.username}`}
-                href={`https://www.instagram.com/${user.userData.instagram.username}`}
+                value={`@${user.getSocialInstagram.username}`}
+                href={`https://www.instagram.com/${user.getSocialInstagram.username}`}
               />
             )}
-            {user?.userData?.farcaster?.username && (
+            {user?.getSocialFarcaster?.username && (
               <LinkCardBox
                 label="Farcaster"
-                value={`@${user.userData.farcaster.username}`}
-                href={`https://warpcast.com/${user.userData.farcaster.username}`}
+                value={`@${user.getSocialFarcaster.username}`}
+                href={`https://warpcast.com/${user.getSocialFarcaster.username}`}
               />
             )}
           </div>
@@ -155,24 +155,24 @@ export default function ProfileOverview() {
             Portfolio
           </span>
           <div className="flex flex-col gap-2">
-            {!user?.userData?.personalWebsites?.websites &&
-              !user?.userData?.substack?.handle && (
+            {!user?.getPortfolioPersonalWebsites?.websites &&
+              !user?.getPortfolioSubstack?.handle && (
                 <span className="text-sm text-label-secondary font-sans font-normal">
                   Add portfolio by editing your chip details!
                 </span>
               )}
-            {user?.userData?.personalWebsites?.websites && (
+            {user?.getPortfolioPersonalWebsites?.websites && (
               <LinksCardBox
                 label="Personal Websites"
-                values={user.userData.personalWebsites.websites}
-                hrefs={user.userData.personalWebsites.websites}
+                values={user.getPortfolioPersonalWebsites.websites}
+                hrefs={user.getPortfolioPersonalWebsites.websites}
               />
             )}
-            {user?.userData?.substack?.handle && (
+            {user?.getPortfolioSubstack?.handle && (
               <LinkCardBox
                 label="Substack"
-                value={`@${user?.userData?.substack?.handle}`}
-                href={`https://substack.com/@${user?.userData?.substack?.handle}`}
+                value={`@${user?.getPortfolioSubstack?.handle}`}
+                href={`https://substack.com/@${user?.getPortfolioSubstack?.handle}`}
               />
             )}
           </div>
@@ -191,7 +191,7 @@ export default function ProfileOverview() {
             <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.1)' }} />
             <AppTagList
               label="🍦 Vanilla"
-              values={user?.userData?.publicInterests || []}
+              values={user?.getTemplatePublicInterests || []}
               maxVisible={5}
               emptyState="Add your public interests by editing your profile!" //TODO: link to vanilla-spicy
             />
@@ -199,7 +199,7 @@ export default function ProfileOverview() {
             {/* TODO: should it be included in the overview? Should only public info live there? */}
             <AppTagList
               label="🌶️ Spicy"
-              values={user?.userData?.privateInterests || []}
+              values={user?.getTemplatePrivateInterests || []}
               maxVisible={5}
               emptyState="Add your private interests by editing your profile! 😏 🤫"
             />
@@ -219,34 +219,34 @@ export default function ProfileOverview() {
             <hr style={{ border: 'none', borderTop: '1px solid rgba(0, 0, 0, 0.1)' }} />
             <AppTagList
               label="🛡️ Public Defender"
-              values={user?.userData?.dislikesPublicDefender || []}
+              values={user?.getTemplateDislikesPublicDefender || []}
               maxVisible={5}
               emptyState="Add issues you stand against by editing your profile!" //TODO: link to lets-shit-talk
             />
             <br/>
             <AppTagList
               label="😤 Pet Peeves"
-              values={user?.userData?.dislikesPetPeeves || []}
+              values={user?.getTemplateDislikesPetPeeves || []}
               maxVisible={5}
               emptyState="Add your pet peeves by editing your profile!" //TODO: link to lets-shit-talk
             />
             <br/>
             <AppTagList
               label="😈 Love to Hate"
-              values={user?.userData?.dislikesLoveToHate || []}
+              values={user?.getTemplateDislikesLoveToHate || []}
               maxVisible={5}
               emptyState="Add what you love to hate by editing your profile!" //TODO: link to lets-shit-talk
             />
           </div>
           <hr/>
         </div>
-        {user?.userData.bio !== "" && (
+        {user?.getBio !== "" && (
           <div className="flex flex-col gap-2 p-4">
             <span className="text-sm font-semibold text-label-primary font-sans">
               Bio
             </span>
             <span className="text-sm text-label-tertiary font-normal font-sans">
-              {user?.userData.bio}
+              {user?.getBio}
             </span>
           </div>
         )}

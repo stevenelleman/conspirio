@@ -373,7 +373,7 @@ export default function LocationPage() {
   }
 
   if (locationTaps) {
-    const username = user?.userData?.username;
+    const username = user?.getBioUsername;
     const locationName = locationTaps?.name;
     const tapDate = tapInfo?.tapResponse.locationTap?.timestamp;
     return (

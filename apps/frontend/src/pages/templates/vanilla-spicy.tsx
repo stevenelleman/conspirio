@@ -32,8 +32,8 @@ export default function VanillaSpicyPage() {
       const { user, session } = await storage.getUserAndSession();
       if (user && session && new Date() < session.authTokenExpiresAt) {
         reset({
-          vanillaInterests: user.userData?.publicInterests || [],
-          spicyInterests: user.userData?.privateInterests || [],
+          vanillaInterests: user.getTemplatePublicInterests || [],
+          spicyInterests: user.getTemplatePrivateInterests || [],
         });
       } else {
         toast.error("Please log in to view your profile.");
@@ -78,8 +78,8 @@ export default function VanillaSpicyPage() {
           for (const chip of user!.chips) {
 
             // This fixes the website value if it was [] accidentally:
-            // const personalWebsites = user.userData.personalWebsites?.websites &&
-            // user.userData.personalWebsites?.websites.length > 0 ? user.userData.personalWebsites?.websites: null;
+            // const personalWebsites = user.getPortfolioPersonalWebsites?.websites &&
+            // user.getPortfolioPersonalWebsites?.websites.length > 0 ? user.getPortfolioPersonalWebsites?.websites: null;
 
             // TODO: Add a function that updates only the inputted value, it'd be safer from forgetting values
             await updateChip({
@@ -92,24 +92,24 @@ export default function VanillaSpicyPage() {
               // Specifically do not add spicyInterests
 
               // All other retain existing values
-              ownerDisplayName: user.userData.displayName ?? null,
-              ownerBio: user.userData.bio ?? null,
-              ownerTwitterUsername: user.userData.twitter?.username ?? null,
-              ownerTelegramUsername: user.userData.telegram?.username ?? null,
-              ownerSignalUsername: user.userData.signal?.username ?? null,
-              ownerInstagramUsername: user.userData.instagram?.username ?? null,
-              ownerFarcasterUsername: user.userData.farcaster?.username ?? null,
-              ownerEmail: user.userData.email?.address ?? null,
-              ownerSMSNumber: user.userData.sms?.number ?? null,
-              ownerWhatsappNumber: user.userData.whatsapp?.number ?? null,
-              ownerPersonalWebsites: user.userData.personalWebsites?.websites ?? null,
-              ownerSubstack: user.userData.substack?.handle ?? null,
-              ownerPronouns: user.userData.pronouns ?? null,
-              ownerDislikesPublicDefender: user.userData.dislikesPublicDefender ?? null,
-              ownerDislikesPetPeeves: user.userData.dislikesPetPeeves ?? null,
-              ownerDislikesLoveToHate: user.userData.dislikesLoveToHate ?? null,
+              ownerDisplayName: user.getBioDisplayName ?? null,
+              ownerBio: user.getBio ?? null,
+              ownerTwitterUsername: user.getSocialTwitter?.username ?? null,
+              ownerTelegramUsername: user.getSocialTelegram?.username ?? null,
+              ownerSignalUsername: user.getSocialSignal?.username ?? null,
+              ownerInstagramUsername: user.getSocialInstagram?.username ?? null,
+              ownerFarcasterUsername: user.getSocialFarcaster?.username ?? null,
+              ownerEmail: user.getSocialEmail?.address ?? null,
+              ownerSMSNumber: user.getSocialSms?.number ?? null,
+              ownerWhatsappNumber: user.getSocialWhatsapp?.number ?? null,
+              ownerPersonalWebsites: user.getPortfolioPersonalWebsites?.websites ?? null,
+              ownerSubstack: user.getPortfolioSubstack?.handle ?? null,
+              ownerPronouns: user.getBioPronouns ?? null,
+              ownerDislikesPublicDefender: user.getTemplateDislikesPublicDefender ?? null,
+              ownerDislikesPetPeeves: user.getTemplateDislikesPetPeeves ?? null,
+              ownerDislikesLoveToHate: user.getTemplateDislikesLoveToHate ?? null,
               ownerSettings: {
-                ...user.userData?.settings,
+                ...user.getSettings,
               },
             });
           }

@@ -218,9 +218,9 @@ const UserProfilePage: React.FC = () => {
       const unregisteredUser = await storage.getUnregisteredUser();
       if (user && session && !unregisteredUser) {
         if (user && connection?.user?.username && (
-          user.userData.username === "stevenelleman" ||
-          user.userData.username === "andrew" ||
-          user.userData.username === "vivek"
+          user.getBioUsername === "stevenelleman" ||
+          user.getBioUsername === "andrew" ||
+          user.getBioUsername === "vivek"
         )) {
           // TODO: make this applicable to other communities
           const chipIdResp: GetChipIdResponse = await getChipId(session.authTokenValue, ChipIssuer.DEVCON_2024, connection?.user?.username);
@@ -483,7 +483,7 @@ const UserProfilePage: React.FC = () => {
 
   const flowerIndex = flowerType(
     connection.user.username,
-    user?.userData?.username
+    user?.getBioUsername
   );
 
   let flowerStage = "sprout";
@@ -491,8 +491,8 @@ const UserProfilePage: React.FC = () => {
   if (connection.PSISize) {
     flowerStage = flowerSize(connection.PSISize);
   } else {
-    if (user?.userData?.connectionPSISize) {
-      const psiSize = user.userData.connectionPSISize;
+    if (user?.getConnectionPSISize) {
+      const psiSize = user.getConnectionPSISize;
       const connectionUsername = connection.user.username;
       if (psiSize[connectionUsername]) {
         flowerStage = flowerSize(psiSize[connectionUsername]);
@@ -503,9 +503,9 @@ const UserProfilePage: React.FC = () => {
 
   // TODO: When roles added, change this logic
   const isUserAdmin = (
-    user?.userData?.username === "stevenelleman" ||
-    user?.userData?.username === "vivek" ||
-    user?.userData?.username === "andrew"
+    user?.getBioUsername === "stevenelleman" ||
+    user?.getBioUsername === "vivek" ||
+    user?.getBioUsername === "andrew"
   );
   
   let chipLink = ""
@@ -514,7 +514,7 @@ const UserProfilePage: React.FC = () => {
   }
 
   // Filled out imports?
-  const githubImported = !!user?.userData?.github;
+  const githubImported = !!user?.getIntegrationGithub;
 
   // Using publicInterests infer vanilla vs spicy interests
   let theirVanilla: string[] = [];
@@ -916,7 +916,7 @@ const UserProfilePage: React.FC = () => {
                               key={index}
                               value={
                                 user
-                                  ? user.userData.hotTakesRating?.rating[
+                                  ? user.getTemplateHotTakesRating?.rating[
                                       index
                                     ] ?? 1
                                   : 1
@@ -959,7 +959,7 @@ const UserProfilePage: React.FC = () => {
                               rightOption={tensionPairs[index][1]}
                               value={
                                 user
-                                  ? user.userData.tensionsRating?.tensionRating[
+                                  ? user.getTemplateTensionsRating?.tensionRating[
                                       index
                                     ] ?? 50
                                   : 50

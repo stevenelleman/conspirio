@@ -235,8 +235,8 @@ export const processUserBackup = ({
         // - From a backup standpoint, should there be a complete swap between values? ie after this backup, don't
         // set / get the UserData value? That feels pretty safe in this case.
 
-        if (user.userData?.connectionPSISize) {
-          for (const [key, value] of Object.entries(user.userData.connectionPSISize)) {
+        if (user.getConnectionPSISize) {
+          for (const [key, value] of Object.entries(user.getConnectionPSISize)) {
             if (user.connections && user.connections[key]) {
               console.log("PSISize", key, value)
               user.connections[key].PSISize = value

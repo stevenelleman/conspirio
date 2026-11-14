@@ -136,5 +136,5 @@ export const getConnectionSigPubKey = (user: User, connectionUsername: string): 
 }
 
 export const getUserSigPubKey = (user: User): string => {
-  return user.userData.signaturePublicKey;
+  return user.getBioSignaturePublicKey;
 };

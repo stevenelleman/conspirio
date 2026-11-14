@@ -50,19 +50,19 @@ const ProfileEdit = () => {
         setUser(user);
         setSession(session);
         reset({
-          displayName: user.userData?.displayName || "",
-          bio: user.userData?.bio || "",
-          twitterUsername: user.userData?.twitter?.username || "",
-          telegramUsername: user.userData?.telegram?.username || "",
-          signalUsername: user.userData?.signal?.username || "",
-          instagramUsername: user.userData?.instagram?.username || "",
-          farcasterUsername: user.userData?.farcaster?.username || "",
-          emailAddress: user.userData?.email?.address || "",
-          smsNumber: user.userData?.sms?.number || "",
-          whatsappNumber: user.userData?.whatsapp?.number || "",
-          personalWebsiteAddresses: user.userData?.personalWebsites?.websites || [],
-          substackHandle: user.userData?.substack?.handle || "",
-          pronouns: user.userData?.pronouns || "",
+          displayName: user.getBioDisplayName || "",
+          bio: user.getBio || "",
+          twitterUsername: user.getSocialTwitter?.username || "",
+          telegramUsername: user.getSocialTelegram?.username || "",
+          signalUsername: user.getSocialSignal?.username || "",
+          instagramUsername: user.getSocialInstagram?.username || "",
+          farcasterUsername: user.getSocialFarcaster?.username || "",
+          emailAddress: user.getSocialEmail?.address || "",
+          smsNumber: user.getSocialSms?.number || "",
+          whatsappNumber: user.getSocialWhatsapp?.number || "",
+          personalWebsiteAddresses: user.getPortfolioPersonalWebsites?.websites || [],
+          substackHandle: user.getPortfolioSubstack?.handle || "",
+          pronouns: user.getBioPronouns || "",
         });
       } else {
         toast.error("User not found");
@@ -111,11 +111,11 @@ const ProfileEdit = () => {
           ownerPronouns: pronouns ?? null,
 
           // Fill existing values
-          ownerPublicInterests: user?.userData?.publicInterests ?? null,
-          ownerDislikesPublicDefender: user?.userData?.dislikesPublicDefender ?? null,
-          ownerDislikesPetPeeves: user?.userData?.dislikesPetPeeves ?? null,
-          ownerDislikesLoveToHate: user?.userData?.dislikesLoveToHate ?? null,
-          ownerSettings: user?.userData?.settings ?? null,
+          ownerPublicInterests: user?.getTemplatePublicInterests ?? null,
+          ownerDislikesPublicDefender: user?.getTemplateDislikesPublicDefender ?? null,
+          ownerDislikesPetPeeves: user?.getTemplateDislikesPetPeeves ?? null,
+          ownerDislikesLoveToHate: user?.getTemplateDislikesLoveToHate ?? null,
+          ownerSettings: user?.getSettings ?? null,
         });
       }
       toast.success("Chip(s) updated successfully");

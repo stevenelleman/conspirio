@@ -38,9 +38,9 @@ export type Intersection = {
 export const refreshPSI = async (user: User, connection: Connection): Promise<Intersection | null> => {
   try {
     let tensions: string[] = [];
-    if (user.userData.tensionsRating?.revealAnswers) {
+    if (user.getTemplateTensionsRating?.revealAnswers) {
       const tensionData = tensionPairs.map((tension, index) =>
-        user.userData.tensionsRating!.tensionRating[index] < 50
+        user.getTemplateTensionsRating!.tensionRating[index] < 50
           ? tension[0]
           : tension[1]
       );
@@ -52,9 +52,9 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
     }
 
     let hotTakes: string[] = [];
-    if (user.userData.hotTakesRating?.revealAnswers) {
+    if (user.getTemplateHotTakesRating?.revealAnswers) {
       const hotTakeData = hotTakeLabels.map((hotTake, index) => {
-        switch (user.userData.hotTakesRating!.rating[index]) {
+        switch (user.getTemplateHotTakesRating!.rating[index]) {
           case 0:
             return "Based";
           case 1:
@@ -83,9 +83,9 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
     // Github
     let languageNames: string[] = [];
     let programmingLangHashes: string[] = [];
-    if (user.userData?.github?.programmingLanguages?.value) {
+    if (user.getIntegrationGithub?.programmingLanguages?.value) {
       languageNames = Object.keys(
-        user.userData?.github?.programmingLanguages?.value
+        user.getIntegrationGithub?.programmingLanguages?.value
       );
 
       programmingLangHashes = await hashCommit(
@@ -97,22 +97,22 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
 
     let repoNames: string[] = [];
     let starredReposHashes: string[] = [];
-    if (user.userData?.github?.starredRepos?.value) {
-      repoNames = user.userData.github.starredRepos.value;
+    if (user.getIntegrationGithub?.starredRepos?.value) {
+      repoNames = user.getIntegrationGithub.starredRepos.value;
       starredReposHashes = await hashCommit(
         user.encryptionPrivateKey,
         connection.user.encryptionPublicKey,
-        user.userData?.github?.starredRepos?.value
+        user.getIntegrationGithub?.starredRepos?.value
       );
     }
 
     // Interests
     let combinedInterests: string[] = [];
-    if (user.userData?.publicInterests) {
-      combinedInterests = combinedInterests.concat(user.userData?.publicInterests);
+    if (user.getTemplatePublicInterests) {
+      combinedInterests = combinedInterests.concat(user.getTemplatePublicInterests);
     }
-    if (user.userData?.privateInterests) {
-      combinedInterests = combinedInterests.concat(user.userData?.privateInterests);
+    if (user.getTemplatePrivateInterests) {
+      combinedInterests = combinedInterests.concat(user.getTemplatePrivateInterests);
     }
 
     // remove duplicates
@@ -131,8 +131,8 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
     // Dislikes
     let dislikesPublicDefender: string[] = [];
     let dislikesPublicDefenderHashes: string[] = [];
-    if (user.userData?.dislikesPublicDefender) {
-      dislikesPublicDefender = user.userData?.dislikesPublicDefender
+    if (user.getTemplateDislikesPublicDefender) {
+      dislikesPublicDefender = user.getTemplateDislikesPublicDefender
 
       dislikesPublicDefenderHashes = await hashCommit(
         user.encryptionPrivateKey,
@@ -143,8 +143,8 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
 
     let dislikesPetPeeves: string[] = [];
     let dislikesPetPeevesHashes: string[] = [];
-    if (user.userData?.dislikesPetPeeves) {
-      dislikesPetPeeves = user.userData?.dislikesPetPeeves
+    if (user.getTemplateDislikesPetPeeves) {
+      dislikesPetPeeves = user.getTemplateDislikesPetPeeves
 
       dislikesPetPeevesHashes = await hashCommit(
         user.encryptionPrivateKey,
@@ -155,8 +155,8 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
 
     let dislikesLoveToHate: string[] = [];
     let dislikesLoveToHateHashes: string[] = [];
-    if (user.userData?.dislikesLoveToHate) {
-      dislikesLoveToHate = user.userData?.dislikesLoveToHate
+    if (user.getTemplateDislikesLoveToHate) {
+      dislikesLoveToHate = user.getTemplateDislikesLoveToHate
 
       dislikesLoveToHateHashes = await hashCommit(
         user.encryptionPrivateKey,
@@ -180,7 +180,7 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         },
         body: JSON.stringify({
           secretHash,
-          index: user.userData.username < connection.user.username ? 0 : 1,
+          index: user.getBioUsername < connection.user.username ? 0 : 1,
           intersectionState: {
             tensions,
             hotTakes,
@@ -295,7 +295,7 @@ export const triggerConnectionRefreshPSI = async (socket: Socket, user: User, co
       // send message with your encrypted username -- this allows connection to know which user to refresh for
       const message = await storage.createPSIMessageAndHandleBackup(
         connection.user.username,
-        user.userData.username,
+        user.getBioUsername,
       );
 
       await sendMessages({
