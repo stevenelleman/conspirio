@@ -27,7 +27,6 @@ export type Intersection = {
   tensions: string[];
   hotTakes: string[];
   contacts: string[];
-  devconEvents: string[];
   programmingLangs: string[];
   starredRepos: string[];
   interests: string[];
@@ -80,18 +79,6 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
       connection.user.encryptionPublicKey,
       contactData
     );
-
-    // Devcon events
-    let devconEventTitles: string[] = [];
-    let devconEvents: string[] = [];
-    if (user.userData?.devcon?.schedule) {
-      devconEventTitles = user.userData.devcon.schedule.map(event => event.title);
-      devconEvents = await hashCommit(
-        user.encryptionPrivateKey,
-        connection.user.encryptionPublicKey,
-        devconEventTitles
-      );
-    }
 
     // Github
     let languageNames: string[] = [];
@@ -198,7 +185,6 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
             tensions,
             hotTakes,
             contacts,
-            devconEvents,
             programmingLangs: programmingLangHashes,
             starredRepos: starredReposHashes,
             interests: interestHashes,
@@ -220,16 +206,6 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         );
         if (index !== -1) {
           translatedContacts.push(contactData[index]);
-        }
-      }
-
-      const translatedEvents = [];
-      for (const hashEvent of data.verifiedIntersectionState.devconEvents) {
-        const index = devconEvents.findIndex(
-          (event) => event === hashEvent
-        );
-        if (index !== -1) {
-          translatedEvents.push(devconEventTitles[index]);
         }
       }
 
@@ -297,7 +273,6 @@ export const refreshPSI = async (user: User, connection: Connection): Promise<In
         contacts: translatedContacts,
         tensions: data.verifiedIntersectionState.tensions,
         hotTakes: data.verifiedIntersectionState.hotTakes,
-        devconEvents: translatedEvents,
         programmingLangs: translatedLangs,
         starredRepos: translatedRepos,
         interests: translatedInterests,
