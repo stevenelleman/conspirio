@@ -12,6 +12,25 @@ import {
 import { LocationTaps, LocationTapsSchema } from "./location";
 import { EdgeBackup, EdgeBackupSchema } from "./edge";
 import { interests } from "@/lib/storage/types/user/interests";
+import { dislikes } from "@/lib/storage/types/user/dislikes";
+import {
+  TwitterData,
+  TelegramData,
+  SignalData,
+  InstagramData,
+  FarcasterData,
+  WhatsappData,
+  SMSData,
+  EmailData,
+} from "@/lib/storage/types/user/userData/socials";
+import { PersonalWebsites, SubstackData } from "@/lib/storage/types/user/userData/portfolio";
+import { StravaData } from "@/lib/storage/types/user/userData/stravaData";
+import { GithubData } from "@/lib/storage/types/user/userData/githubData";
+import { HotTakesRating, LannaData, TensionsRating } from "@/lib/storage/types/user/userData/lannaData";
+import { LannaHalloweenData } from "@/lib/storage/types/user/userData/lannaHalloweenData";
+import { DevconData } from "@/lib/storage/types/user/userData/devconData";
+import { ConnectionPSISize } from "@/lib/storage/types/user/userData/psiSizeData";
+import { UserSettings } from "@/lib/storage/types/user/userData";
 
 export const UserDataMigrationsSchema = z.object({
   migrationMovePSISizeToConnections: nullToUndefined(z.boolean().nullable()),
@@ -108,8 +127,139 @@ export class User implements UserType {
   }
 
   // getters for UserData values
+
+  // Bio
+  get getBioUsername(): string {
+    return this.userData.getUsername;
+  }
+
+  get getBioDisplayName(): string {
+    return this.userData.getDisplayName;
+  }
+
+  get getBio(): string {
+    return this.userData.getBio;
+  }
+
+  get getBioSignaturePublicKey(): string {
+    return this.userData.getSignaturePublicKey;
+  }
+
+  get getBioEncryptionPublicKey(): string {
+    return this.userData.getEncryptionPublicKey;
+  }
+
+  get getBioPsiPublicKeyLink(): string | undefined {
+    return this.userData.getPsiPublicKeyLink;
+  }
+
+  get getBioPronouns(): string | undefined {
+    return this.userData.getPronouns;
+  }
+
+  // Socials
+  get getSocialTwitter(): TwitterData | undefined {
+    return this.userData.getTwitter;
+  }
+
+  get getSocialTelegram(): TelegramData | undefined {
+    return this.userData.getTelegram;
+  }
+
+  get getSocialSignal(): SignalData | undefined {
+    return this.userData.getSignal;
+  }
+
+  get getSocialInstagram(): InstagramData | undefined {
+    return this.userData.getInstagram;
+  }
+
+  get getSocialFarcaster(): FarcasterData | undefined {
+    return this.userData.getFarcaster;
+  }
+
+  get getSocialWhatsapp(): WhatsappData | undefined {
+    return this.userData.getWhatsapp;
+  }
+
+  get getSocialSms(): SMSData | undefined {
+    return this.userData.getSms;
+  }
+
+  get getSocialEmail(): EmailData | undefined {
+    return this.userData.getEmail;
+  }
+
+  // Portfolio
+  get getPortfolioSubstack(): SubstackData | undefined {
+    return this.userData.getSubstack;
+  }
+
+  get getPortfolioPersonalWebsites(): PersonalWebsites | undefined {
+    return this.userData.getPersonalWebsites;
+  }
+
+  // Integrations
+  get getIntegrationStrava(): StravaData | undefined {
+    return this.userData.getStrava;
+  }
+
+  get getIntegrationGithub(): GithubData | undefined {
+    return this.userData.getGithub;
+  }
+
+  // Templates
+  get getTemplateTensionsRating(): TensionsRating | undefined {
+    return this.userData.getTensionsRating;
+  }
+
+  get getTemplateHotTakesRating(): HotTakesRating | undefined {
+    return this.userData.getHotTakesRating;
+  }
+
+  // -- Vanilla & Spicy
   get getTemplatePublicInterests(): interests | undefined {
     return this.userData.getPublicInterests;
+  }
+
+  get getTemplatePrivateInterests(): interests | undefined {
+    return this.userData.getPrivateInterests;
+  }
+
+  // -- Lets Shit Talk
+  get getTemplateDislikesPublicDefender(): dislikes | undefined {
+    return this.userData.getDislikesPublicDefender;
+  }
+
+  get getTemplateDislikesPetPeeves(): dislikes | undefined {
+    return this.userData.getDislikesPetPeeves;
+  }
+
+  get getTemplateDislikesLoveToHate(): dislikes | undefined {
+    return this.userData.getDislikesLoveToHate;
+  }
+
+  // Settings
+  get getSettings(): UserSettings | undefined {
+    return this.userData.getSettings;
+  }
+
+  // WIP: Migration in progress to ConnectionSchema
+  get getConnectionPSISize(): ConnectionPSISize | undefined {
+    return this.userData.getConnectionPSISize;
+  }
+
+  // Deprecated
+  get getDeprecatedLanna(): LannaData | undefined {
+    return this.userData.getLanna;
+  }
+
+  get getDeprecatedLannaHalloween(): LannaHalloweenData | undefined {
+    return this.userData.getLannaHalloween;
+  }
+
+  get getDeprecatedDevcon(): DevconData | undefined {
+    return this.userData.getDevcon;
   }
 }
 

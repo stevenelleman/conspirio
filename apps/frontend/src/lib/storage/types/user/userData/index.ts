@@ -220,8 +220,138 @@ export class UserData implements UserDataType {
     this.devcon = validated.devcon;
   }
 
+  // Bio
+  get getUsername(): string {
+    return this.username;
+  }
+
+  get getDisplayName(): string {
+    return this.displayName;
+  }
+
+  get getBio(): string {
+    return this.bio;
+  }
+
+  get getSignaturePublicKey(): string {
+    return this.signaturePublicKey;
+  }
+
+  get getEncryptionPublicKey(): string {
+    return this.encryptionPublicKey;
+  }
+
+  get getPsiPublicKeyLink(): string | undefined {
+    return this.psiPublicKeyLink;
+  }
+
+  get getPronouns(): string | undefined {
+    return this.pronouns;
+  }
+
+  // Socials
+  get getTwitter(): TwitterData | undefined {
+    return this.twitter;
+  }
+
+  get getTelegram(): TelegramData | undefined {
+    return this.telegram;
+  }
+
+  get getSignal(): SignalData | undefined {
+    return this.signal;
+  }
+
+  get getInstagram(): InstagramData | undefined {
+    return this.instagram;
+  }
+
+  get getFarcaster(): FarcasterData | undefined {
+    return this.farcaster;
+  }
+
+  get getWhatsapp(): WhatsappData | undefined {
+    return this.whatsapp;
+  }
+
+  get getSms(): SMSData | undefined {
+    return this.sms;
+  }
+
+  get getEmail(): EmailData | undefined {
+    return this.email;
+  }
+
+  // Portfolio
+  get getSubstack(): SubstackData | undefined {
+    return this.substack;
+  }
+
+  get getPersonalWebsites(): PersonalWebsites | undefined {
+    return this.personalWebsites;
+  }
+
+  // Integrations
+  get getStrava(): StravaData | undefined {
+    return this.strava;
+  }
+
+  get getGithub(): GithubData | undefined {
+    return this.github;
+  }
+
+  // Templates
+  get getTensionsRating(): TensionsRating | undefined {
+    return this.tensionsRating;
+  }
+
+  get getHotTakesRating(): HotTakesRating | undefined {
+    return this.hotTakesRating;
+  }
+
+  // -- Vanilla & Spicy
   get getPublicInterests(): interests | undefined {
     return this.publicInterests;
+  }
+
+  get getPrivateInterests(): interests | undefined {
+    return this.privateInterests;
+  }
+
+  // -- Lets Shit Talk
+  get getDislikesPublicDefender(): dislikes | undefined {
+    return this.dislikesPublicDefender;
+  }
+
+  get getDislikesPetPeeves(): dislikes | undefined {
+    return this.dislikesPetPeeves;
+  }
+
+  get getDislikesLoveToHate(): dislikes | undefined {
+    return this.dislikesLoveToHate;
+  }
+
+  // Settings
+  get getSettings(): UserSettings | undefined {
+    return this.settings;
+  }
+
+  // WIP: Migration in progress to ConnectionSchema
+  get getConnectionPSISize(): ConnectionPSISize | undefined {
+    return this.connectionPSISize;
+  }
+
+  // Deprecated
+  get getLanna(): LannaData | undefined {
+    return this.lanna;
+  }
+
+  get getLannaHalloween(): LannaHalloweenData | undefined {
+    return this.lannaHalloween;
+  }
+
+  get getDevcon(): DevconData | undefined {
+    return this.devcon;
   }
 }
 
