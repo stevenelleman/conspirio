@@ -1,25 +1,21 @@
 import { DataImportSource } from "@types";
-import { UserDataV0Type } from "@/lib/storage/types";
+import { UserDataPatch } from "@/lib/storage/types";
 import { getUserAndSession } from "@/lib/storage/localStorage/user/index";
 import { createUserDataBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
-import { requireUserDataV0 } from "@/lib/storage/types";
 
 export const deleteAppImports = async (
   app: DataImportSource
 ): Promise<void> => {
   const { user, session } = await getUserAndSession();
 
-  let updatedUserData: UserDataV0Type = requireUserDataV0(user.userData);
-  if (!updatedUserData) {
+  if (!user.userData) {
     return;
   }
 
-  for (const fieldName of Object.keys(updatedUserData)) {
-    if (fieldName === app.toString()) {
-      updatedUserData = {...updatedUserData, [fieldName]: undefined};
-    }
-  }
+  // DataImportSource values match the strava and github UserData property names
+  const patch: UserDataPatch = { [app]: undefined };
+  const updatedUserData = user.userData.withUpdates(patch);
 
   const importDeletionBackup = createUserDataBackup({
     email: user.email,

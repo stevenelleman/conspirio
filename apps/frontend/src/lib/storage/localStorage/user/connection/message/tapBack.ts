@@ -9,7 +9,6 @@ import { getUserShareableData } from "@/lib/user";
 import { createActivityBackup, upsertConnectionBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "../../../utils";
 import { createTapBackSentActivity } from "@/lib/activity";
-import { requireUserDataV0 } from "@/lib/storage/types";
 
 export const createTapBackMessage = async (
   connectionUsername: string,
@@ -39,7 +38,7 @@ export const createTapBackMessage = async (
 
   const { serializedMessage, messageTimestamp } =
     await generateSerializedTapBackMessage({
-      user: getUserShareableData(requireUserDataV0(user.userData)),
+      user: getUserShareableData(user.userData),
       chipPrivateKey: tapBackChipPrivateKey,
       chipPublicKey: tapBackChipPublicKey,
       chipIssuer: tapBackChipIssuer,

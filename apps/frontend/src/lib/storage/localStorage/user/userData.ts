@@ -1,9 +1,9 @@
-import { UserDataV0Type } from "@/lib/storage/types";
+import { UserDataType, UserDataV0Type } from "@/lib/storage/types";
 import { createUserDataBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "../utils";
 import { getUserAndSession } from ".";
 
-export const updateUserData = async (userData: UserDataV0Type): Promise<void> => {
+export const updateUserData = async (userData: UserDataV0Type | UserDataType): Promise<void> => {
   const { user, session } = await getUserAndSession();
 
   const userDataBackup = createUserDataBackup({

@@ -95,10 +95,8 @@ export const processUserBackup = ({
           throw new Error("USER_DATA backup entry found before INITIAL");
         }
 
-        // Entries written before MIGRATION_USERDATA_CLEANUP1 are V0, entries after are V1.
-        // NOTE: Uses the explicit flag rather than user.migratedUserDataCleanup1, because users created after that
-        // getter's cutoff date are still registered with V0 data and must not be upgraded yet.
-        user.userData = parseUserData(JSON.parse(decryptedData), !!user.migrations?.migrationUserDataCleanup1);
+        // Entries written before MIGRATION_USERDATA_CLEANUP1 are V0, entries after are V1
+        user.userData = parseUserData(JSON.parse(decryptedData), user.migratedUserDataCleanup1);
         break;
       case BackupEntryType.CHIP:
         if (!user) {

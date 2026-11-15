@@ -2,7 +2,7 @@ import { BASE_API_URL } from "@/config";
 import { ChipIssuer, errorToString, GetChipIdResponse, GetChipIdResponseSchema, Json, UpdateChipRequest } from "@types";
 import { storage } from "../storage";
 import { validateEmail, validateHttpsDomain } from "@/lib/frontend/util";
-import { UserSettings, requireUserDataV0 } from "@/lib/storage/types";
+import { UserSettings } from "@/lib/storage/types";
 
 interface UpdateChipArgs {
   authToken: string;
@@ -150,8 +150,7 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       throw new Error("User not found");
     }
 
-    await storage.updateUserData({
-      ...requireUserDataV0(user.userData),
+    await storage.updateUserData(user.userData.withUpdates({
       displayName: args.ownerDisplayName ?? "",
       bio: args.ownerBio ?? "",
       twitter: {
@@ -190,7 +189,7 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
       dislikesPetPeeves: args.ownerDislikesPetPeeves ?? undefined,
       dislikesLoveToHate: args.ownerDislikesLoveToHate ?? undefined,
       settings: args.ownerSettings ?? undefined,
-    });
+    }));
   } catch (error) {
     console.error("Error updating chip:", errorToString(error));
     throw error;

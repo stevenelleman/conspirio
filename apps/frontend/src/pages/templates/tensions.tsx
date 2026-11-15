@@ -11,7 +11,6 @@ import { errorToString } from "@types";
 import { SUPPORT_CONTACT } from "@/constants";
 import { cn } from "@/lib/frontend/util";
 import useSettings from "@/hooks/useSettings";
-import { requireUserDataV0 } from "@/lib/storage/types";
 
 export default function TensionsPage() {
   const router = useRouter();
@@ -72,14 +71,13 @@ export default function TensionsPage() {
     }
 
     try {
-      await storage.updateUserData({
-        ...requireUserDataV0(user.userData),
+      await storage.updateUserData(user.userData.withUpdates({
         tensionsRating: {
           tensionRating: sliderValues,
           revealAnswers,
           contributeAnonymously,
         },
-      });
+      }));
 
       logClientEvent("submit_tensions", {});
 

@@ -14,7 +14,6 @@ import { fuzzyMatch } from "@/lib/frontend/util";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { updateChip } from "@/lib/chip/update";
-import { requireUserDataV0 } from "@/lib/storage/types";
 
 type InterestFormData = {
   vanillaInterests?: string[],
@@ -66,11 +65,10 @@ export default function VanillaSpicyPage() {
     // TODO: Similar to other personalWebsites what is difference between null vs undefined vs []?
 
     try {
-      await storage.updateUserData({
-        ...requireUserDataV0(user.userData),
+      await storage.updateUserData(user.userData.withUpdates({
         publicInterests: vanillaInterests,
         privateInterests: spicyInterests,
-      });
+      }));
 
       // Only update chips if vanillaInterests defined
       if (vanillaInterests) {

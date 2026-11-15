@@ -13,9 +13,8 @@ import {
 import {
   User,
   Connection,
-  UserDataV0Type,
+  UserDataV0,
   Session,
-  requireUserDataV0,
 } from "@/lib/storage/types";
 import { storage } from "@/lib/storage";
 import { sendMessages } from "@/lib/message";
@@ -348,7 +347,12 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
         newBackupData: [connectionBackup],
       });
     } else {
-      const newUserData: UserDataV0Type = requireUserDataV0(user.userData);
+      // Only reachable before MIGRATION_MOVE_PSISIZE_TO_CONNECTION, which MIGRATION_USERDATA_CLEANUP1 depends on, so
+      // userData is always UserDataV0 here
+      if (!(user.userData instanceof UserDataV0)) {
+        throw new Error("Expected UserDataV0 before MIGRATION_MOVE_PSISIZE_TO_CONNECTION");
+      }
+      const newUserData: UserDataV0 = user.userData;
       if (!newUserData.connectionPSISize) {
         newUserData.connectionPSISize = {};
       }

@@ -9,7 +9,7 @@ import {
   OAuthAppDetails,
   RefreshRateType,
 } from "@types";
-import { User, UserDataV0Type, requireUserDataV0 } from "@/lib/storage/types";
+import { User, UserDataGetters } from "@/lib/storage/types";
 import { fetchImportedData } from "./fetch";
 import { saveImportedData } from "./save";
 import { OAUTH_APP_DETAILS } from "@/config";
@@ -61,25 +61,25 @@ export async function fetchAndSaveImportedData(
 }
 
 export function getUserDataUpdatedAt(
-  userData: UserDataV0Type,
+  userData: UserDataGetters,
   dataType: ImportDataType
 ): Date | undefined {
   let lastImportedAt: Date | undefined = undefined;
   switch (dataType) {
     case ImportDataType.STRAVA_PREVIOUS_MONTH_RUN_DISTANCE:
-      lastImportedAt = userData?.strava?.previousMonthRunDistance?.lastUpdated;
+      lastImportedAt = userData?.getStrava?.previousMonthRunDistance?.lastUpdated;
       break;
     case ImportDataType.GITHUB_LANNA_CONTRIBUTIONS:
-      lastImportedAt = userData?.github?.lannaCommits?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.lannaCommits?.lastUpdated;
       break;
     case ImportDataType.GITHUB_CONTRIBUTIONS_LAST_YEAR:
-      lastImportedAt = userData?.github?.annualCommits?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.annualCommits?.lastUpdated;
       break;
     case ImportDataType.GITHUB_STARRED_REPOS:
-      lastImportedAt = userData?.github?.starredRepos?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.starredRepos?.lastUpdated;
       break;
     case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
-      lastImportedAt = userData?.github?.programmingLanguages?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.programmingLanguages?.lastUpdated;
       break;
     default:
       console.error("Import type not recognized.");
@@ -138,7 +138,7 @@ export function shouldRefreshImport(
 ): boolean {
   try {
     const lastImportedAt: Date | undefined = getUserDataUpdatedAt(
-      requireUserDataV0(user.userData),
+      user.userData,
       dataType
     );
 

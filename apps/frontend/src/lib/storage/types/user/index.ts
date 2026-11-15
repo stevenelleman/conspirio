@@ -137,9 +137,10 @@ export class User implements UserType {
   }
 
   get migratedUserDataCleanup1(): boolean {
-    // TODO: any way to factor in migrationMovePSISizeToConnections? would love to ensure that it's also true by
-    //  this stage
-    return !!((this.createdAt && this.createdAt > new Date("2026-11-14")) || (this.migrations && this.migrations.migrationUserDataCleanup1));
+    // Uses the shape of userData rather than a createdAt cutoff: users registered after registration switched to
+    // UserData already have it, while users registered with UserDataV0 (whenever that was) still need the migration.
+    // The dependency on migrationMovePSISizeToConnections is enforced by the MIGRATION_USERDATA_CLEANUP1 backup case.
+    return this.userData instanceof UserData || !!(this.migrations && this.migrations.migrationUserDataCleanup1);
   }
 
   // getters for UserData values

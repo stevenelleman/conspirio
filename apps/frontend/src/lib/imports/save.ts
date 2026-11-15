@@ -16,7 +16,7 @@ import {
 } from "./integrations/github";
 import { updateUserDataFromImportData } from "@/lib/imports/update";
 import { storage } from "@/lib/storage";
-import { User, UserDataV0Type, requireUserDataV0 } from "@/lib/storage/types";
+import { User, UserData, UserDataV0 } from "@/lib/storage/types";
 import { updateLeaderboardEntry } from "@/lib/chip";
 
 
@@ -56,7 +56,7 @@ export function MapResponseToLeaderboardEntryRequest(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function updateUserData(userData: UserDataV0Type, importType: ImportDataType, data: any): Promise<void> {
+async function updateUserData(userData: UserData | UserDataV0, importType: ImportDataType, data: any): Promise<void> {
   // Do not have backup type because leaderboard is chipIssuer-scoped, not user-scoped
   const newUserData = await updateUserDataFromImportData(
     userData,
@@ -80,7 +80,7 @@ async function saveLeaderboardEntries(options: DataOption, authToken: string, us
     throw new Error("Imported leaderboard entry is null");
   }
 
-  await updateUserData(requireUserDataV0(user.userData), options.type, leaderboardEntryRequest.entryValue);
+  await updateUserData(user.userData, options.type, leaderboardEntryRequest.entryValue);
 
   await updateLeaderboardEntry(leaderboardEntryRequest);
   return;
@@ -121,7 +121,7 @@ export async function saveImportedData(authToken: string, user: User, option: Da
           }
           starredRepos.push(name);
         }
-        await updateUserData(requireUserDataV0(user.userData), option.type, starredRepos);
+        await updateUserData(user.userData, option.type, starredRepos);
         return;
       case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
         const repos2: GithubReposResponse = GithubReposResponseSchema.parse(data);
@@ -137,7 +137,7 @@ export async function saveImportedData(authToken: string, user: User, option: Da
           }
           languages[lang].push(repo.full_name);
         }
-        await updateUserData(requireUserDataV0(user.userData), option.type, languages);
+        await updateUserData(user.userData, option.type, languages);
         return;
       default:
         return;

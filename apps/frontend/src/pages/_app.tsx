@@ -144,7 +144,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         } else if (user.migratedPSISize && !user.migratedUserDataCleanup1) {
           // The first condition is redundant, but I want it to be explicit that there's a dependency between migrations
 
-          // migrateUserDataCleanup1(user, session);
+          migrateUserDataCleanup1(user, session);
         }
       }
     }

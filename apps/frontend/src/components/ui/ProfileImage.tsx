@@ -7,7 +7,7 @@ const goudyBookletter = Goudy_Bookletter_1911({
   subsets: ["latin"],
 });
 
-export const getProfileBackgroundColor = (user: UserDataV0Type) => {
+export const getProfileBackgroundColor = (user: UserDataV0Type | undefined) => {
   const colorPalette = [
     "#FF9DF8", // Light Pinkish Purple
     "#FFF59D", // Light Yellow
@@ -25,7 +25,7 @@ export const getProfileBackgroundColor = (user: UserDataV0Type) => {
   ];
 
   const colorIndex =
-    user?.username
+    (user?.username ?? "")
       .trim()
       .split("")
       .reduce((acc, char) => acc + char.charCodeAt(0), 0) % colorPalette.length;
@@ -37,7 +37,7 @@ export const ProfileImage = ({
   user,
   size = 12,
 }: {
-  user: UserDataV0Type;
+  user: UserDataV0Type | undefined;
   size?: number;
 }) => {
   if (!user || Object.keys(user)?.length === 0)

@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { updateChip } from "@/lib/chip/update";
 import { loveToHate, petPeeves, socialIssues } from "@/lib/storage/types/user/dislikes";
-import { requireUserDataV0 } from "@/lib/storage/types";
 
 type DislikesFormData = {
   publicDefender: string[],
@@ -76,8 +75,7 @@ export default function LetsShitTalkPage() {
     // TODO: Similar to other personalWebsites what is difference between null vs undefined vs []?
 
     try {
-      await storage.updateUserData({
-        ...requireUserDataV0(user.userData),
+      await storage.updateUserData(user.userData.withUpdates({
         dislikesPublicDefender: publicDefender,
         dislikesPetPeeves: petPeeves,
         dislikesLoveToHate: loveToHate,
@@ -87,7 +85,7 @@ export default function LetsShitTalkPage() {
           discloseDislikesPetPeeves: disclosePetPeeves,
           discloseDislikesLoveToHate: discloseLoveToHate,
         }
-      });
+      }));
 
       try {
         // Once UserData successfully updated, update userChips

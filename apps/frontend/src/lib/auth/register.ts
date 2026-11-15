@@ -101,17 +101,21 @@ export async function registerUser({
     serializedPsiPrivateKey: undefined,
     lastMessageFetchedAt: new Date(),
     userData: {
-      username,
-      displayName,
-      bio,
-      signaturePublicKey,
-      encryptionPublicKey,
-      psiPublicKeyLink: undefined,
-      twitter: {
-        username: twitterHandle,
+      bio: {
+        username,
+        displayName,
+        bio,
+        signaturePublicKey,
+        encryptionPublicKey,
+        psiPublicKeyLink: undefined,
       },
-      telegram: {
-        username: telegramHandle,
+      socials: {
+        twitter: {
+          username: twitterHandle,
+        },
+        telegram: {
+          username: telegramHandle,
+        },
       },
     },
     chips: [],

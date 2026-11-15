@@ -186,6 +186,42 @@ export interface UserDataGetters {
   readonly getDevcon: DevconData | undefined;
 }
 
+// Writers describe changes with the flat V0 property names, and each class applies them in its own shape. A key that is
+// present with an undefined value clears that property.
+export type UserDataPatch = Partial<Omit<UserDataV0Type, "connectionPSISize" | "lanna" | "lannaHalloween" | "devcon">>;
+
+type UserDataGroup = "bio" | "socials" | "portfolio" | "templates" | "integrations" | "settings";
+
+const USER_DATA_PATCH_GROUPS: Record<keyof UserDataPatch, UserDataGroup> = {
+  username: "bio",
+  displayName: "bio",
+  bio: "bio",
+  signaturePublicKey: "bio",
+  encryptionPublicKey: "bio",
+  psiPublicKeyLink: "bio",
+  pronouns: "bio",
+  twitter: "socials",
+  telegram: "socials",
+  signal: "socials",
+  instagram: "socials",
+  farcaster: "socials",
+  whatsapp: "socials",
+  sms: "socials",
+  email: "socials",
+  substack: "portfolio",
+  personalWebsites: "portfolio",
+  strava: "integrations",
+  github: "integrations",
+  tensionsRating: "templates",
+  hotTakesRating: "templates",
+  publicInterests: "templates",
+  privateInterests: "templates",
+  dislikesPublicDefender: "templates",
+  dislikesPetPeeves: "templates",
+  dislikesLoveToHate: "templates",
+  settings: "settings",
+};
+
 export class UserData implements UserDataType, UserDataGetters {
   bio: UserBio;
   socials: UserSocials | undefined;
@@ -248,6 +284,28 @@ export class UserData implements UserDataType, UserDataGetters {
       },
       settings: v0.settings,
     });
+  }
+
+  withUpdates(patch: UserDataPatch): UserData {
+    const groups: Record<Exclude<UserDataGroup, "settings">, Record<string, unknown>> = {
+      bio: { ...this.bio },
+      socials: { ...this.socials },
+      portfolio: { ...this.portfolio },
+      templates: { ...this.templates },
+      integrations: { ...this.integrations },
+    };
+    let settings = this.settings;
+
+    for (const [key, value] of Object.entries(patch)) {
+      const group = USER_DATA_PATCH_GROUPS[key as keyof UserDataPatch];
+      if (group === "settings") {
+        settings = value as UserSettings | undefined;
+      } else {
+        groups[group][key] = value;
+      }
+    }
+
+    return new UserData({ ...groups, settings });
   }
 
   // Bio
@@ -559,6 +617,10 @@ export class UserDataV0 implements UserDataV0Type, UserDataGetters {
     this.devcon = validated.devcon;
   }
 
+  withUpdates(patch: UserDataPatch): UserDataV0 {
+    return new UserDataV0({ ...this, ...patch });
+  }
+
   // Bio
   get getUsername(): string {
     return this.username;
@@ -707,13 +769,57 @@ export const parseUserData = (raw: unknown, migrated: boolean): UserData | UserD
   return migrated ? UserData.fromV0(v0) : v0;
 };
 
-// TODO: MIGRATION_USERDATA_CLEANUP1 -- callers of this still read or write the flat V0 shape. Each one must handle
-//  UserData before the migration is triggered in _app.tsx, otherwise migrated users will hit this error.
-export const requireUserDataV0 = (userData: UserData | UserDataV0): UserDataV0 => {
-  if (!(userData instanceof UserDataV0)) {
-    throw new Error("Expected UserDataV0, but user has already migrated to UserData");
-  }
-  return userData;
+// Flat V0 shape built from either version. Data shared with other users (tap backs, chips) and components that also
+// render connections' data still use this shape.
+export const userDataToV0Type = (userData: UserDataGetters): UserDataV0Type => {
+  return {
+    // Bio
+    username: userData.getUsername,
+    displayName: userData.getDisplayName,
+    bio: userData.getBio,
+    signaturePublicKey: userData.getSignaturePublicKey,
+    encryptionPublicKey: userData.getEncryptionPublicKey,
+    psiPublicKeyLink: userData.getPsiPublicKeyLink,
+    pronouns: userData.getPronouns,
+
+    // Socials
+    twitter: userData.getTwitter,
+    telegram: userData.getTelegram,
+    signal: userData.getSignal,
+    instagram: userData.getInstagram,
+    farcaster: userData.getFarcaster,
+    whatsapp: userData.getWhatsapp,
+    sms: userData.getSms,
+    email: userData.getEmail,
+
+    // Portfolio
+    substack: userData.getSubstack,
+    personalWebsites: userData.getPersonalWebsites,
+
+    // Integrations
+    strava: userData.getStrava,
+    github: userData.getGithub,
+
+    // Templates
+    tensionsRating: userData.getTensionsRating,
+    hotTakesRating: userData.getHotTakesRating,
+    publicInterests: userData.getPublicInterests,
+    privateInterests: userData.getPrivateInterests,
+    dislikesPublicDefender: userData.getDislikesPublicDefender,
+    dislikesPetPeeves: userData.getDislikesPetPeeves,
+    dislikesLoveToHate: userData.getDislikesLoveToHate,
+
+    // Settings
+    settings: userData.getSettings,
+
+    // WIP: Migration in progress to ConnectionSchema
+    connectionPSISize: userData.getConnectionPSISize,
+
+    // Deprecated
+    lanna: userData.getLanna,
+    lannaHalloween: userData.getLannaHalloween,
+    devcon: userData.getDevcon,
+  };
 };
 
 export const UnregisteredUserDataSchema = z.object({

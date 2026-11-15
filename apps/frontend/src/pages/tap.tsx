@@ -23,7 +23,7 @@ import { hasRecentAddChipRequest } from "@/lib/chip/addChip";
 import { upsertSocialGraphEdge } from "@/lib/graph";
 import { sha256 } from "js-sha256";
 import { sendMessages } from "@/lib/message";
-import { DEVCON, requireUserDataV0 } from "@/lib/storage/types";
+import { DEVCON } from "@/lib/storage/types";
 import { logoutUser } from "@/lib/auth";
 
 const TapPage: React.FC = () => {
@@ -214,7 +214,7 @@ const TapPage: React.FC = () => {
             logClientEvent("tap-chip-logged-in-bind-new-chip", {});
 
             // Only include shareable data
-            const shareableUserData = shareableUserDataToJson(requireUserDataV0(user.userData));
+            const shareableUserData = shareableUserDataToJson(user.userData);
 
             await registerChip({
               authToken: session.authTokenValue,
