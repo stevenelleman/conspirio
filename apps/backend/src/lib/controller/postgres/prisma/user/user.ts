@@ -118,8 +118,7 @@ PrismaPostgresClient.prototype.CreateUser = async function (
       usernameLowercase: createUser.username.toLowerCase(),
       email: createUser.email.toLowerCase(),
       notificationsEnabled: false,
-      // NOTE: Local DB removed column 
-      //tapGraphEnabled: false,
+      tapGraphEnabled: false,
     },
   });
 
