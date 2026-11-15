@@ -5,7 +5,7 @@ import {
   PSIData,
   Session,
   TapInfo,
-  UserData,
+  UserDataType,
   User,
 } from "./types";
 import { LocalStorage } from "./localStorage/client";
@@ -39,7 +39,7 @@ export interface ClientStorage {
   saveTapInfo(tapInfo: TapInfo): Promise<void>;
   loadSavedTapInfo(): Promise<TapInfo | undefined>;
   deleteSavedTapInfo(): Promise<void>;
-  updateUserData(userData: UserData): Promise<void>;
+  updateUserData(userData: UserDataType): Promise<void>;
   addChip(chip: Chip): Promise<void>;
   addUserTap(tapResponse: ChipTapResponse): Promise<void>;
   addLocationTap(tapResponse: ChipTapResponse): Promise<void>;

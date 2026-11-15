@@ -38,14 +38,14 @@ export default function LetsShitTalkPage() {
       const { user, session } = await storage.getUserAndSession();
       if (user && session && new Date() < session.authTokenExpiresAt) {
         reset({
-          publicDefender: user.userData?.dislikesPublicDefender || [],
-          petPeeves: user.userData?.dislikesPetPeeves || [],
-          loveToHate: user.userData?.dislikesLoveToHate || [],
+          publicDefender: user.getTemplateDislikesPublicDefender || [],
+          petPeeves: user.getTemplateDislikesPetPeeves || [],
+          loveToHate: user.getTemplateDislikesLoveToHate || [],
         });
 
-        setDisclosePublicDefender(user.userData?.settings?.discloseDislikesPublicDefender || false);
-        setDisclosePetPeeves(user.userData?.settings?.discloseDislikesPetPeeves || false);
-        setDiscloseLoveToHate(user.userData?.settings?.discloseDislikesLoveToHate || false);
+        setDisclosePublicDefender(user.getSettings?.discloseDislikesPublicDefender || false);
+        setDisclosePetPeeves(user.getSettings?.discloseDislikesPetPeeves || false);
+        setDiscloseLoveToHate(user.getSettings?.discloseDislikesLoveToHate || false);
       } else {
         toast.error("Please log in to view your profile.");
         router.push("/");
@@ -75,18 +75,18 @@ export default function LetsShitTalkPage() {
     // TODO: Similar to other personalWebsites what is difference between null vs undefined vs []?
 
     try {
-      await storage.updateUserData({
-        ...user.userData,
-        dislikesPublicDefender: publicDefender,
-        dislikesPetPeeves: petPeeves,
-        dislikesLoveToHate: loveToHate,
+      await storage.updateUserData(user.userData.withUpdates({
+        templates: {
+          dislikesPublicDefender: publicDefender,
+          dislikesPetPeeves: petPeeves,
+          dislikesLoveToHate: loveToHate,
+        },
         settings: {
-          ...user.userData.settings,
           discloseDislikesPublicDefender: disclosePublicDefender,
           discloseDislikesPetPeeves: disclosePetPeeves,
           discloseDislikesLoveToHate: discloseLoveToHate,
         }
-      });
+      }));
 
       try {
         // Once UserData successfully updated, update userChips
@@ -111,23 +111,23 @@ export default function LetsShitTalkPage() {
             ownerDislikesLoveToHate: disclosedAndNonEmptyLoveToHate ? loveToHate: null,
 
             // All other retain existing values
-            ownerDisplayName: user.userData.displayName ?? null,
-            ownerBio: user.userData.bio ?? null,
-            ownerTwitterUsername: user.userData.twitter?.username ?? null,
-            ownerTelegramUsername: user.userData.telegram?.username ?? null,
-            ownerSignalUsername: user.userData.signal?.username ?? null,
-            ownerInstagramUsername: user.userData.instagram?.username ?? null,
-            ownerFarcasterUsername: user.userData.farcaster?.username ?? null,
-            ownerEmail: user.userData.email?.address ?? null,
-            ownerSMSNumber: user.userData.sms?.number ?? null,
-            ownerWhatsappNumber: user.userData.whatsapp?.number ?? null,
-            ownerPersonalWebsites: user.userData.personalWebsites?.websites ?? null,
-            ownerSubstack: user.userData.substack?.handle ?? null,
-            ownerPronouns: user.userData.pronouns ?? null,
-            ownerPublicInterests: user.userData.publicInterests ?? null,
+            ownerDisplayName: user.getBioDisplayName ?? null,
+            ownerBio: user.getBio ?? null,
+            ownerTwitterUsername: user.getSocialTwitter?.username ?? null,
+            ownerTelegramUsername: user.getSocialTelegram?.username ?? null,
+            ownerSignalUsername: user.getSocialSignal?.username ?? null,
+            ownerInstagramUsername: user.getSocialInstagram?.username ?? null,
+            ownerFarcasterUsername: user.getSocialFarcaster?.username ?? null,
+            ownerEmail: user.getSocialEmail?.address ?? null,
+            ownerSMSNumber: user.getSocialSms?.number ?? null,
+            ownerWhatsappNumber: user.getSocialWhatsapp?.number ?? null,
+            ownerPersonalWebsites: user.getPortfolioPersonalWebsites?.websites ?? null,
+            ownerSubstack: user.getPortfolioSubstack?.handle ?? null,
+            ownerPronouns: user.getBioPronouns ?? null,
+            ownerPublicInterests: user.getTemplatePublicInterests ?? null,
 
             ownerSettings: {
-              ...user.userData?.settings,
+              ...user.getSettings,
               discloseDislikesPublicDefender: disclosedAndNonEmptyPublicDefender,
               discloseDislikesPetPeeves: disclosePetPeeves,
               discloseDislikesLoveToHate: discloseLoveToHate

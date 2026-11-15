@@ -29,7 +29,7 @@ export const createTapBackMessage = async (
   const chip = user.chips.find((chip) => chip.issuer === chipIssuer);
   if (!chip) {
     tapBackChipPrivateKey = user.signaturePrivateKey;
-    tapBackChipPublicKey = user.userData.signaturePublicKey;
+    tapBackChipPublicKey = user.getBioSignaturePublicKey;
     tapBackChipIssuer = ChipIssuer.USER;
   } else {
     tapBackChipPrivateKey = chip.privateKey;
@@ -78,7 +78,7 @@ export const createTapBackMessage = async (
     receiverSignaturePublicKey: connection.user.signaturePublicKey,
     receiverEncryptionPublicKey: connection.user.encryptionPublicKey,
     serializedData: serializedMessage,
-    senderSignaturePublicKey: user.userData.signaturePublicKey,
+    senderSignaturePublicKey: user.getBioSignaturePublicKey,
     senderSignaturePrivateKey: user.signaturePrivateKey,
   });
 };

@@ -29,13 +29,13 @@ export default function TensionsPage() {
         return;
       }
 
-      if (user.userData.hotTakesRating) {
+      if (user.getTemplateHotTakesRating) {
         setSliderValues(
-          user.userData.hotTakesRating.rating ?? hotTakeLabels.map(() => 1)
+          user.getTemplateHotTakesRating.rating ?? hotTakeLabels.map(() => 1)
         );
-        setRevealAnswers(user.userData.hotTakesRating.revealAnswers ?? false);
+        setRevealAnswers(user.getTemplateHotTakesRating.revealAnswers ?? false);
         setContributeAnonymously(
-          user.userData.hotTakesRating.contributeAnonymously ?? false
+          user.getTemplateHotTakesRating.contributeAnonymously ?? false
         );
       }
     };
@@ -68,14 +68,15 @@ export default function TensionsPage() {
     }
 
     try {
-      await storage.updateUserData({
-        ...user.userData,
-        hotTakesRating: {
-          rating: sliderValues,
-          revealAnswers,
-          contributeAnonymously,
+      await storage.updateUserData(user.userData.withUpdates({
+        templates: {
+          hotTakesRating: {
+            rating: sliderValues,
+            revealAnswers,
+            contributeAnonymously,
+          },
         },
-      });
+      }));
 
       logClientEvent("submit_tensions", {});
 

@@ -65,7 +65,7 @@ export const createEdgeMessageAndHandleBackup = async (
     receiverSignaturePublicKey: connection.user.signaturePublicKey,
     receiverEncryptionPublicKey: connection.user.encryptionPublicKey,
     serializedData: serializedMessage,
-    senderSignaturePublicKey: user.userData.signaturePublicKey,
+    senderSignaturePublicKey: user.getBioSignaturePublicKey,
     senderSignaturePrivateKey: user.signaturePrivateKey,
   });
 };

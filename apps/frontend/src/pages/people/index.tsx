@@ -106,8 +106,8 @@ const PeoplePage: React.FC = () => {
       }
 
       // WIP: Migration in progress, once backfilled, this can be removed
-      if (user?.userData?.connectionPSISize) {
-        setPSISize(user?.userData?.connectionPSISize);
+      if (user?.getConnectionPSISize) {
+        setPSISize(user?.getConnectionPSISize);
       }
 
       let sortedConnections = {};
@@ -155,7 +155,7 @@ const PeoplePage: React.FC = () => {
 
           const flowerIndex = flowerType(
             connection.user.username,
-            user?.userData?.username
+            user?.getBioUsername
           );
 
           const flowerImage = `/flowers/flower-${flowerIndex}-${flowerStage}.svg`;

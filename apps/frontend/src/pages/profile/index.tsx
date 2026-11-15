@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
-import { User, UserData } from "@/lib/storage/types";
+import { User, toWireUserData } from "@/lib/storage/types";
 import { toast } from "sonner";
 import AppLayout from "@/layouts/AppLayout";
 import { AppButton } from "@/components/ui/Button";
@@ -104,12 +104,12 @@ const ProfilePage: React.FC = () => {
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.STRAVA);
 
   const hasOauthToAdd = hasGithubToAdd || hasStravaToAdd;
-  const hasDataToAdd = hasOauthToAdd || !user.userData.tensionsRating;
+  const hasDataToAdd = hasOauthToAdd || !user.getTemplateTensionsRating;
 
   const hasVaultData =
     (user.oauth && Object.keys(user.oauth).length > 0) ||
-    user.userData.tensionsRating ||
-    user.userData.hotTakesRating;
+    user.getTemplateTensionsRating ||
+    user.getTemplateHotTakesRating;
 
   return (
     <>
@@ -124,12 +124,12 @@ const ProfilePage: React.FC = () => {
               className="h-[60px] w-full relative"
               style={{
                 background: `linear-gradient(90deg, #FFF 0%, ${getProfileBackgroundColor(
-                  user?.userData
+                  user ? toWireUserData(user.userData) : undefined
                 )} 100%)`,
               }}
             >
               <div className="absolute left-4 top-[30px]">
-                <ProfileImage size={16} user={user?.userData as UserData} />
+                <ProfileImage size={16} user={user ? toWireUserData(user.userData) : undefined} />
               </div>
             </div>
           </div>
@@ -141,10 +141,10 @@ const ProfilePage: React.FC = () => {
             <div className="flex flex-col gap-4 w-full">
               <div className="flex flex-col">
                 <span className="text-[30px] font-semibold tracking-[-0.22px] font-sans text-label-primary">
-                  {user?.userData.displayName}
+                  {user?.getBioDisplayName}
                 </span>
                 <span className="text-[14px] font-medium font-sans text-label-tertiary">
-                  {`${user?.userData.username}`}
+                  {`${user?.getBioUsername}`}
                 </span>
               </div>
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
@@ -276,7 +276,7 @@ const ProfilePage: React.FC = () => {
                 </Card.Base>
 
 
-                {!user.userData.tensionsRating && (
+                {!user.getTemplateTensionsRating && (
                   <Card.Base
                     variant="gray"
                     className="p-4 !rounded-lg !border !border-white"
@@ -302,7 +302,7 @@ const ProfilePage: React.FC = () => {
                   </Card.Base>
                 )}
 
-                {!user.userData.hotTakesRating && (
+                {!user.getTemplateHotTakesRating && (
                   <Card.Base
                     variant="gray"
                     className="p-4 !rounded-lg !border !border-white"
@@ -356,7 +356,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                   </div>
                 )}
-                {user.userData.hotTakesRating && (
+                {user.getTemplateHotTakesRating && (
                   <Card.Base
                     variant="gray"
                     className="p-4 !rounded-lg !border !border-white"
@@ -382,7 +382,7 @@ const ProfilePage: React.FC = () => {
                     </div>
                   </Card.Base>
                 )}
-                {user.userData.tensionsRating && (
+                {user.getTemplateTensionsRating && (
                   <Card.Base
                     variant="gray"
                     className="p-4 !rounded-lg !border !border-white"
@@ -434,7 +434,7 @@ const ProfilePage: React.FC = () => {
             <div className="py-0">
               <ToggleSwitch
                 label="Refresh PSI automatically"
-                checked={!!user?.userData?.settings?.automaticPSIEnabled}
+                checked={!!user?.getSettings?.automaticPSIEnabled}
                 onChange={() => {
                   toggleAutomaticPSI();
                 }}

@@ -22,7 +22,10 @@ export enum BackupEntryType {
   EDGE_BACKFILL_FOR_ENABLED_USERS = "EDGE_BACKFILL_FOR_ENABLED_USERS",
 
   // Migrations
-  MIGRATION_MOVE_PSISIZE_TO_CONNECTION = "MIGRATION_MOVE_PSISIZE_TO_CONNECTION"
+  // Legacy: only replayed from existing backups. New backups use MIGRATION.
+  MIGRATION_MOVE_PSISIZE_TO_CONNECTION = "MIGRATION_MOVE_PSISIZE_TO_CONNECTION",
+  // Generic migration entry, the payload names the migration (see apps/frontend/src/lib/migrations)
+  MIGRATION = "MIGRATION",
 }
 
 export const BackupEntryTypeSchema = z.nativeEnum(BackupEntryType);

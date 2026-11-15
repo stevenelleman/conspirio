@@ -9,6 +9,10 @@ const USER_STORAGE_KEY = "user";
 const UNREGISTERED_STORAGE_KEY = "unregistered";
 
 export const saveUser = (user: User): void => {
+
+  // NOTE: Runtime Serialization. Calling JSON.stringify(instance) converts the object's enumerable properties into
+  // a raw JSON text string. Functions, methods, and private fields are stripped out during this process.
+
   saveToLocalStorage(USER_STORAGE_KEY, JSON.stringify(user));
 };
 

@@ -30,14 +30,14 @@ export default function TensionsPage() {
         return;
       }
 
-      if (user.userData.tensionsRating) {
+      if (user.getTemplateTensionsRating) {
         setSliderValues(
-          user.userData.tensionsRating.tensionRating ??
+          user.getTemplateTensionsRating.tensionRating ??
             tensionPairs.map(() => 50)
         );
-        setRevealAnswers(user.userData.tensionsRating.revealAnswers ?? false);
+        setRevealAnswers(user.getTemplateTensionsRating.revealAnswers ?? false);
         setContributeAnonymously(
-          user.userData.tensionsRating.contributeAnonymously ?? false
+          user.getTemplateTensionsRating.contributeAnonymously ?? false
         );
       }
     };
@@ -71,14 +71,15 @@ export default function TensionsPage() {
     }
 
     try {
-      await storage.updateUserData({
-        ...user.userData,
-        tensionsRating: {
-          tensionRating: sliderValues,
-          revealAnswers,
-          contributeAnonymously,
+      await storage.updateUserData(user.userData.withUpdates({
+        templates: {
+          tensionsRating: {
+            tensionRating: sliderValues,
+            revealAnswers,
+            contributeAnonymously,
+          },
         },
-      });
+      }));
 
       logClientEvent("submit_tensions", {});
 

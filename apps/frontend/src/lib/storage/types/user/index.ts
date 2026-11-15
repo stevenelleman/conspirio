@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { UnregisteredUserDataSchema, UserData, UserDataSchema } from "./userData";
+import {
+  UnregisteredUserDataSchema,
+  UserDataSchema,
+  UserData,
+  upgradeUserData,
+} from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
 import { ActivitySchema, Activity } from "./activity";
@@ -11,10 +16,27 @@ import {
 } from "@types";
 import { LocationTaps, LocationTapsSchema } from "./location";
 import { EdgeBackup, EdgeBackupSchema } from "./edge";
+import { interests } from "@/lib/storage/types/user/interests";
+import { dislikes } from "@/lib/storage/types/user/dislikes";
+import {
+  TwitterData,
+  TelegramData,
+  SignalData,
+  InstagramData,
+  FarcasterData,
+  WhatsappData,
+  SMSData,
+  EmailData,
+} from "@/lib/storage/types/user/userData/socials";
+import { PersonalWebsites, SubstackData } from "@/lib/storage/types/user/userData/portfolio";
+import { StravaData } from "@/lib/storage/types/user/userData/stravaData";
+import { GithubData } from "@/lib/storage/types/user/userData/githubData";
+import { HotTakesRating, TensionsRating } from "@/lib/storage/types/user/userData/lannaData";
+import { ConnectionPSISize } from "@/lib/storage/types/user/userData/psiSizeData";
+import { UserSettings } from "@/lib/storage/types/user/userData";
 
-export const UserDataMigrationsSchema = z.object({
-  migrationMovePSISizeToConnections: nullToUndefined(z.boolean().nullable()),
-})
+// Keyed by MigrationName, see lib/migrations
+export const UserDataMigrationsSchema = z.record(z.string(), z.boolean());
 
 export type UserDataMigrations = z.infer<typeof UserDataMigrationsSchema>;
 
@@ -26,7 +48,8 @@ export const UserSchema = z.object({
   lastMessageFetchedAt: z.coerce.date(),
   createdAt: nullToUndefined(z.coerce.date()),
 
-  userData: UserDataSchema,
+  // NOTE: The UserSchema uses UserDataSchema. Older stored versions are upgraded to the latest before validation.
+  userData: z.preprocess(upgradeUserData, UserDataSchema),
   chips: z.array(ChipSchema),
   connections: z.record(z.string(), ConnectionSchema),
   locations: nullToUndefined(z.record(z.string(), LocationTapsSchema)),
@@ -55,6 +78,7 @@ export class User implements UserType {
   lastMessageFetchedAt: Date;
   createdAt: Date | undefined;
 
+  // NOTE: The User class also uses the UserData class
   userData: UserData;
   chips: Chip[];
   connections: Record<string, Connection>;
@@ -72,7 +96,7 @@ export class User implements UserType {
   migrations: UserDataMigrations | undefined;
 
   constructor(data: unknown) {
-    // 4. Validate incoming data at runtime during instantiation
+    // Validate incoming data at runtime during instantiation
     const validated = UserSchema.parse(data);
 
     this.email = validated.email;
@@ -83,7 +107,7 @@ export class User implements UserType {
     this.lastMessageFetchedAt = validated.lastMessageFetchedAt;
     this.createdAt = validated.createdAt;
 
-    this.userData = validated.userData;
+    this.userData = new UserData(validated.userData);
     this.chips = validated.chips;
     this.connections = validated.connections;
     this.locations = validated.locations;
@@ -100,8 +124,127 @@ export class User implements UserType {
     this.migrations = validated.migrations;
   }
 
-  get migratedPSISize(): boolean {
-    return !!((this.createdAt && this.createdAt > new Date("2026-11-05")) || (this.migrations && this.migrations.migrationMovePSISizeToConnections));
+  // getters for UserData values
+
+  // Bio
+  get getBioUsername(): string {
+    return this.userData.getUsername;
+  }
+
+  get getBioDisplayName(): string {
+    return this.userData.getDisplayName;
+  }
+
+  get getBio(): string {
+    return this.userData.getBio;
+  }
+
+  get getBioSignaturePublicKey(): string {
+    return this.userData.getSignaturePublicKey;
+  }
+
+  get getBioEncryptionPublicKey(): string {
+    return this.userData.getEncryptionPublicKey;
+  }
+
+  get getBioPsiPublicKeyLink(): string | undefined {
+    return this.userData.getPsiPublicKeyLink;
+  }
+
+  get getBioPronouns(): string | undefined {
+    return this.userData.getPronouns;
+  }
+
+  // Socials
+  get getSocialTwitter(): TwitterData | undefined {
+    return this.userData.getTwitter;
+  }
+
+  get getSocialTelegram(): TelegramData | undefined {
+    return this.userData.getTelegram;
+  }
+
+  get getSocialSignal(): SignalData | undefined {
+    return this.userData.getSignal;
+  }
+
+  get getSocialInstagram(): InstagramData | undefined {
+    return this.userData.getInstagram;
+  }
+
+  get getSocialFarcaster(): FarcasterData | undefined {
+    return this.userData.getFarcaster;
+  }
+
+  get getSocialWhatsapp(): WhatsappData | undefined {
+    return this.userData.getWhatsapp;
+  }
+
+  get getSocialSms(): SMSData | undefined {
+    return this.userData.getSms;
+  }
+
+  get getSocialEmail(): EmailData | undefined {
+    return this.userData.getEmail;
+  }
+
+  // Portfolio
+  get getPortfolioSubstack(): SubstackData | undefined {
+    return this.userData.getSubstack;
+  }
+
+  get getPortfolioPersonalWebsites(): PersonalWebsites | undefined {
+    return this.userData.getPersonalWebsites;
+  }
+
+  // Integrations
+  get getIntegrationStrava(): StravaData | undefined {
+    return this.userData.getStrava;
+  }
+
+  get getIntegrationGithub(): GithubData | undefined {
+    return this.userData.getGithub;
+  }
+
+  // Templates
+  get getTemplateTensionsRating(): TensionsRating | undefined {
+    return this.userData.getTensionsRating;
+  }
+
+  get getTemplateHotTakesRating(): HotTakesRating | undefined {
+    return this.userData.getHotTakesRating;
+  }
+
+  // -- Vanilla & Spicy
+  get getTemplatePublicInterests(): interests | undefined {
+    return this.userData.getPublicInterests;
+  }
+
+  get getTemplatePrivateInterests(): interests | undefined {
+    return this.userData.getPrivateInterests;
+  }
+
+  // -- Lets Shit Talk
+  get getTemplateDislikesPublicDefender(): dislikes | undefined {
+    return this.userData.getDislikesPublicDefender;
+  }
+
+  get getTemplateDislikesPetPeeves(): dislikes | undefined {
+    return this.userData.getDislikesPetPeeves;
+  }
+
+  get getTemplateDislikesLoveToHate(): dislikes | undefined {
+    return this.userData.getDislikesLoveToHate;
+  }
+
+  // Settings
+  get getSettings(): UserSettings | undefined {
+    return this.userData.getSettings;
+  }
+
+  // WIP: Migration in progress to ConnectionSchema
+  get getConnectionPSISize(): ConnectionPSISize | undefined {
+    return this.userData.getConnectionPSISize;
   }
 }
 

@@ -1,13 +1,15 @@
 import {
+  User,
   UserData,
-  UserDataSchema,
-  User
+  WireUserData,
+  toWireUserData,
 } from "@/lib/storage/types";
 import { Json } from "@types";
 
 // To prevent accidental sharing, default ensure shareable data needs to be added to this method
 // TODO: offer a more expressive way to define / set shareable data based on community / persona
-export const getUserShareableData = (userData: UserData): UserData => {
+// NOTE: Shareable data is sent to other users in the wire format, regardless of the UserData version stored locally.
+export const getUserShareableData = (userData: UserData): WireUserData => {
   const {
     username,
     displayName,
@@ -28,7 +30,7 @@ export const getUserShareableData = (userData: UserData): UserData => {
     dislikesPetPeeves,
     dislikesLoveToHate,
     settings,
-  } = UserDataSchema.parse(userData);
+  } = toWireUserData(userData);
 
   return {
     username,
@@ -81,7 +83,7 @@ export const shareableUserDataToJson = (userData: UserData): Json => {
     dislikesPetPeeves,
     dislikesLoveToHate,
     settings,
-  } = UserDataSchema.parse(userData);
+  } = toWireUserData(userData);
 
   const nullableDislikesPublicDefender = !!dislikesPublicDefender ? dislikesPublicDefender : null;
   const nullableDislikesPetPeeves = !!dislikesPetPeeves ? dislikesPetPeeves : null;
@@ -136,5 +138,5 @@ export const getConnectionSigPubKey = (user: User, connectionUsername: string): 
 }
 
 export const getUserSigPubKey = (user: User): string => {
-  return user.userData.signaturePublicKey;
+  return user.getBioSignaturePublicKey;
 };

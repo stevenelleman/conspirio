@@ -67,19 +67,19 @@ export function getUserDataUpdatedAt(
   let lastImportedAt: Date | undefined = undefined;
   switch (dataType) {
     case ImportDataType.STRAVA_PREVIOUS_MONTH_RUN_DISTANCE:
-      lastImportedAt = userData?.strava?.previousMonthRunDistance?.lastUpdated;
+      lastImportedAt = userData?.getStrava?.previousMonthRunDistance?.lastUpdated;
       break;
     case ImportDataType.GITHUB_LANNA_CONTRIBUTIONS:
-      lastImportedAt = userData?.github?.lannaCommits?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.lannaCommits?.lastUpdated;
       break;
     case ImportDataType.GITHUB_CONTRIBUTIONS_LAST_YEAR:
-      lastImportedAt = userData?.github?.annualCommits?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.annualCommits?.lastUpdated;
       break;
     case ImportDataType.GITHUB_STARRED_REPOS:
-      lastImportedAt = userData?.github?.starredRepos?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.starredRepos?.lastUpdated;
       break;
     case ImportDataType.GITHUB_PROGRAMMING_LANGUAGES:
-      lastImportedAt = userData?.github?.programmingLanguages?.lastUpdated;
+      lastImportedAt = userData?.getGithub?.programmingLanguages?.lastUpdated;
       break;
     default:
       console.error("Import type not recognized.");

@@ -134,26 +134,24 @@ const RegisterETHIndia: React.FC<RegisterETHIndiaProps> = ({ savedTap }) => {
         logClientEvent("register-register-chip", {
           chipIssuer: savedTap.tapResponse.chipIssuer,
         });
-        const {
-          username,
-          displayName,
-          bio,
-          signaturePublicKey,
-          encryptionPublicKey,
-          psiPublicKeyLink,
-        } = user.userData;
+        const username = user.getBioUsername;
+        const displayName = user.getBioDisplayName;
+        const bio = user.getBio;
+        const signaturePublicKey = user.getBioSignaturePublicKey;
+        const encryptionPublicKey = user.getBioEncryptionPublicKey;
+        const psiPublicKeyLink = user.getBioPsiPublicKeyLink;
 
         // Set owner user data for chip registration
         // TODO: Generalize this to be extensible for arbitrary user data
         const ownerUserData: Json = {};
-        if (user.userData.twitter && user.userData.twitter.username) {
+        if (user.getSocialTwitter && user.getSocialTwitter.username) {
           ownerUserData.twitter = {
-            username: user.userData.twitter.username,
+            username: user.getSocialTwitter.username,
           };
         }
-        if (user.userData.telegram && user.userData.telegram.username) {
+        if (user.getSocialTelegram && user.getSocialTelegram.username) {
           ownerUserData.telegram = {
-            username: user.userData.telegram.username,
+            username: user.getSocialTelegram.username,
           };
         }
 

@@ -8,13 +8,11 @@ export const toggleAutomaticPSISetting = async (): Promise<boolean> => {
     session.authTokenValue &&
     session.authTokenExpiresAt > new Date()
   ) {
-    const updatedUserData = user.userData;
-
-    if (!updatedUserData.settings) {
-      updatedUserData.settings = {};
-    }
-
-    updatedUserData.settings.automaticPSIEnabled = !updatedUserData.settings.automaticPSIEnabled;
+    const updatedUserData = user.userData.withUpdates({
+      settings: {
+        automaticPSIEnabled: !user.getSettings?.automaticPSIEnabled,
+      },
+    });
 
     await updateUserData(updatedUserData)
     return true;

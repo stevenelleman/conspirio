@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { nullToUndefined } from "@types";
-import { UserDataSchema } from "../userData";
+import { WireUserDataSchema } from "../userData";
 import { CommentDataSchema } from "./commentData";
 import { TapDataSchema } from "./tapData";
 import { PSIDataSchema } from "./psiData";
 import { SentMessageSchema } from "./sentMessage";
 
 export const ConnectionSchema = z.object({
-  user: UserDataSchema,
+  user: WireUserDataSchema,
   comment: nullToUndefined(CommentDataSchema),
   taps: z.array(TapDataSchema),
   psi: nullToUndefined(PSIDataSchema),

@@ -153,7 +153,7 @@ async function handleEdges(session: Session, user: User, messages: EdgeMessage[]
 }
 
 async function handleConnectionPSIs(user: User, messages: PSIMessage[]): Promise<void> {
-  if (user.userData?.settings?.automaticPSIEnabled) {
+  if (user.getSettings?.automaticPSIEnabled) {
     for (const message of messages) {
       if (message.senderUsername && user.connections && user.connections[message.senderUsername]) {
         // Only if the setting is enabled should PSI be automatically refreshed when navigating to the connection's page
