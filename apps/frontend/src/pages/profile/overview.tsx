@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/ProfileImage";
 import AppLayout from "@/layouts/AppLayout";
 import { storage } from "@/lib/storage";
-import { User, UserDataType } from "@/lib/storage/types";
+import { User, UserDataV0Type } from "@/lib/storage/types";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -43,12 +43,12 @@ export default function ProfileOverview() {
             className="h-[60px] w-full relative"
             style={{
               background: `linear-gradient(90deg, #FFF 0%, ${getProfileBackgroundColor(
-                user?.userData as UserDataType
+                user?.userData as UserDataV0Type
               )} 100%)`,
             }}
           >
             <div className="absolute left-4 top-[40px]">
-              <ProfileImage size={16} user={user?.userData as UserDataType} />
+              <ProfileImage size={16} user={user?.userData as UserDataV0Type} />
             </div>
             <div className="absolute right-4 top-[70px]">
               <Link href="/profile/edit">

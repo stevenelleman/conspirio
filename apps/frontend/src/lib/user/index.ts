@@ -1,13 +1,13 @@
 import {
-  UserDataType,
-  UserDataSchema,
+  UserDataV0Type,
+  UserDataV0Schema,
   User
 } from "@/lib/storage/types";
 import { Json } from "@types";
 
 // To prevent accidental sharing, default ensure shareable data needs to be added to this method
 // TODO: offer a more expressive way to define / set shareable data based on community / persona
-export const getUserShareableData = (userData: UserDataType): UserDataType => {
+export const getUserShareableData = (userData: UserDataV0Type): UserDataV0Type => {
   const {
     username,
     displayName,
@@ -28,7 +28,7 @@ export const getUserShareableData = (userData: UserDataType): UserDataType => {
     dislikesPetPeeves,
     dislikesLoveToHate,
     settings,
-  } = UserDataSchema.parse(userData);
+  } = UserDataV0Schema.parse(userData);
 
   return {
     username,
@@ -58,7 +58,7 @@ export const getUserShareableData = (userData: UserDataType): UserDataType => {
   };
 };
 
-export const shareableUserDataToJson = (userData: UserDataType): Json => {
+export const shareableUserDataToJson = (userData: UserDataV0Type): Json => {
   const { username,
     displayName,
     bio,
@@ -81,7 +81,7 @@ export const shareableUserDataToJson = (userData: UserDataType): Json => {
     dislikesPetPeeves,
     dislikesLoveToHate,
     settings,
-  } = UserDataSchema.parse(userData);
+  } = UserDataV0Schema.parse(userData);
 
   const nullableDislikesPublicDefender = !!dislikesPublicDefender ? dislikesPublicDefender : null;
   const nullableDislikesPetPeeves = !!dislikesPetPeeves ? dislikesPetPeeves : null;

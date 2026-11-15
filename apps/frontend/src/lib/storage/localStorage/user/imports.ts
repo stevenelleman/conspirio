@@ -1,5 +1,5 @@
 import { DataImportSource } from "@types";
-import { UserDataType } from "@/lib/storage/types";
+import { UserDataV0Type } from "@/lib/storage/types";
 import { getUserAndSession } from "@/lib/storage/localStorage/user/index";
 import { createUserDataBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
@@ -9,7 +9,7 @@ export const deleteAppImports = async (
 ): Promise<void> => {
   const { user, session } = await getUserAndSession();
 
-  let updatedUserData: UserDataType = user.userData;
+  let updatedUserData: UserDataV0Type = user.userData;
   if (!updatedUserData) {
     return;
   }

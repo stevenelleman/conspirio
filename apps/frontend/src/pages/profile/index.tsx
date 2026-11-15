@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
-import { User, UserDataType } from "@/lib/storage/types";
+import { User, UserDataV0Type } from "@/lib/storage/types";
 import { toast } from "sonner";
 import AppLayout from "@/layouts/AppLayout";
 import { AppButton } from "@/components/ui/Button";
@@ -129,7 +129,7 @@ const ProfilePage: React.FC = () => {
               }}
             >
               <div className="absolute left-4 top-[30px]">
-                <ProfileImage size={16} user={user?.userData as UserDataType} />
+                <ProfileImage size={16} user={user?.userData as UserDataV0Type} />
               </div>
             </div>
           </div>

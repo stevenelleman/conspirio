@@ -9,7 +9,7 @@ import {
   OAuthAppDetails,
   RefreshRateType,
 } from "@types";
-import { User, UserDataType } from "@/lib/storage/types";
+import { User, UserDataV0Type } from "@/lib/storage/types";
 import { fetchImportedData } from "./fetch";
 import { saveImportedData } from "./save";
 import { OAUTH_APP_DETAILS } from "@/config";
@@ -61,7 +61,7 @@ export async function fetchAndSaveImportedData(
 }
 
 export function getUserDataUpdatedAt(
-  userData: UserDataType,
+  userData: UserDataV0Type,
   dataType: ImportDataType
 ): Date | undefined {
   let lastImportedAt: Date | undefined = undefined;

@@ -20,3 +20,6 @@ export const migratePSISizeFromUserToConnection = async (user: User, session: Se
 
   return;
 }
+
+// How to go from old to new version? may need to go from
+// export const migrateUserData()

@@ -8,20 +8,20 @@ import {
 } from "@types";
 import {
   TapDataSchema,
-  UserDataSchema,
-  UserDataType,
+  UserDataV0Schema,
+  UserDataV0Type,
 } from "../storage/types";
 
 export const TapBackMessageSchema = z.object({
   type: MessageTypeSchema,
-  user: UserDataSchema,
+  user: UserDataV0Schema,
   tap: TapDataSchema,
 });
 
 export type TapBackMessage = z.infer<typeof TapBackMessageSchema>;
 
 export interface GenerateTapBackMessageArgs {
-  user: UserDataType;
+  user: UserDataV0Type;
   chipPrivateKey: string;
   chipPublicKey: string;
   chipIssuer: ChipIssuer;

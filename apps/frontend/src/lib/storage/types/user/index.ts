@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UnregisteredUserDataSchema, UserData, UserDataSchema } from "./userData";
+import { UnregisteredUserDataSchema, UserDataV0Schema, UserDataV0 } from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
 import { ActivitySchema, Activity } from "./activity";
@@ -34,6 +34,7 @@ import { UserSettings } from "@/lib/storage/types/user/userData";
 
 export const UserDataMigrationsSchema = z.object({
   migrationMovePSISizeToConnections: nullToUndefined(z.boolean().nullable()),
+  migrationUserDataCleanup1: nullToUndefined(z.boolean().nullable()),
 })
 
 export type UserDataMigrations = z.infer<typeof UserDataMigrationsSchema>;
@@ -47,7 +48,7 @@ export const UserSchema = z.object({
   createdAt: nullToUndefined(z.coerce.date()),
 
   // NOTE: The UserSchema uses UserDataSchema
-  userData: UserDataSchema,
+  userData: UserDataV0Schema,
   chips: z.array(ChipSchema),
   connections: z.record(z.string(), ConnectionSchema),
   locations: nullToUndefined(z.record(z.string(), LocationTapsSchema)),
@@ -77,7 +78,7 @@ export class User implements UserType {
   createdAt: Date | undefined;
 
   // NOTE: The User class also uses the UserData class
-  userData: UserData;
+  userData: UserDataV0;
   chips: Chip[];
   connections: Record<string, Connection>;
   locations: Record<string, LocationTaps> | undefined;
@@ -105,7 +106,7 @@ export class User implements UserType {
     this.lastMessageFetchedAt = validated.lastMessageFetchedAt;
     this.createdAt = validated.createdAt;
 
-    this.userData = new UserData(validated.userData);
+    this.userData = new UserDataV0(validated.userData);
     this.chips = validated.chips;
     this.connections = validated.connections;
     this.locations = validated.locations;
@@ -124,6 +125,12 @@ export class User implements UserType {
 
   get migratedPSISize(): boolean {
     return !!((this.createdAt && this.createdAt > new Date("2026-11-05")) || (this.migrations && this.migrations.migrationMovePSISizeToConnections));
+  }
+
+  get migratedUserDataCleanup1(): boolean {
+    // TODO: any way to factor in migrationMovePSISizeToConnections? would love to ensure that it's also true by
+    //  this stage
+    return !!((this.createdAt && this.createdAt > new Date("2026-11-14")) || (this.migrations && this.migrations.migrationUserDataCleanup1));
   }
 
   // getters for UserData values

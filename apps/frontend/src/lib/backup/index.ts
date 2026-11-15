@@ -15,12 +15,12 @@ import {
   ConnectionSchema,
   LocationTaps,
   LocationTapsSchema,
-  UserDataType,
+  UserDataV0Type,
   OAuthAppSchema,
   OAuthApp,
   EdgeIdsSchema,
   User,
-  UserData,
+  UserDataV0,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";
@@ -91,7 +91,9 @@ export const processUserBackup = ({
         if (!user) {
           throw new Error("USER_DATA backup entry found before INITIAL");
         }
-        user.userData = new UserData(JSON.parse(decryptedData));
+
+        // TODO: if migration applied, then use other
+        user.userData = new UserDataV0(JSON.parse(decryptedData));
         break;
       case BackupEntryType.CHIP:
         if (!user) {
@@ -255,6 +257,16 @@ export const processUserBackup = ({
         }
 
         break;
+      case BackupEntryType.MIGRATION_USERDATA_CLEANUP1:
+        if (!user) {
+          throw new Error("MIGRATION_USERDATA_CLEANUP1 backup entry found before INITIAL");
+        }
+
+        // TODO: update from v0 to v1 and updateUserData
+        //  How??
+        //  - in User type, allow either type?
+
+        break;
       default:
         throw new Error(`Invalid backup entry type: ${data.backupEntryType}`);
     }
@@ -369,7 +381,7 @@ export const createInitialBackup = ({
 export interface CreateUserDataBackupArgs {
   email: string;
   password: string;
-  userData: UserDataType;
+  userData: UserDataV0Type;
 }
 
 export const createUserDataBackup = ({

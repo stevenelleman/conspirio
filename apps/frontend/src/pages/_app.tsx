@@ -138,6 +138,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         // migrations will be applied in order, which could matter if one migration is dependent on another
         if (!user.migratedPSISize) {
           migratePSISizeFromUserToConnection(user, session);
+        } else if (user.migratedPSISize && !user.migratedUserDataCleanup1) {
+          // The first condition is redundant, but I want it to be explicit that there's a dependency between migrations
+          // TODO: migrate UserData 
         }
       }
     }

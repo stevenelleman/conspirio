@@ -16,7 +16,7 @@ import {
 } from "./integrations/github";
 import { updateUserDataFromImportData } from "@/lib/imports/update";
 import { storage } from "@/lib/storage";
-import { User, UserDataType } from "@/lib/storage/types";
+import { User, UserDataV0Type } from "@/lib/storage/types";
 import { updateLeaderboardEntry } from "@/lib/chip";
 
 
@@ -56,7 +56,7 @@ export function MapResponseToLeaderboardEntryRequest(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function updateUserData(userData: UserDataType, importType: ImportDataType, data: any): Promise<void> {
+async function updateUserData(userData: UserDataV0Type, importType: ImportDataType, data: any): Promise<void> {
   // Do not have backup type because leaderboard is chipIssuer-scoped, not user-scoped
   const newUserData = await updateUserDataFromImportData(
     userData,
