@@ -15,21 +15,19 @@ import {
   ConnectionSchema,
   LocationTaps,
   LocationTapsSchema,
-  UserDataV0Type,
   UserDataType,
   OAuthAppSchema,
   OAuthApp,
   EdgeIdsSchema,
   User,
   UserData,
-  UserDataV0,
-  parseUserData,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";
 import { OAuthData, OAuthDataSchema } from "@/lib/storage/types";
 import { EdgeBackup, EdgeBackupSchema } from "@/lib/storage/types";
 import { updateBackfilledEdgesOnUser } from "@/lib/storage/localStorage/graph";
+import { applyMigration, MigrationBackup, MigrationBackupSchema, MigrationName } from "@/lib/migrations";
 
 /**
  * Parses a user object from backup data.
@@ -95,8 +93,8 @@ export const processUserBackup = ({
           throw new Error("USER_DATA backup entry found before INITIAL");
         }
 
-        // Entries written before MIGRATION_USERDATA_CLEANUP1 are V0, entries after are V1
-        user.userData = parseUserData(JSON.parse(decryptedData), user.migratedUserDataCleanup1);
+        // Older UserData versions are upgraded on read
+        user.userData = new UserData(JSON.parse(decryptedData));
         break;
       case BackupEntryType.CHIP:
         if (!user) {
@@ -231,58 +229,18 @@ export const processUserBackup = ({
           throw new Error("MIGRATION_MOVE_PSISIZE_TO_CONNECTION backup entry found before INITIAL");
         }
 
-        // 1. move user.UserData.ConnectionPSISize over to user.connections.PSISize
-        // 2. set migration to true
-        //
-        // Asides:
-        // - Migrations should be idempotent
-        // - In data migration where the data is already available in the user object, no need for encrypted backup.
-        // - From a backup standpoint, should there be a complete swap between values? ie after this backup, don't
-        // set / get the UserData value? That feels pretty safe in this case.
-
-        if (user.getConnectionPSISize) {
-          for (const [key, value] of Object.entries(user.getConnectionPSISize)) {
-            if (user.connections && user.connections[key]) {
-              console.log("PSISize", key, value)
-              user.connections[key].PSISize = value
-            }
-          }
-
-          // Once copied, wipe values. UserData has no connectionPSISize, so only V0 needs wiping.
-          if (user.userData instanceof UserDataV0) {
-            user.userData.connectionPSISize = undefined;
-          }
-        }
-
-        // Given this is the first migration, default to setting the migrations object
-        // Run even if connectionPSISize does not exist. This case shouldn't happen, bc users created after
-        // migration should not have the property or apply this backup. But better safe than sorry.
-        user.migrations = {
-          migrationMovePSISizeToConnections: true,
-        }
-
+        // Legacy entry type from before BackupEntryType.MIGRATION, which has no payload
+        applyMigration(user, MigrationName.MOVE_PSISIZE_TO_CONNECTIONS);
         break;
-      case BackupEntryType.MIGRATION_USERDATA_CLEANUP1:
+      case BackupEntryType.MIGRATION:
         if (!user) {
-          throw new Error("MIGRATION_USERDATA_CLEANUP1 backup entry found before INITIAL");
+          throw new Error("MIGRATION backup entry found before INITIAL");
         }
 
-        // Like MIGRATION_MOVE_PSISIZE_TO_CONNECTION, the data is already on the user object, so the backup has no
-        // payload. Idempotent: an already-migrated UserData is left as is.
-        if (!user.migratedPSISize) {
-          throw new Error("MIGRATION_USERDATA_CLEANUP1 backup entry found before MIGRATION_MOVE_PSISIZE_TO_CONNECTION");
-        }
-
-        if (user.userData instanceof UserDataV0) {
-          user.userData = UserData.fromV0(user.userData);
-        }
-
-        // Spread to keep the flags of earlier migrations
-        user.migrations = {
-          ...user.migrations,
-          migrationUserDataCleanup1: true,
-        }
-
+        const migrationBackup: MigrationBackup = MigrationBackupSchema.parse(
+          JSON.parse(decryptedData)
+        );
+        applyMigration(user, migrationBackup.name);
         break;
       default:
         throw new Error(`Invalid backup entry type: ${data.backupEntryType}`);
@@ -398,7 +356,7 @@ export const createInitialBackup = ({
 export interface CreateUserDataBackupArgs {
   email: string;
   password: string;
-  userData: UserDataV0Type | UserDataType;
+  userData: UserDataType;
 }
 
 export const createUserDataBackup = ({
@@ -699,17 +657,21 @@ export const createEdgeBackfillForEnabledUserBackup = ({
 
 // Migration user backups
 
-export interface CreateMigrationBackfillForConnectionPSISizeUserBackupArgs {
+export interface CreateMigrationBackupArgs {
   email: string;
   password: string;
+  name: MigrationName;
 }
 
-export const createMigrationBackfillForConnectionPSISizeUserBackup = ({
+export const createMigrationBackup = ({
   email,
   password,
-}: CreateMigrationBackfillForConnectionPSISizeUserBackupArgs): CreateBackupData => {
+  name,
+}: CreateMigrationBackupArgs): CreateBackupData => {
+  const migrationBackup: MigrationBackup = { name };
+
   const { authenticationTag, iv, encryptedData } = encryptBackupString({
-    backup: "",
+    backup: JSON.stringify(migrationBackup),
     email,
     password,
   });
@@ -718,31 +680,7 @@ export const createMigrationBackfillForConnectionPSISizeUserBackup = ({
     authenticationTag,
     iv,
     encryptedData,
-    backupEntryType: BackupEntryType.MIGRATION_MOVE_PSISIZE_TO_CONNECTION,
-    clientCreatedAt: new Date(),
-  };
-};
-
-export interface CreateMigrationUserDataCleanup1BackupArgs {
-  email: string;
-  password: string;
-}
-
-export const createMigrationUserDataCleanup1Backup = ({
-  email,
-  password,
-}: CreateMigrationUserDataCleanup1BackupArgs): CreateBackupData => {
-  const { authenticationTag, iv, encryptedData } = encryptBackupString({
-    backup: "",
-    email,
-    password,
-  });
-
-  return {
-    authenticationTag,
-    iv,
-    encryptedData,
-    backupEntryType: BackupEntryType.MIGRATION_USERDATA_CLEANUP1,
+    backupEntryType: BackupEntryType.MIGRATION,
     clientCreatedAt: new Date(),
   };
 };

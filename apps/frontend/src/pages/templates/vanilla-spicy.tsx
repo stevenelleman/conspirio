@@ -66,8 +66,10 @@ export default function VanillaSpicyPage() {
 
     try {
       await storage.updateUserData(user.userData.withUpdates({
-        publicInterests: vanillaInterests,
-        privateInterests: spicyInterests,
+        templates: {
+          publicInterests: vanillaInterests,
+          privateInterests: spicyInterests,
+        },
       }));
 
       // Only update chips if vanillaInterests defined

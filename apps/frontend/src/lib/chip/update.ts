@@ -151,43 +151,51 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
     }
 
     await storage.updateUserData(user.userData.withUpdates({
-      displayName: args.ownerDisplayName ?? "",
-      bio: args.ownerBio ?? "",
-      twitter: {
-        username: args.ownerTwitterUsername ?? undefined,
+      bio: {
+        displayName: args.ownerDisplayName ?? "",
+        bio: args.ownerBio ?? "",
+        pronouns: args.ownerPronouns ?? undefined,
       },
-      telegram: {
-        username: args.ownerTelegramUsername ?? undefined,
+      socials: {
+        twitter: {
+          username: args.ownerTwitterUsername ?? undefined,
+        },
+        telegram: {
+          username: args.ownerTelegramUsername ?? undefined,
+        },
+        signal: {
+          username: args.ownerSignalUsername ?? undefined,
+        },
+        instagram: {
+          username: args.ownerInstagramUsername ?? undefined,
+        },
+        farcaster: {
+          username: args.ownerFarcasterUsername ?? undefined,
+        },
+        email: {
+          address: args.ownerEmail ?? undefined,
+        },
+        sms: {
+          number: args.ownerSMSNumber ?? undefined,
+        },
+        whatsapp: {
+          number: args.ownerWhatsappNumber ?? undefined,
+        },
       },
-      signal: {
-        username: args.ownerSignalUsername ?? undefined,
+      portfolio: {
+        personalWebsites: {
+          websites: args.ownerPersonalWebsites ?? undefined,
+        },
+        substack: {
+          handle: args.ownerSubstack ?? undefined,
+        },
       },
-      instagram: {
-        username: args.ownerInstagramUsername ?? undefined,
+      templates: {
+        publicInterests: args.ownerPublicInterests ?? undefined,
+        dislikesPublicDefender: args.ownerDislikesPublicDefender ?? undefined,
+        dislikesPetPeeves: args.ownerDislikesPetPeeves ?? undefined,
+        dislikesLoveToHate: args.ownerDislikesLoveToHate ?? undefined,
       },
-      farcaster: {
-        username: args.ownerFarcasterUsername ?? undefined,
-      },
-      email: {
-        address: args.ownerEmail ?? undefined,
-      },
-      sms: {
-        number: args.ownerSMSNumber ?? undefined,
-      },
-      whatsapp: {
-        number: args.ownerWhatsappNumber ?? undefined,
-      },
-      personalWebsites: {
-        websites: args.ownerPersonalWebsites ?? undefined,
-      },
-      substack: {
-        handle: args.ownerSubstack ?? undefined,
-      },
-      pronouns: args.ownerPronouns ?? undefined,
-      publicInterests: args.ownerPublicInterests ?? undefined,
-      dislikesPublicDefender: args.ownerDislikesPublicDefender ?? undefined,
-      dislikesPetPeeves: args.ownerDislikesPetPeeves ?? undefined,
-      dislikesLoveToHate: args.ownerDislikesLoveToHate ?? undefined,
       settings: args.ownerSettings ?? undefined,
     }));
   } catch (error) {

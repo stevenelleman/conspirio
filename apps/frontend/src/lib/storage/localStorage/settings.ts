@@ -10,7 +10,6 @@ export const toggleAutomaticPSISetting = async (): Promise<boolean> => {
   ) {
     const updatedUserData = user.userData.withUpdates({
       settings: {
-        ...user.getSettings,
         automaticPSIEnabled: !user.getSettings?.automaticPSIEnabled,
       },
     });

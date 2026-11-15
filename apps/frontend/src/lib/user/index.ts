@@ -1,16 +1,15 @@
 import {
-  UserDataV0Type,
-  UserDataV0Schema,
-  UserDataGetters,
   User,
-  userDataToV0Type,
+  UserData,
+  WireUserData,
+  toWireUserData,
 } from "@/lib/storage/types";
 import { Json } from "@types";
 
 // To prevent accidental sharing, default ensure shareable data needs to be added to this method
 // TODO: offer a more expressive way to define / set shareable data based on community / persona
-// NOTE: Shareable data is sent to other users in the V0 shape, regardless of the UserData version stored locally.
-export const getUserShareableData = (userData: UserDataGetters): UserDataV0Type => {
+// NOTE: Shareable data is sent to other users in the wire format, regardless of the UserData version stored locally.
+export const getUserShareableData = (userData: UserData): WireUserData => {
   const {
     username,
     displayName,
@@ -31,7 +30,7 @@ export const getUserShareableData = (userData: UserDataGetters): UserDataV0Type 
     dislikesPetPeeves,
     dislikesLoveToHate,
     settings,
-  } = UserDataV0Schema.parse(userDataToV0Type(userData));
+  } = toWireUserData(userData);
 
   return {
     username,
@@ -61,7 +60,7 @@ export const getUserShareableData = (userData: UserDataGetters): UserDataV0Type 
   };
 };
 
-export const shareableUserDataToJson = (userData: UserDataGetters): Json => {
+export const shareableUserDataToJson = (userData: UserData): Json => {
   const { username,
     displayName,
     bio,
@@ -84,7 +83,7 @@ export const shareableUserDataToJson = (userData: UserDataGetters): Json => {
     dislikesPetPeeves,
     dislikesLoveToHate,
     settings,
-  } = UserDataV0Schema.parse(userDataToV0Type(userData));
+  } = toWireUserData(userData);
 
   const nullableDislikesPublicDefender = !!dislikesPublicDefender ? dislikesPublicDefender : null;
   const nullableDislikesPetPeeves = !!dislikesPetPeeves ? dislikesPetPeeves : null;

@@ -21,7 +21,6 @@ import {
   Session,
   TapInfo,
   UnregisteredUser,
-  UserDataV0Type,
   UserDataType,
   User,
 } from "@/lib/storage/types";
@@ -142,7 +141,7 @@ export class LocalStorage implements ClientStorage {
     return deleteSavedTapInfo();
   }
 
-  async updateUserData(userData: UserDataV0Type | UserDataType): Promise<void> {
+  async updateUserData(userData: UserDataType): Promise<void> {
     return updateUserData(userData);
   }
 

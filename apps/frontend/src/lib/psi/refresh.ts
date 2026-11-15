@@ -13,9 +13,9 @@ import {
 import {
   User,
   Connection,
-  UserDataV0,
   Session,
 } from "@/lib/storage/types";
+import { isMigrationApplied, MigrationName } from "@/lib/migrations";
 import { storage } from "@/lib/storage";
 import { sendMessages } from "@/lib/message";
 import { Socket } from "socket.io-client";
@@ -332,7 +332,7 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
   if (user && session) {
     // WIP: Migration in progress, once backfilled and connection.PSIsize is in use, remove second option
     const updatedConnection: Connection = connection;
-    if (user.migratedPSISize) {
+    if (isMigrationApplied(user, MigrationName.MOVE_PSISIZE_TO_CONNECTIONS)) {
       updatedConnection.PSISize = intersectionSize;
 
       const connectionBackup = upsertConnectionBackup({
@@ -347,17 +347,12 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
         newBackupData: [connectionBackup],
       });
     } else {
-      // Only reachable before MIGRATION_MOVE_PSISIZE_TO_CONNECTION, which MIGRATION_USERDATA_CLEANUP1 depends on, so
-      // userData is always UserDataV0 here
-      if (!(user.userData instanceof UserDataV0)) {
-        throw new Error("Expected UserDataV0 before MIGRATION_MOVE_PSISIZE_TO_CONNECTION");
-      }
-      const newUserData: UserDataV0 = user.userData;
-      if (!newUserData.connectionPSISize) {
-        newUserData.connectionPSISize = {};
-      }
-
-      newUserData.connectionPSISize[connection.user.username] = intersectionSize;
+      const newUserData = user.userData.withUpdates({
+        connectionPSISize: {
+          ...user.getConnectionPSISize,
+          [connection.user.username]: intersectionSize,
+        },
+      });
       await updateUserData(newUserData);
     }
   }

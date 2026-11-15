@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { storage } from "@/lib/storage";
-import { User, userDataToV0Type } from "@/lib/storage/types";
+import { User, toWireUserData } from "@/lib/storage/types";
 import { toast } from "sonner";
 import AppLayout from "@/layouts/AppLayout";
 import { AppButton } from "@/components/ui/Button";
@@ -124,12 +124,12 @@ const ProfilePage: React.FC = () => {
               className="h-[60px] w-full relative"
               style={{
                 background: `linear-gradient(90deg, #FFF 0%, ${getProfileBackgroundColor(
-                  user ? userDataToV0Type(user.userData) : undefined
+                  user ? toWireUserData(user.userData) : undefined
                 )} 100%)`,
               }}
             >
               <div className="absolute left-4 top-[30px]">
-                <ProfileImage size={16} user={user ? userDataToV0Type(user.userData) : undefined} />
+                <ProfileImage size={16} user={user ? toWireUserData(user.userData) : undefined} />
               </div>
             </div>
           </div>

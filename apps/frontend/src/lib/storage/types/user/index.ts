@@ -1,11 +1,9 @@
 import { z } from "zod";
 import {
   UnregisteredUserDataSchema,
-  UserDataV0Schema,
-  UserDataV0,
   UserDataSchema,
   UserData,
-  parseUserData,
+  upgradeUserData,
 } from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
@@ -33,16 +31,12 @@ import {
 import { PersonalWebsites, SubstackData } from "@/lib/storage/types/user/userData/portfolio";
 import { StravaData } from "@/lib/storage/types/user/userData/stravaData";
 import { GithubData } from "@/lib/storage/types/user/userData/githubData";
-import { HotTakesRating, LannaData, TensionsRating } from "@/lib/storage/types/user/userData/lannaData";
-import { LannaHalloweenData } from "@/lib/storage/types/user/userData/lannaHalloweenData";
-import { DevconData } from "@/lib/storage/types/user/userData/devconData";
+import { HotTakesRating, TensionsRating } from "@/lib/storage/types/user/userData/lannaData";
 import { ConnectionPSISize } from "@/lib/storage/types/user/userData/psiSizeData";
 import { UserSettings } from "@/lib/storage/types/user/userData";
 
-export const UserDataMigrationsSchema = z.object({
-  migrationMovePSISizeToConnections: nullToUndefined(z.boolean().nullable()),
-  migrationUserDataCleanup1: nullToUndefined(z.boolean().nullable()),
-})
+// Keyed by MigrationName, see lib/migrations
+export const UserDataMigrationsSchema = z.record(z.string(), z.boolean());
 
 export type UserDataMigrations = z.infer<typeof UserDataMigrationsSchema>;
 
@@ -54,10 +48,8 @@ export const UserSchema = z.object({
   lastMessageFetchedAt: z.coerce.date(),
   createdAt: nullToUndefined(z.coerce.date()),
 
-  // NOTE: The UserSchema uses UserDataSchema
-  // Either version may be stored until MIGRATION_USERDATA_CLEANUP1 is applied. UserDataSchema goes first: V1 data
-  // fails UserDataV0Schema (no top-level username) and V0 data fails UserDataSchema (bio is a string).
-  userData: z.union([UserDataSchema, UserDataV0Schema]),
+  // NOTE: The UserSchema uses UserDataSchema. Older stored versions are upgraded to the latest before validation.
+  userData: z.preprocess(upgradeUserData, UserDataSchema),
   chips: z.array(ChipSchema),
   connections: z.record(z.string(), ConnectionSchema),
   locations: nullToUndefined(z.record(z.string(), LocationTapsSchema)),
@@ -87,7 +79,7 @@ export class User implements UserType {
   createdAt: Date | undefined;
 
   // NOTE: The User class also uses the UserData class
-  userData: UserData | UserDataV0;
+  userData: UserData;
   chips: Chip[];
   connections: Record<string, Connection>;
   locations: Record<string, LocationTaps> | undefined;
@@ -115,7 +107,7 @@ export class User implements UserType {
     this.lastMessageFetchedAt = validated.lastMessageFetchedAt;
     this.createdAt = validated.createdAt;
 
-    this.userData = parseUserData(validated.userData, !!validated.migrations?.migrationUserDataCleanup1);
+    this.userData = new UserData(validated.userData);
     this.chips = validated.chips;
     this.connections = validated.connections;
     this.locations = validated.locations;
@@ -130,17 +122,6 @@ export class User implements UserType {
     this.edges = validated.edges;
 
     this.migrations = validated.migrations;
-  }
-
-  get migratedPSISize(): boolean {
-    return !!((this.createdAt && this.createdAt > new Date("2026-11-05")) || (this.migrations && this.migrations.migrationMovePSISizeToConnections));
-  }
-
-  get migratedUserDataCleanup1(): boolean {
-    // Uses the shape of userData rather than a createdAt cutoff: users registered after registration switched to
-    // UserData already have it, while users registered with UserDataV0 (whenever that was) still need the migration.
-    // The dependency on migrationMovePSISizeToConnections is enforced by the MIGRATION_USERDATA_CLEANUP1 backup case.
-    return this.userData instanceof UserData || !!(this.migrations && this.migrations.migrationUserDataCleanup1);
   }
 
   // getters for UserData values
@@ -264,19 +245,6 @@ export class User implements UserType {
   // WIP: Migration in progress to ConnectionSchema
   get getConnectionPSISize(): ConnectionPSISize | undefined {
     return this.userData.getConnectionPSISize;
-  }
-
-  // Deprecated
-  get getDeprecatedLanna(): LannaData | undefined {
-    return this.userData.getLanna;
-  }
-
-  get getDeprecatedLannaHalloween(): LannaHalloweenData | undefined {
-    return this.userData.getLannaHalloween;
-  }
-
-  get getDeprecatedDevcon(): DevconData | undefined {
-    return this.userData.getDevcon;
   }
 }
 

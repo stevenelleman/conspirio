@@ -16,7 +16,7 @@ import {
   createInitialBackup,
   processUserBackup
 } from "@/lib/backup";
-import { ActivitySchema, ConnectionSchema, UnregisteredUser, User, UserType } from "@/lib/storage/types";
+import { ActivitySchema, ConnectionSchema, UnregisteredUser, User, UserType, USER_DATA_VERSION } from "@/lib/storage/types";
 import { storage } from "@/lib/storage";
 import { createRegisterActivity } from "../activity";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
@@ -101,6 +101,7 @@ export async function registerUser({
     serializedPsiPrivateKey: undefined,
     lastMessageFetchedAt: new Date(),
     userData: {
+      version: USER_DATA_VERSION,
       bio: {
         username,
         displayName,

@@ -76,11 +76,12 @@ export default function LetsShitTalkPage() {
 
     try {
       await storage.updateUserData(user.userData.withUpdates({
-        dislikesPublicDefender: publicDefender,
-        dislikesPetPeeves: petPeeves,
-        dislikesLoveToHate: loveToHate,
+        templates: {
+          dislikesPublicDefender: publicDefender,
+          dislikesPetPeeves: petPeeves,
+          dislikesLoveToHate: loveToHate,
+        },
         settings: {
-          ...user.getSettings,
           discloseDislikesPublicDefender: disclosePublicDefender,
           discloseDislikesPetPeeves: disclosePetPeeves,
           discloseDislikesLoveToHate: discloseLoveToHate,

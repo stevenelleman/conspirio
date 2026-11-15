@@ -13,8 +13,8 @@ export const deleteAppImports = async (
     return;
   }
 
-  // DataImportSource values match the strava and github UserData property names
-  const patch: UserDataPatch = { [app]: undefined };
+  // DataImportSource values match the strava and github UserData integrations property names
+  const patch: UserDataPatch = { integrations: { [app]: undefined } };
   const updatedUserData = user.userData.withUpdates(patch);
 
   const importDeletionBackup = createUserDataBackup({

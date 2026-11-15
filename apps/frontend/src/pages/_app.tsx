@@ -24,10 +24,7 @@ import { backfillEdgesForUserWithFeatureAlreadyEnabled } from "@/lib/storage/loc
 import { logClientEvent } from "@/lib/frontend/metrics";
 import Link from "next/link";
 import { FRONTEND_URL } from "@/config";
-import {
-  migratePSISizeFromUserToConnection,
-  migrateUserDataCleanup1
-} from "@/lib/storage/localStorage/migrations";
+import { runPendingMigrations } from "@/lib/storage/localStorage/migrations";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -133,19 +130,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       if (user && session && session.authTokenExpiresAt > new Date()) {
         // Run migrations -- run *only once* to prevent duplicate backups
         // In practice the migrations should be idempotent by construction, so it should still be safe if they are
-        // run multiple times. Also only apply to users created *before* migration merged.
-
-        // Using object getter method is best of both worlds, allows user.createdAt to be taken into account such
-        // that there's no need to update the user object.
-
-        // migrations will be applied in order, which could matter if one migration is dependent on another
-        if (!user.migratedPSISize) {
-          migratePSISizeFromUserToConnection(user, session);
-        } else if (user.migratedPSISize && !user.migratedUserDataCleanup1) {
-          // The first condition is redundant, but I want it to be explicit that there's a dependency between migrations
-
-          migrateUserDataCleanup1(user, session);
-        }
+        // run multiple times. Each migration's isApplied skips users who don't need it, e.g. users created after it.
+        // Migrations are applied in the order of MIGRATIONS, which matters if one migration depends on another.
+        runPendingMigrations(user, session);
       }
     }
     runMigrations();

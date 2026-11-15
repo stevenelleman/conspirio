@@ -1,5 +1,5 @@
 import { cn } from "@/lib/frontend/util";
-import { UserDataV0Type } from "@/lib/storage/types";
+import { WireUserData } from "@/lib/storage/types";
 import { Goudy_Bookletter_1911 } from "next/font/google";
 
 const goudyBookletter = Goudy_Bookletter_1911({
@@ -7,7 +7,7 @@ const goudyBookletter = Goudy_Bookletter_1911({
   subsets: ["latin"],
 });
 
-export const getProfileBackgroundColor = (user: UserDataV0Type | undefined) => {
+export const getProfileBackgroundColor = (user: WireUserData | undefined) => {
   const colorPalette = [
     "#FF9DF8", // Light Pinkish Purple
     "#FFF59D", // Light Yellow
@@ -37,7 +37,7 @@ export const ProfileImage = ({
   user,
   size = 12,
 }: {
-  user: UserDataV0Type | undefined;
+  user: WireUserData | undefined;
   size?: number;
 }) => {
   if (!user || Object.keys(user)?.length === 0)

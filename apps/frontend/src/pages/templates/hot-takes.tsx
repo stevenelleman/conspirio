@@ -69,10 +69,12 @@ export default function TensionsPage() {
 
     try {
       await storage.updateUserData(user.userData.withUpdates({
-        hotTakesRating: {
-          rating: sliderValues,
-          revealAnswers,
-          contributeAnonymously,
+        templates: {
+          hotTakesRating: {
+            rating: sliderValues,
+            revealAnswers,
+            contributeAnonymously,
+          },
         },
       }));
 
