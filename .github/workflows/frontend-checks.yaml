@@ -1,0 +1,46 @@
+name: 'Frontend checks'
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    name: Typecheck, lint, and test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/frontend
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Only the frontend and the shared types package (the @types path alias). Scripts are skipped so the backend's
+      # postinstall (prisma migrate deploy) never runs here.
+      - name: Install dependencies
+        working-directory: .
+        run: pnpm install --frozen-lockfile --filter frontend --filter @connections/types --ignore-scripts
+
+      - name: Typecheck
+        run: npx tsc --noEmit -p .
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test

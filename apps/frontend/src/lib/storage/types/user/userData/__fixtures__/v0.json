@@ -1,0 +1,56 @@
+{
+  "username": "alice",
+  "displayName": "Alice Example",
+  "bio": "Building things.",
+  "signaturePublicKey": "sig-public-key-alice",
+  "encryptionPublicKey": "enc-public-key-alice",
+  "psiPublicKeyLink": "https://example.com/psi/alice",
+  "pronouns": "they/them",
+  "twitter": { "username": "alice_tw" },
+  "telegram": { "username": "alice_tg" },
+  "signal": { "username": "alice.01" },
+  "instagram": { "username": "alice_ig" },
+  "farcaster": { "username": "alice_fc" },
+  "whatsapp": { "number": "+15550000001" },
+  "sms": { "number": "+15550000002" },
+  "email": { "address": "alice@example.com" },
+  "substack": { "handle": "alice" },
+  "personalWebsites": { "websites": ["https://alice.example.com"] },
+  "strava": {
+    "previousMonthRunDistance": { "value": 42.5, "lastUpdated": "2026-10-01T00:00:00.000Z" }
+  },
+  "github": {
+    "annualCommits": { "value": 512, "lastUpdated": "2026-10-02T00:00:00.000Z" },
+    "starredRepos": { "value": ["octo/repo"], "lastUpdated": "2026-10-03T00:00:00.000Z" },
+    "programmingLanguages": {
+      "value": { "TypeScript": ["octo/repo"] },
+      "lastUpdated": "2026-10-04T00:00:00.000Z"
+    }
+  },
+  "tensionsRating": { "tensionRating": [1, 2, 3], "revealAnswers": true, "contributeAnonymously": false },
+  "hotTakesRating": { "rating": [4, 5], "revealAnswers": false, "contributeAnonymously": true },
+  "publicInterests": ["hiking", "chess"],
+  "privateInterests": ["secret-interest"],
+  "dislikesPublicDefender": ["traffic"],
+  "dislikesPetPeeves": ["loud chewing"],
+  "dislikesLoveToHate": ["mondays"],
+  "settings": {
+    "automaticPSIEnabled": true,
+    "discloseDislikesPublicDefender": true,
+    "discloseDislikesPetPeeves": false,
+    "discloseDislikesLoveToHate": true
+  },
+  "connectionPSISize": { "bob": 3 },
+  "lanna": {
+    "desiredConnections": {
+      "getHealthy": true,
+      "cowork": false,
+      "enjoyMeals": true,
+      "learnFrontierTopics": false,
+      "findCollaborators": true,
+      "goExploring": false,
+      "party": true,
+      "doMentalWorkouts": false
+    }
+  }
+}

@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { Icons } from "../icons/Icons";
-import { fontBase } from "@/config";
+import { fontBase } from "@/lib/frontend/fonts";
 import { cn } from "@/lib/frontend/util";
 
 export interface ModalProps

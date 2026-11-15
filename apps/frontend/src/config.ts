@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import { RouterItem } from "@/lib/frontend/types";
 import { Icons } from "@/components/icons/Icons";
 import {
@@ -8,8 +7,6 @@ import {
   RefreshRateType,
 } from "@types";
 import { SUPPORT_EMAIL } from "@/constants";
-
-export const fontBase = Inter({ subsets: ["latin"], variable: "--font-base" });
 
 export const FRONTEND_URL =
   process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
