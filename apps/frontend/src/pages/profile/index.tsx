@@ -17,7 +17,6 @@ import { Card } from "@/components/cards/Card";
 import { logoutUser } from "@/lib/auth";
 import { logClientEvent } from "@/lib/frontend/metrics";
 import ImportGithubButton from "@/features/oauth/ImportGithubButton";
-import ImportDevconButton from "@/features/oauth/ImportDevconButton";
 import ImportStravaButton from "@/features/oauth/ImportStravaButton";
 import ToggleSwitch from "@/components/ui/Switch";
 import useSettings from "@/hooks/useSettings";
@@ -103,15 +102,13 @@ const ProfilePage: React.FC = () => {
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.GITHUB);
   const hasStravaToAdd =
     !user.oauth || !Object.keys(user.oauth).includes(DataImportSource.STRAVA);
-  const hasDevconToAdd = !Object.keys(user.userData).includes("devcon");
 
-  const hasOauthToAdd = hasGithubToAdd || hasStravaToAdd || hasDevconToAdd;
+  const hasOauthToAdd = hasGithubToAdd || hasStravaToAdd;
   const hasDataToAdd = hasOauthToAdd || !user.userData.tensionsRating;
 
   const hasVaultData =
     (user.oauth && Object.keys(user.oauth).length > 0) ||
     user.userData.tensionsRating ||
-    user.userData.devcon ||
     user.userData.hotTakesRating;
 
   return (
@@ -226,7 +223,6 @@ const ProfilePage: React.FC = () => {
                           <ImportStravaButton />
                         </div>
                       )}
-                      {hasDevconToAdd && <ImportDevconButton />}
                     </div>
                   </div>
                 )}
@@ -347,8 +343,7 @@ const ProfilePage: React.FC = () => {
                     {`This data can be used to discover commonalities and try digital pheromone experiments.`}
                   </span>
                 </div>
-                {((user.oauth && Object.keys(user.oauth).length > 0) ||
-                  !hasDevconToAdd) && (
+                {(user.oauth && Object.keys(user.oauth).length > 0) && (
                   <div className="py-2">
                     <div className="w-full flex gap-2 overflow-x-auto">
                       {Object.keys(user.oauth || {}).includes(
@@ -356,11 +351,6 @@ const ProfilePage: React.FC = () => {
                       ) && (
                         <div>
                           <ImportGithubButton addElement={false} />
-                        </div>
-                      )}
-                      {!hasDevconToAdd && (
-                        <div>
-                          <ImportDevconButton addElement={false} />
                         </div>
                       )}
                     </div>

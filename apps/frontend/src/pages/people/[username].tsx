@@ -514,7 +514,6 @@ const UserProfilePage: React.FC = () => {
   }
 
   // Filled out imports?
-  const devconImported = !!user?.userData?.devcon;
   const githubImported = !!user?.userData?.github;
 
   // Using publicInterests infer vanilla vs spicy interests
@@ -971,33 +970,6 @@ const UserProfilePage: React.FC = () => {
                       )}
                     </>
                   )}
-                </IntersectionAccordion>
-
-                <IntersectionAccordion label="Shared Devcon events" icon="📅">
-                  {!devconImported ? (
-                    <div className="text-sm text-label-primary font-sans font-normal">
-                      <a className="text-link-primary" style={{textDecoration: "underline"}} href={"/imports/devcon"}>Import your calendar</a> and refresh to see results!
-                    </div>
-                    ) : verifiedIntersection.devconEvents.length === 0 ? (
-                      <div className="text-sm text-label-primary font-sans font-normal">
-                        No common events.
-                      </div>
-                    ) : (
-                      <ul>
-                        <div className="text-sm text-link-primary font-sans font-normal">
-                          {verifiedIntersection.devconEvents.map(
-                            (event, index) => (
-                              <li key={index}>
-                                <Link href={`https://app.devcon.org/schedule`}>
-                                  - {event}
-                                </Link>
-                              </li>
-                            )
-                          )}
-                        </div>
-                      </ul>
-                    )
-                  }
                 </IntersectionAccordion>
 
                 <IntersectionAccordion label="Shared Github starred repositories" icon="🛠️">
