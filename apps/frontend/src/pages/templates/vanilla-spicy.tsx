@@ -14,6 +14,7 @@ import { fuzzyMatch } from "@/lib/frontend/util";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { updateChip } from "@/lib/chip/update";
+import { requireUserDataV0 } from "@/lib/storage/types";
 
 type InterestFormData = {
   vanillaInterests?: string[],
@@ -66,7 +67,7 @@ export default function VanillaSpicyPage() {
 
     try {
       await storage.updateUserData({
-        ...user.userData,
+        ...requireUserDataV0(user.userData),
         publicInterests: vanillaInterests,
         privateInterests: spicyInterests,
       });

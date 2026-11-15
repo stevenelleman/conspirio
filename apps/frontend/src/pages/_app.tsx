@@ -24,7 +24,10 @@ import { backfillEdgesForUserWithFeatureAlreadyEnabled } from "@/lib/storage/loc
 import { logClientEvent } from "@/lib/frontend/metrics";
 import Link from "next/link";
 import { FRONTEND_URL } from "@/config";
-import { migratePSISizeFromUserToConnection } from "@/lib/storage/localStorage/migrations";
+import {
+  migratePSISizeFromUserToConnection,
+  migrateUserDataCleanup1
+} from "@/lib/storage/localStorage/migrations";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -140,7 +143,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           migratePSISizeFromUserToConnection(user, session);
         } else if (user.migratedPSISize && !user.migratedUserDataCleanup1) {
           // The first condition is redundant, but I want it to be explicit that there's a dependency between migrations
-          // TODO: migrate UserData 
+
+          // migrateUserDataCleanup1(user, session);
         }
       }
     }

@@ -1,5 +1,6 @@
 import { storage } from "@/lib/storage";
 import { updateUserData } from "@/lib/storage/localStorage/user/userData";
+import { requireUserDataV0 } from "@/lib/storage/types";
 
 export const toggleAutomaticPSISetting = async (): Promise<boolean> => {
   const { user, session } = await storage.getUserAndSession();
@@ -8,7 +9,7 @@ export const toggleAutomaticPSISetting = async (): Promise<boolean> => {
     session.authTokenValue &&
     session.authTokenExpiresAt > new Date()
   ) {
-    const updatedUserData = user.userData;
+    const updatedUserData = requireUserDataV0(user.userData);
 
     if (!updatedUserData.settings) {
       updatedUserData.settings = {};

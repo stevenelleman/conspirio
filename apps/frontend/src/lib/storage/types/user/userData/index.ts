@@ -136,7 +136,57 @@ export type UserDataType = z.infer<typeof UserDataSchema>;
 
 // How to remove Lanna, LannaHalloween, Devcon code? May have to remove references from it first (done).
 
-export class UserData implements UserDataType {
+// Getters shared by UserData and UserDataV0, so callers can read from either version during the migration.
+export interface UserDataGetters {
+  // Bio
+  readonly getUsername: string;
+  readonly getDisplayName: string;
+  readonly getBio: string;
+  readonly getSignaturePublicKey: string;
+  readonly getEncryptionPublicKey: string;
+  readonly getPsiPublicKeyLink: string | undefined;
+  readonly getPronouns: string | undefined;
+
+  // Socials
+  readonly getTwitter: TwitterData | undefined;
+  readonly getTelegram: TelegramData | undefined;
+  readonly getSignal: SignalData | undefined;
+  readonly getInstagram: InstagramData | undefined;
+  readonly getFarcaster: FarcasterData | undefined;
+  readonly getWhatsapp: WhatsappData | undefined;
+  readonly getSms: SMSData | undefined;
+  readonly getEmail: EmailData | undefined;
+
+  // Portfolio
+  readonly getSubstack: SubstackData | undefined;
+  readonly getPersonalWebsites: PersonalWebsites | undefined;
+
+  // Integrations
+  readonly getStrava: StravaData | undefined;
+  readonly getGithub: GithubData | undefined;
+
+  // Templates
+  readonly getTensionsRating: TensionsRating | undefined;
+  readonly getHotTakesRating: HotTakesRating | undefined;
+  readonly getPublicInterests: interests | undefined;
+  readonly getPrivateInterests: interests | undefined;
+  readonly getDislikesPublicDefender: dislikes | undefined;
+  readonly getDislikesPetPeeves: dislikes | undefined;
+  readonly getDislikesLoveToHate: dislikes | undefined;
+
+  // Settings
+  readonly getSettings: UserSettings | undefined;
+
+  // WIP: Migration in progress to ConnectionSchema
+  readonly getConnectionPSISize: ConnectionPSISize | undefined;
+
+  // Deprecated
+  readonly getLanna: LannaData | undefined;
+  readonly getLannaHalloween: LannaHalloweenData | undefined;
+  readonly getDevcon: DevconData | undefined;
+}
+
+export class UserData implements UserDataType, UserDataGetters {
   bio: UserBio;
   socials: UserSocials | undefined;
   portfolio: UserPortfolio | undefined;
@@ -154,6 +204,50 @@ export class UserData implements UserDataType {
     this.templates = validated.templates;
     this.integrations = validated.integrations;
     this.settings = validated.settings;
+  }
+
+  // MIGRATION_USERDATA_CLEANUP1: map the flat V0 shape into the nested V1 shape. connectionPSISize and the deprecated
+  // lanna, lannaHalloween, devcon properties are intentionally dropped.
+  static fromV0(v0: UserDataV0): UserData {
+    return new UserData({
+      bio: {
+        username: v0.username,
+        displayName: v0.displayName,
+        bio: v0.bio,
+        signaturePublicKey: v0.signaturePublicKey,
+        encryptionPublicKey: v0.encryptionPublicKey,
+        psiPublicKeyLink: v0.psiPublicKeyLink,
+        pronouns: v0.pronouns,
+      },
+      socials: {
+        twitter: v0.twitter,
+        telegram: v0.telegram,
+        signal: v0.signal,
+        instagram: v0.instagram,
+        farcaster: v0.farcaster,
+        whatsapp: v0.whatsapp,
+        sms: v0.sms,
+        email: v0.email,
+      },
+      portfolio: {
+        substack: v0.substack,
+        personalWebsites: v0.personalWebsites,
+      },
+      templates: {
+        tensionsRating: v0.tensionsRating,
+        hotTakesRating: v0.hotTakesRating,
+        publicInterests: v0.publicInterests,
+        privateInterests: v0.privateInterests,
+        dislikesPublicDefender: v0.dislikesPublicDefender,
+        dislikesPetPeeves: v0.dislikesPetPeeves,
+        dislikesLoveToHate: v0.dislikesLoveToHate,
+      },
+      integrations: {
+        strava: v0.strava,
+        github: v0.github,
+      },
+      settings: v0.settings,
+    });
   }
 
   // Bio
@@ -357,7 +451,7 @@ export type UserDataV0Type = z.infer<typeof UserDataV0Schema>;
 // should ensure UserData properties are kept in line with UserDataType, which is the UserData object stored in
 // local storage.
 
-export class UserDataV0 implements UserDataV0Type {
+export class UserDataV0 implements UserDataV0Type, UserDataGetters {
   // Bio
   username: string;
   displayName: string;
@@ -599,6 +693,28 @@ export class UserDataV0 implements UserDataV0Type {
     return this.devcon;
   }
 }
+
+// Accepts either stored version. The shape decides the version (V0 bio is a string, V1 bio is an object) rather than the
+// migration flag, because the flag isn't known yet when an INITIAL backup or local storage is parsed. If the user has
+// already migrated, V0 data (e.g. written by a stale client) is upgraded immediately.
+export const parseUserData = (raw: unknown, migrated: boolean): UserData | UserDataV0 => {
+  const bio = (raw as { bio?: unknown } | null)?.bio;
+  if (typeof bio === "object" && bio !== null) {
+    return new UserData(raw);
+  }
+
+  const v0 = new UserDataV0(raw);
+  return migrated ? UserData.fromV0(v0) : v0;
+};
+
+// TODO: MIGRATION_USERDATA_CLEANUP1 -- callers of this still read or write the flat V0 shape. Each one must handle
+//  UserData before the migration is triggered in _app.tsx, otherwise migrated users will hit this error.
+export const requireUserDataV0 = (userData: UserData | UserDataV0): UserDataV0 => {
+  if (!(userData instanceof UserDataV0)) {
+    throw new Error("Expected UserDataV0, but user has already migrated to UserData");
+  }
+  return userData;
+};
 
 export const UnregisteredUserDataSchema = z.object({
   signaturePublicKey: z.string(),

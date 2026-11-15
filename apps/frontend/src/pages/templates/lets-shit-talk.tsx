@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { updateChip } from "@/lib/chip/update";
 import { loveToHate, petPeeves, socialIssues } from "@/lib/storage/types/user/dislikes";
+import { requireUserDataV0 } from "@/lib/storage/types";
 
 type DislikesFormData = {
   publicDefender: string[],
@@ -76,7 +77,7 @@ export default function LetsShitTalkPage() {
 
     try {
       await storage.updateUserData({
-        ...user.userData,
+        ...requireUserDataV0(user.userData),
         dislikesPublicDefender: publicDefender,
         dislikesPetPeeves: petPeeves,
         dislikesLoveToHate: loveToHate,

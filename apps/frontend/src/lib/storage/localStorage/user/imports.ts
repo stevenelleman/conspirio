@@ -3,13 +3,14 @@ import { UserDataV0Type } from "@/lib/storage/types";
 import { getUserAndSession } from "@/lib/storage/localStorage/user/index";
 import { createUserDataBackup } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
+import { requireUserDataV0 } from "@/lib/storage/types";
 
 export const deleteAppImports = async (
   app: DataImportSource
 ): Promise<void> => {
   const { user, session } = await getUserAndSession();
 
-  let updatedUserData: UserDataV0Type = user.userData;
+  let updatedUserData: UserDataV0Type = requireUserDataV0(user.userData);
   if (!updatedUserData) {
     return;
   }

@@ -9,7 +9,7 @@ import {
   OAuthAppDetails,
   RefreshRateType,
 } from "@types";
-import { User, UserDataV0Type } from "@/lib/storage/types";
+import { User, UserDataV0Type, requireUserDataV0 } from "@/lib/storage/types";
 import { fetchImportedData } from "./fetch";
 import { saveImportedData } from "./save";
 import { OAUTH_APP_DETAILS } from "@/config";
@@ -138,7 +138,7 @@ export function shouldRefreshImport(
 ): boolean {
   try {
     const lastImportedAt: Date | undefined = getUserDataUpdatedAt(
-      user.userData,
+      requireUserDataV0(user.userData),
       dataType
     );
 

@@ -2,7 +2,7 @@ import { BASE_API_URL } from "@/config";
 import { ChipIssuer, errorToString, GetChipIdResponse, GetChipIdResponseSchema, Json, UpdateChipRequest } from "@types";
 import { storage } from "../storage";
 import { validateEmail, validateHttpsDomain } from "@/lib/frontend/util";
-import { UserSettings } from "@/lib/storage/types";
+import { UserSettings, requireUserDataV0 } from "@/lib/storage/types";
 
 interface UpdateChipArgs {
   authToken: string;
@@ -151,7 +151,7 @@ export async function updateChip(args: UpdateChipArgs): Promise<void> {
     }
 
     await storage.updateUserData({
-      ...user.userData,
+      ...requireUserDataV0(user.userData),
       displayName: args.ownerDisplayName ?? "",
       bio: args.ownerBio ?? "",
       twitter: {

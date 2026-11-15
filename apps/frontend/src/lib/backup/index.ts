@@ -16,11 +16,14 @@ import {
   LocationTaps,
   LocationTapsSchema,
   UserDataV0Type,
+  UserDataType,
   OAuthAppSchema,
   OAuthApp,
   EdgeIdsSchema,
   User,
+  UserData,
   UserDataV0,
+  parseUserData,
 } from "@/lib/storage/types";
 import { decryptBackupString, encryptBackupString } from "@/lib/crypto/backup";
 import { BASE_API_URL } from "@/config";
@@ -92,8 +95,10 @@ export const processUserBackup = ({
           throw new Error("USER_DATA backup entry found before INITIAL");
         }
 
-        // TODO: if migration applied, then use other
-        user.userData = new UserDataV0(JSON.parse(decryptedData));
+        // Entries written before MIGRATION_USERDATA_CLEANUP1 are V0, entries after are V1.
+        // NOTE: Uses the explicit flag rather than user.migratedUserDataCleanup1, because users created after that
+        // getter's cutoff date are still registered with V0 data and must not be upgraded yet.
+        user.userData = parseUserData(JSON.parse(decryptedData), !!user.migrations?.migrationUserDataCleanup1);
         break;
       case BackupEntryType.CHIP:
         if (!user) {
@@ -245,8 +250,10 @@ export const processUserBackup = ({
             }
           }
 
-          // Once copied, wipe values
-          user.userData.connectionPSISize = undefined;
+          // Once copied, wipe values. UserData has no connectionPSISize, so only V0 needs wiping.
+          if (user.userData instanceof UserDataV0) {
+            user.userData.connectionPSISize = undefined;
+          }
         }
 
         // Given this is the first migration, default to setting the migrations object
@@ -262,9 +269,21 @@ export const processUserBackup = ({
           throw new Error("MIGRATION_USERDATA_CLEANUP1 backup entry found before INITIAL");
         }
 
-        // TODO: update from v0 to v1 and updateUserData
-        //  How??
-        //  - in User type, allow either type?
+        // Like MIGRATION_MOVE_PSISIZE_TO_CONNECTION, the data is already on the user object, so the backup has no
+        // payload. Idempotent: an already-migrated UserData is left as is.
+        if (!user.migratedPSISize) {
+          throw new Error("MIGRATION_USERDATA_CLEANUP1 backup entry found before MIGRATION_MOVE_PSISIZE_TO_CONNECTION");
+        }
+
+        if (user.userData instanceof UserDataV0) {
+          user.userData = UserData.fromV0(user.userData);
+        }
+
+        // Spread to keep the flags of earlier migrations
+        user.migrations = {
+          ...user.migrations,
+          migrationUserDataCleanup1: true,
+        }
 
         break;
       default:
@@ -381,7 +400,7 @@ export const createInitialBackup = ({
 export interface CreateUserDataBackupArgs {
   email: string;
   password: string;
-  userData: UserDataV0Type;
+  userData: UserDataV0Type | UserDataType;
 }
 
 export const createUserDataBackup = ({
@@ -702,6 +721,30 @@ export const createMigrationBackfillForConnectionPSISizeUserBackup = ({
     iv,
     encryptedData,
     backupEntryType: BackupEntryType.MIGRATION_MOVE_PSISIZE_TO_CONNECTION,
+    clientCreatedAt: new Date(),
+  };
+};
+
+export interface CreateMigrationUserDataCleanup1BackupArgs {
+  email: string;
+  password: string;
+}
+
+export const createMigrationUserDataCleanup1Backup = ({
+  email,
+  password,
+}: CreateMigrationUserDataCleanup1BackupArgs): CreateBackupData => {
+  const { authenticationTag, iv, encryptedData } = encryptBackupString({
+    backup: "",
+    email,
+    password,
+  });
+
+  return {
+    authenticationTag,
+    iv,
+    encryptedData,
+    backupEntryType: BackupEntryType.MIGRATION_USERDATA_CLEANUP1,
     clientCreatedAt: new Date(),
   };
 };

@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { UnregisteredUserDataSchema, UserDataV0Schema, UserDataV0 } from "./userData";
+import {
+  UnregisteredUserDataSchema,
+  UserDataV0Schema,
+  UserDataV0,
+  UserDataSchema,
+  UserData,
+  parseUserData,
+} from "./userData";
 import { Chip, ChipSchema } from "./chip";
 import { Connection, ConnectionSchema } from "./connection";
 import { ActivitySchema, Activity } from "./activity";
@@ -48,7 +55,9 @@ export const UserSchema = z.object({
   createdAt: nullToUndefined(z.coerce.date()),
 
   // NOTE: The UserSchema uses UserDataSchema
-  userData: UserDataV0Schema,
+  // Either version may be stored until MIGRATION_USERDATA_CLEANUP1 is applied. UserDataSchema goes first: V1 data
+  // fails UserDataV0Schema (no top-level username) and V0 data fails UserDataSchema (bio is a string).
+  userData: z.union([UserDataSchema, UserDataV0Schema]),
   chips: z.array(ChipSchema),
   connections: z.record(z.string(), ConnectionSchema),
   locations: nullToUndefined(z.record(z.string(), LocationTapsSchema)),
@@ -78,7 +87,7 @@ export class User implements UserType {
   createdAt: Date | undefined;
 
   // NOTE: The User class also uses the UserData class
-  userData: UserDataV0;
+  userData: UserData | UserDataV0;
   chips: Chip[];
   connections: Record<string, Connection>;
   locations: Record<string, LocationTaps> | undefined;
@@ -106,7 +115,7 @@ export class User implements UserType {
     this.lastMessageFetchedAt = validated.lastMessageFetchedAt;
     this.createdAt = validated.createdAt;
 
-    this.userData = new UserDataV0(validated.userData);
+    this.userData = parseUserData(validated.userData, !!validated.migrations?.migrationUserDataCleanup1);
     this.chips = validated.chips;
     this.connections = validated.connections;
     this.locations = validated.locations;

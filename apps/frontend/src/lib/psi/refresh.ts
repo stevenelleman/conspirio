@@ -14,7 +14,8 @@ import {
   User,
   Connection,
   UserDataV0Type,
-  Session
+  Session,
+  requireUserDataV0,
 } from "@/lib/storage/types";
 import { storage } from "@/lib/storage";
 import { sendMessages } from "@/lib/message";
@@ -347,7 +348,7 @@ export const updateConnectionPSISize = async (newVerifiedIntersection: Intersect
         newBackupData: [connectionBackup],
       });
     } else {
-      const newUserData: UserDataV0Type = user.userData;
+      const newUserData: UserDataV0Type = requireUserDataV0(user.userData);
       if (!newUserData.connectionPSISize) {
         newUserData.connectionPSISize = {};
       }

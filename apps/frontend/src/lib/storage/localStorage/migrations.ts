@@ -1,6 +1,7 @@
 import { Session, User } from "@/lib/storage/types";
 import {
-  createMigrationBackfillForConnectionPSISizeUserBackup
+  createMigrationBackfillForConnectionPSISizeUserBackup,
+  createMigrationUserDataCleanup1Backup,
 } from "@/lib/backup";
 import { saveBackupAndUpdateStorage } from "@/lib/storage/localStorage/utils";
 
@@ -21,5 +22,20 @@ export const migratePSISizeFromUserToConnection = async (user: User, session: Se
   return;
 }
 
-// How to go from old to new version? may need to go from
-// export const migrateUserData()
+// Converts UserDataV0 to UserData, see BackupEntryType.MIGRATION_USERDATA_CLEANUP1 in processUserBackup
+export const migrateUserDataCleanup1 = async (user: User, session: Session): Promise<void> => {
+  if (user.migratedPSISize && !user.migratedUserDataCleanup1) {
+    const backup = createMigrationUserDataCleanup1Backup({
+      email: user.email,
+      password: session.backupMasterPassword,
+    });
+
+    await saveBackupAndUpdateStorage({
+      user,
+      session,
+      newBackupData: [backup]
+    });
+  }
+
+  return;
+}
